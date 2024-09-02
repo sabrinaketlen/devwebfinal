@@ -1,25 +1,48 @@
-# :checkered_flag: NOME DO PROJETO
+# :checkered_flag: Readio
 
-Breve descrição do que o seu projeto faz.
+Uma rede social voltada para a interação social entre leitores, permitindo que os usuários compartilhem e acompanhem suas leituras. 
 
 ## :technologist: Membros da equipe
 
-Matrícula, nome e curso dos participantes.
+535904, Sabrina Ketlen, Ciência da Computação
 
 ## :people_holding_hands: Papéis ou tipos de usuário da aplicação
 
-Informe aqui os tipos de usuário que irão interagir com a aplicação. Ex: administrador, locador, locatario, usuário não logado.
-
-> Tenha em mente que obrigatoriamente a aplicação deve possuir funcionalidades acessíveis a todos os tipos de usuário e outra funcionalidades restritas a certos tipos de usuários.
+- Usuário Cadastrado
+- Usuário Não Cadastrado
+- Organizador do catálogo
 
 ## :spiral_calendar: Entidades ou tabelas do sistema
 
-Liste as principais entidades do sistema.
+- Usuário
+- Livro
+- Estante 
+- Amigos
+- Posts (normais, status de leitura, resenha)
 
 ## :triangular_flag_on_post:	 Principais funcionalidades da aplicação
 
-Descreve ou liste brevemente as principais funcionalidades da aplicação que será desenvolvida. Destaque a funcionalidades que serão acessévies a todos os usuários e aquelas restriras a usuários logados.
+Funcionalidades Acessíveis a Todos os Usuários:
 
+Pesquisa de livros e visualização de informações básicas.
+Visualização de perfis de usuários e estantes públicas.
+Acesso a informações gerais sobre a plataforma e seus recursos.
+
+Funcionalidades Restritas a Usuários Logados:
+
+Criação e gerenciamento de perfil pessoal.
+Adminstração da estante pessoal.
+Registro de histórico de leitura em posts.
+Avaliação de livros.
+Adminstração da lista de amigos.
+Criação e interação com postagens (curtidas e comentários).
+Visualização de feeds personalizados (amigos, de um livro específico, geral).
+
+Funcionalidades Restritas ao Organizador do catálogo:
+
+Adicionar livros ao catálogo
+Excluir livros do catálogo
+Editar informações de livros do catálogo
 
 ----
 

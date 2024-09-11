@@ -22,13 +22,13 @@ Uma rede social voltada para a interação social entre leitores, permitindo que
 
 ## :triangular_flag_on_post:	 Principais funcionalidades da aplicação
 
-Funcionalidades Acessíveis a Todos os Usuários:
+- Funcionalidades Acessíveis a Todos os Usuários:
 
 Pesquisa de livros e visualização de informações básicas.
 Visualização de perfis de usuários e estantes públicas.
 Acesso a informações gerais sobre a plataforma e seus recursos.
 
-Funcionalidades Restritas a Usuários Logados:
+- Funcionalidades Restritas a Usuários Logados:
 
 Criação e gerenciamento de perfil pessoal.
 Adminstração da estante pessoal.
@@ -36,9 +36,8 @@ Registro de histórico de leitura em posts.
 Avaliação de livros.
 Adminstração da lista de amigos.
 Criação e interação com postagens (curtidas e comentários).
-Visualização de feeds personalizados (amigos, de um livro específico, geral).
 
-Funcionalidades Restritas ao Organizador do catálogo:
+- Funcionalidades Restritas ao Organizador do catálogo:
 
 Adicionar livros ao catálogo
 Excluir livros do catálogo

@@ -41,7 +41,7 @@ Avaliação de livros em posts.
 
 Adminstração da lista de amigos.
 
-Criação e interação com postagens (curtidas e comentários).
+Criação e interação com postagens (comentários).
 
 - Funcionalidades Restritas ao Organizador do catálogo:
 

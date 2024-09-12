@@ -17,7 +17,7 @@ Uma rede social voltada para a interação social entre leitores, permitindo que
 - Usuário
 - Livro
 - Estante 
-- Posts (normais, status de leitura, resenha)
+- Post (atualizar status de leitura, resenha)
 
 ## :triangular_flag_on_post:	 Principais funcionalidades da aplicação
 
@@ -35,9 +35,9 @@ Criação e gerenciamento de perfil pessoal.
 
 Adminstração da estante pessoal.
 
-Registro de histórico de leitura em posts.
+Atualização de statusa de leitura em posts.
 
-Avaliação de livros.
+Avaliação de livros em posts.
 
 Adminstração da lista de amigos.
 

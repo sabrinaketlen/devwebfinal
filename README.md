@@ -17,7 +17,6 @@ Uma rede social voltada para a interação social entre leitores, permitindo que
 - Usuário
 - Livro
 - Estante 
-- Amigos
 - Posts (normais, status de leitura, resenha)
 
 ## :triangular_flag_on_post:	 Principais funcionalidades da aplicação

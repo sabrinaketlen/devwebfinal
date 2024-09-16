@@ -18,7 +18,6 @@ Uma rede social voltada para a interação social entre leitores, permitindo que
 - Amizade
 - Livro
 - Estante
-- GuardarLivro
 - Post (atualizar status de leitura, resenha)
 - Comentário
 

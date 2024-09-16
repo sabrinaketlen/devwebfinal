@@ -17,31 +17,38 @@ Uma rede social voltada para a interação social entre leitores, permitindo que
 - Usuário
 - Livro
 - Estante 
-- Amigos
-- Posts (normais, status de leitura, resenha)
+- Post (atualizar status de leitura, resenha)
 
 ## :triangular_flag_on_post:	 Principais funcionalidades da aplicação
 
-Funcionalidades Acessíveis a Todos os Usuários:
+- Funcionalidades Acessíveis a Todos os Usuários:
 
-Pesquisa de livros e visualização de informações básicas.
-Visualização de perfis de usuários e estantes públicas.
+Pesquisa de livros e visualização de informações sobre eles.
+
+Visualização de perfis de usuários.
+
 Acesso a informações gerais sobre a plataforma e seus recursos.
 
-Funcionalidades Restritas a Usuários Logados:
+- Funcionalidades Restritas a Usuários Logados:
 
 Criação e gerenciamento de perfil pessoal.
-Adminstração da estante pessoal.
-Registro de histórico de leitura em posts.
-Avaliação de livros.
-Adminstração da lista de amigos.
-Criação e interação com postagens (curtidas e comentários).
-Visualização de feeds personalizados (amigos, de um livro específico, geral).
 
-Funcionalidades Restritas ao Organizador do catálogo:
+Adminstração da estante pessoal.
+
+Atualização de statusa de leitura em posts.
+
+Avaliação de livros em posts.
+
+Adminstração da lista de amigos.
+
+Criação e interação com postagens (comentários).
+
+- Funcionalidades Restritas ao Organizador do catálogo:
 
 Adicionar livros ao catálogo
+
 Excluir livros do catálogo
+
 Editar informações de livros do catálogo
 
 ----

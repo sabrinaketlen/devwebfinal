@@ -1,0 +1,55 @@
+{
+  "kind": "collectionType",
+  "collectionName": "livros",
+  "info": {
+    "singularName": "livro",
+    "pluralName": "livros",
+    "displayName": "Livros",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "id_livro": {
+      "type": "uid",
+      "required": true
+    },
+    "Nome": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "Autor": {
+      "type": "string",
+      "required": true
+    },
+    "Genero": {
+      "type": "string",
+      "required": true
+    },
+    "Sinopse": {
+      "type": "text",
+      "maxLength": 500,
+      "minLength": 100
+    },
+    "Capa": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "Nota": {
+      "type": "decimal",
+      "required": false,
+      "max": 5
+    },
+    "nCapitulos": {
+      "type": "integer",
+      "required": true
+    }
+  }
+}

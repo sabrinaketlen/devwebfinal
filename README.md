@@ -15,7 +15,6 @@ Uma rede social voltada para a interação social entre leitores, permitindo que
 ## :spiral_calendar: Entidades ou tabelas do sistema
 
 - Usuário
-- Amizade
 - Livro
 - Estante
 - Post (atualizar status de leitura, resenha)

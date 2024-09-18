@@ -16,8 +16,9 @@ const loading = ref(true)
 // Função para buscar o livro
 const fetchLivro = async () => {
   try {
-    const { data } = await api.get(`/livros`);
-    console.log(data); // Adicione isso para inspecionar a resposta
+    const { data } = await api.get(`/livros?populate=Capa`);
+   
+    console.log(data); //Adicione isso para inspecionar a resposta
     livros.value = data.data; 
   } catch (e) {
     if (isAxiosError(e) && isApplicationError(e.response?.data)) {
@@ -41,9 +42,6 @@ onMounted(() => {
   });
 });
 
-onUnmounted(() => {
-  clearLivro();
-});
 </script>
 
 <template>
@@ -54,17 +52,19 @@ onUnmounted(() => {
   <div v-if="loading" class="spinner-border" role="status">
     <span class="visually-hidden">Loading...</span>
   </div>
-  <div v-else>
+  
+  <div v-else class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
     <Book
       v-for="livro in livros"
-      :id="livro.id"
-      :nome="livro.nome"
-      :autor="livro.autor"
-      :genero="livro.genero"
-      :sinopse="livro.sinopse"
-      :capa="livro.capa"
-      :nota="livro.nota"
-      :caps="livro.caps"
+      :key="livro.attributes.id"
+      :id="livro.attributes.id"
+      :nome="livro.attributes.Nome"
+      :autor="livro.attributes.Autor"
+      :genero="livro.attributes.Genero"
+      :sinopse="livro.attributes.Sinopse"
+      :nota="livro.attributes.Nota"
+      :capa="livro.attributes.Capa"
+      :caps="livro.attributes.nCapitulos"
     />
   </div>
 </template>

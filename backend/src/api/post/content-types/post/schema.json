@@ -4,17 +4,14 @@
   "info": {
     "singularName": "post",
     "pluralName": "posts",
-    "displayName": "Posts"
+    "displayName": "Posts",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
   },
   "pluginOptions": {},
   "attributes": {
-    "id_post": {
-      "type": "uid",
-      "required": true
-    },
     "users_permissions_user": {
       "type": "relation",
       "relation": "manyToOne",

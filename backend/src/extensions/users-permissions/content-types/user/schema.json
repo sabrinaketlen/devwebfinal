@@ -88,6 +88,12 @@
       "relation": "manyToMany",
       "target": "plugin::users-permissions.user",
       "inversedBy": "users_permissions_users"
+    },
+    "estante": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::estante.estante",
+      "mappedBy": "users_permissions_user"
     }
   }
 }

@@ -12,10 +12,6 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "id_livro": {
-      "type": "uid",
-      "required": true
-    },
     "Nome": {
       "type": "string",
       "required": true,

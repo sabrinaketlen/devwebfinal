@@ -11,7 +11,7 @@ const uploadHelper = useUpload();
       <div class="card shadow-sm">
         <img 
           v-if="props.capa" 
-          :src="uploadHelper(props.capa.url)" 
+          :src="uploadHelper(props.capa.data.attributes.url)" 
           :alt="`Capa do Livro ${props.nome}`" 
           class="cover"
         />

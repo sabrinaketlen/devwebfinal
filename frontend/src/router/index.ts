@@ -1,5 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { useUserStore } from '@/stores/userStore'
+
 import HomeView from '../views/HomeView.vue'
+import Login from '../views/Login.vue'
+import Book from '../components/Book.vue'
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -15,9 +20,22 @@ const router = createRouter({
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import('../views/Login.vue')
+      component: Login
+    },
+    {
+      path: '/livros/:id',
+      name: 'livro',
+      component: Book, // Componente que mostrará os detalhes do livro
+      props: true // Habilita a passagem do parâmetro `id` como propriedade
     }
   ]
 })
 
 export default router
+
+router.beforeEach((to, from) => {
+  const userStore = useUserStore()
+  if (to.meta.requiresAuth && !userStore.isAuthenticated) {
+    return '/login'
+  }
+})

@@ -2,11 +2,12 @@
   <div class="d-flex" id="wrapper">
     <!-- Sidebar -->
     <div v-if="isSidebarVisible" id="sidebar-wrapper">
-
-      <div class="list-group list-group-flush">
-        <a href="#" class="list-group-item list-group-item-action bg-light">Dashboard</a>
-        <a href="#" class="list-group-item list-group-item-action bg-light">Profile</a>
-        <a href="#" class="list-group-item list-group-item-action bg-light">Settings</a>
+      <!-- VOU PRECISAR ALTERAR PRA QUANDO ESTIVER LOGADO -->
+      <div class="btn-group-vertical" role="group" aria-label="Vertical button group">
+        <button type="button" class="btn btn-light">Fazer post</button>
+        <button type="button" class="btn btn-light">Amigos</button>
+        <button type="button" class="btn btn-light">Estante</button>
+        <RouterLink to='/'><button type="button" class="btn btn-light">Catálogo</button></RouterLink>
       </div>
     </div>
 
@@ -14,9 +15,15 @@
     <div id="page-content-wrapper">
       <nav class="navbar navbar-expand-lg border-bottom">
         <button @click="toggleSidebar" class="btn btn-primary" id="menu-toggle">
-          Toggle Sidebar
+          <!-- Ícone de Menu -->
+          <i class="fa-solid fa-bars"></i>
         </button>
-        <RouterLink to="/login" class="btn btn-light">Login</RouterLink>
+        <template v-if="userStore.username">
+                <RouterLink to="/login">
+                <a href="#" @click="userStore.logout" class="btn btn-outline-danger">Logout</a>
+                </RouterLink>
+        </template>
+        <template v-else><RouterLink to="/login" class="btn btn-light">Login</RouterLink></template>
       </nav>
     </div>
   </div>
@@ -24,6 +31,10 @@
 
 <script setup>
 import { ref } from 'vue'
+import { useUserStore } from '@/stores/userStore'
+
+const userStore = useUserStore()
+
 
 const isSidebarVisible = ref(true)
 
@@ -54,6 +65,9 @@ function toggleSidebar() {
   transition: transform 0.3s; /* Transição suave para a transformação */
   position: fixed; /* Fixa a sidebar no lado esquerdo */
   z-index: 1000; /* Garante que a sidebar fique sobre outros conteúdos */
+  display: flex; /* Usa Flexbox */
+  flex-direction: column; /* Organiza os itens em coluna */
+  justify-content: center; 
 }
 
 #page-content-wrapper {
@@ -92,4 +106,9 @@ nav {
   margin-top: 10px;
   margin-bottom: 10px; /* Adiciona margem entre os itens da lista */
 }
+
+.btn-group-vertical .btn {
+  margin-bottom: 10px; /* Espaço entre os botões */
+}
+
 </style>

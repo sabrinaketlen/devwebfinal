@@ -4,17 +4,14 @@
   "info": {
     "singularName": "comentario",
     "pluralName": "comentarios",
-    "displayName": "Comentario"
+    "displayName": "Comentario",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
   },
   "pluginOptions": {},
   "attributes": {
-    "id_comentario": {
-      "type": "uid",
-      "required": true
-    },
     "Conteudo": {
       "type": "text",
       "required": true,

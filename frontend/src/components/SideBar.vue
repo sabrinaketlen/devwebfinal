@@ -6,7 +6,7 @@
       <div class="btn-group-vertical" role="group" aria-label="Vertical button group">
         <button type="button" class="btn btn-light">Fazer post</button>
         <button type="button" class="btn btn-light">Amigos</button>
-        <button type="button" class="btn btn-light">Estante</button>
+        <RouterLink :to="`/estante/${username}`"><button type="button" class="btn btn-light">Estante</button></RouterLink>
         <RouterLink to='/'><button type="button" class="btn btn-light">Catálogo</button></RouterLink>
       </div>
     </div>
@@ -33,6 +33,7 @@ import { ref } from 'vue'
 import { useUserStore } from '@/stores/userStore'
 
 const userStore = useUserStore()
+const username = userStore.user.username
 
 
 const isSidebarVisible = ref(true)

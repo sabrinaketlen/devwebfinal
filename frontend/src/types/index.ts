@@ -1,12 +1,12 @@
 export type Livro = {
   id: number,
-  nome: string | undefined,   // Permitir undefined caso o dado não esteja presente
-  autor: string | undefined,
-  genero: string | undefined,
-  sinopse: string | undefined,
-  capa: Capa | undefined,     // O objeto Capa pode ser undefined se não estiver carregado
-  nota: number | undefined,   // Pode ser undefined se ainda não tiver nota atribuída
-  caps: number | undefined    // Pode ser undefined caso o número de capítulos não esteja definido
+  nome: string   // Permitir undefined caso o dado não esteja presente
+  autor: string
+  genero: string
+  sinopse: string
+  capa: Capa    // O objeto Capa pode ser undefined se não estiver carregado
+  nota?: number   // Pode ser undefined se ainda não tiver nota atribuída
+  caps: number    // Pode ser undefined caso o número de capítulos não esteja definido
 }
 
 type Capa = {
@@ -25,6 +25,10 @@ type Role = {
   name: string
 }
 
+export type Estante = {
+  username: string,
+  livros: Livro[]
+}
 export interface ApplicationError {
   error: {
     name: string,

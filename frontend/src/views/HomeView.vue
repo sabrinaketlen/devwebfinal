@@ -56,8 +56,8 @@ onMounted(() => {
   <div v-else class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
     <Book
       v-for="livro in livros"
-      :key="livro.attributes.id"
-      :id="livro.attributes.id"
+      :key="livro.id"
+      :id="livro.id"
       :nome="livro.attributes.Nome"
       :autor="livro.attributes.Autor"
       :genero="livro.attributes.Genero"

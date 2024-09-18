@@ -926,6 +926,11 @@ export interface ApiLivroLivro extends Schema.CollectionType {
         number
       >;
     nCapitulos: Attribute.Integer & Attribute.Required;
+    posts: Attribute.Relation<
+      'api::livro.livro',
+      'oneToMany',
+      'api::post.post'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -977,6 +982,11 @@ export interface ApiPostPost extends Schema.CollectionType {
       'api::post.post',
       'oneToMany',
       'api::comentario.comentario'
+    >;
+    livro: Attribute.Relation<
+      'api::post.post',
+      'manyToOne',
+      'api::livro.livro'
     >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;

@@ -16,13 +16,8 @@ const uploadHelper = useUpload();
           class="cover"
         />
         <div class="card-body">
-          <h5 class="card-title">{{ props.nome }} - {{ props.autor }}</h5>
-          <p class="card-text">{{ props.genero }}</p>
-          <p class="card-text">{{ props.sinopse }}</p>
-          <div class="d-flex justify-content-between align-items-center">
-            <small class="text-danger">Nota: {{ props.nota }}/5</small>
-            <small class="text-muted">Capítulos: {{ props.caps }}</small>
-          </div>
+          <h5 class="card-title">{{ props.nome }} </h5>
+          <p class="card-text"> {{ props.autor }}</p>
         </div>
       </div>
     </div>

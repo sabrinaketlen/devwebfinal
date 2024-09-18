@@ -46,6 +46,12 @@
     "nCapitulos": {
       "type": "integer",
       "required": true
+    },
+    "posts": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::post.post",
+      "mappedBy": "livro"
     }
   }
 }

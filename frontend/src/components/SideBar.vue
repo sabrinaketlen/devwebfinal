@@ -14,9 +14,8 @@
     <!-- Page Content -->
     <div id="page-content-wrapper">
       <nav class="navbar navbar-expand-lg border-bottom">
-        <button @click="toggleSidebar" class="btn btn-primary" id="menu-toggle">
-          <!-- Ícone de Menu -->
-          <i class="fa-solid fa-bars"></i>
+        <button @click="toggleSidebar" class="btn fs-1" id="menu-toggle">
+          <i class="bi bi-list fs-1 text-white"></i>
         </button>
         <template v-if="userStore.username">
                 <RouterLink to="/login">

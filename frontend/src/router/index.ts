@@ -3,7 +3,7 @@ import { useUserStore } from '@/stores/userStore'
 
 import HomeView from '../views/HomeView.vue'
 import Login from '../views/Login.vue'
-import Book from '../components/Book.vue'
+import BookProfile from '@/views/BookProfile.vue'
 
 
 const router = createRouter({
@@ -25,8 +25,8 @@ const router = createRouter({
     {
       path: '/livros/:id',
       name: 'livro',
-      component: Book, // Componente que mostrará os detalhes do livro
-      props: true // Habilita a passagem do parâmetro `id` como propriedade
+      component: BookProfile, // Componente que mostrará os detalhes do livro
+      // Habilita a passagem do parâmetro `id` como propriedade
     }
   ]
 })

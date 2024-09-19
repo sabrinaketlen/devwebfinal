@@ -6,6 +6,7 @@ import Login from '../views/Login.vue'
 import BookProfile from '../views/BookProfile.vue'
 import Estante from '../views/Estante.vue'
 import Amigos from '../views/Amigos.vue'
+import NotFound from '../views/NotFound.vue'
 
 
 const router = createRouter({
@@ -48,6 +49,7 @@ const router = createRouter({
       }
       // Habilita a passagem do parâmetro `id` como propriedade
     },
+    { path: '/:pathMatch(.*)*', component: NotFound },
   ]
 })
 

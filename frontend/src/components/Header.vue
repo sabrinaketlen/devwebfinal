@@ -1,17 +1,68 @@
 <template>
   <header>
     <RouterLink to='/'><img src="../assets/logo.png" alt="" /></RouterLink>
-  
-    <input type="text" required placeholder="Buscar no catálogo..." />
+    
+    <!-- v-model para armazenar o valor do input -->
+    <input v-model="searchQuery" type="text" required placeholder="Buscar no catálogo..." @keyup.enter="getLivro" />
+
   </header>
 </template>
 
-<script>
+<script setup lang="ts">
+import { api } from '@/api'
+import { ref, toRaw } from 'vue';
 import { RouterLink } from 'vue-router';
+import type { ApplicationError, Livro } from '@/types'
+import { isAxiosError } from 'axios'
+import { isApplicationError } from '@/composables/useApplicationError'
+import { useRouter } from 'vue-router';
 
-export default {
-  name: 'myHeader'
-}
+const loading = ref(true)
+const error = ref<ApplicationError>()
+const id = ref('')
+const router = useRouter();
+
+const livro = ref([] as Livro[])
+
+const searchQuery = ref('');
+    // Função para logar o valor do input no console
+async function logSearchQuery(){
+      console.log(searchQuery.value); // Exibe o valor atual do input no console quando "Enter" é pressionado
+      searchQuery.value = '';
+    }
+
+async function getLivro() {
+      try {
+        const { data } = await api.get(`/livros?populate=Capa`)
+        livro.value = data.data
+
+        const livro_objeto = toRaw(livro._rawValue)
+
+        let achado = false
+        for (let i = 0; i < livro_objeto.length; i++) {
+          if (livro_objeto[i].attributes.Nome === searchQuery._rawValue) {
+            id.value = livro_objeto[i].id
+            console.log(id._rawValue);
+            router.push(`/livros/${id._rawValue}`);
+            achado = true
+            break;
+          }
+        }
+
+        if(achado == false){
+          router.push({ path: '/:pathMatch(.*)*' });
+        }
+        
+        
+        
+      } catch (e) {
+        if (isAxiosError(e) && isApplicationError(e.response?.data)) {
+          error.value = e.response?.data
+        }
+      } finally {
+        loading.value = false
+      }
+    }
 </script>
 
 <!-- digo que o estilo só vai ser adicionado a esse escopo -->

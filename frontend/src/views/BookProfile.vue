@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, toRaw } from 'vue'
 import { useRoute } from 'vue-router'
 import { api } from '@/api'
 import { useUpload } from '@/composables/useUpload'
@@ -15,7 +15,6 @@ const error = ref<ApplicationError>()
 const uploadHelper = useUpload()
 const estante = ref({} as Estante)
 
-
 const feedback = ref('')
 const userStore = useUserStore()
 const user_id = userStore.user.id
@@ -24,11 +23,26 @@ const isBookInEstante = ref(false)
 
 async function checkIfBookInEstante() {
   try {
-    const { data } = await api.get(`/estantes/${user_id}?populate=livros`, {
+    const { data } = await api.get(`/estantes/${user_id}?populate=livros.Capa`, {
       headers: {
         Authorization: `Bearer ${userStore.jwt}`,
       },
     })
+
+    //console.log(data.data.attributes.livros.data);
+
+    console.log("data:");
+    
+    console.log(data);
+    
+    estante.value = data.data.attributes.livros.data
+
+    console.log(estante);
+    
+
+    //const estante_objeto = toRaw(estante.value)
+    //console.log(estante_objeto);
+    
 
     // Verifica se o livro está na estante
     let found = false
@@ -46,50 +60,63 @@ async function checkIfBookInEstante() {
   }
 }
 
-checkIfBookInEstante()
-
 async function toggleBookInEstante() {
+  checkIfBookInEstante()
   const action = isBookInEstante.value ? 'remove' : 'add'
 
   try {
     loading.value = true
+    
+    //console.log(estante._rawValue);
+    
+    const currentLivros = toRaw(estante._rawValue)
+    console.log("currentLivros:");
+    
+    console.log(currentLivros);
+    
+    const livro_objeto = toRaw(livro._rawValue)
 
-    const { data } = await api.get(`/estantes/${user_id}?populate=livros`, {
-      headers: {
-        Authorization: `Bearer ${userStore.jwt}`,
-      },
-    })
+    console.log("livro_objeto");
 
-    const currentLivros = data.data.attributes.livros.data.map((livro: any) => livro.id)
+    console.log(livro_objeto);
+    
 
-    if (action === 'add') {
-      currentLivros.push(livro.value.id)
-    } else if (action === 'remove') {
-      const index = currentLivros.indexOf(livro.value.id)
-      if (index > -1) {
-        currentLivros.splice(index, 1)
+    if (action == 'add') {
+      console.log("tentei add");
+      currentLivros.push(livro_objeto)
+    } else if (action == 'remove') {
+      console.log("tentei remover");
+      let indexToRemove = -1; 
+      for (let i = 0; i < currentLivros.length; i++) {
+        if (currentLivros[i].id === livro_objeto.id) {
+          indexToRemove = i; 
+          break;
+        }
+      }
+      if (indexToRemove > -1) {
+        currentLivros.splice(indexToRemove, 1);
       }
     }
 
-    const payload = {
-      livros: currentLivros, 
-    }
-    console.log('Payload enviado:', payload)
+    const newdata = {
+      data: {
+        data: {
+          attributes: {
+            livros:{
+                data: currentLivros
+            }
+          }
+        }
+      }
+    };
+    console.log('Payload enviado:', newdata)
     
 
-    const response = await api.put(`/estantes/${user_id}`, payload, {
+    const { data } = await api.put(`/estantes/${user_id}`, newdata, {
       headers: {
         Authorization: `Bearer ${userStore.jwt}`,
-        'Content-Type': 'application/json', 
       },
-    })
-
-    console.log('Resposta da API:', response.data)
-
-    isBookInEstante.value = action === 'add'
-    feedback.value = action === 'add'
-      ? 'Livro adicionado à estante com sucesso.'
-      : 'Livro removido da estante com sucesso.'
+    });
   } catch (e) {
     if (isAxiosError(e) && isApplicationError(e.response?.data)) {
       error.value = e.response?.data
@@ -105,8 +132,8 @@ async function toggleBookInEstante() {
 async function getLivro() {
   try {
     const { data } = await api.get(`/livros/${route.params.id}?populate=Capa`)
-    livro.value = data.data.attributes
-    //console.log(data.data.attributes);
+    livro.value = data.data
+    //console.log(livro);
     
   } catch (e) {
     if (isAxiosError(e) && isApplicationError(e.response?.data)) {
@@ -118,6 +145,9 @@ async function getLivro() {
 }
 
 getLivro()
+checkIfBookInEstante()
+
+
 
 </script>
 
@@ -146,7 +176,7 @@ getLivro()
             <div class="col-md-8">
               <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center">
-                  <h5 class="card-title mb-0">{{ livro.Nome }}</h5>
+                  <h5 class="card-title mb-0">{{ livro.attributes.Nome }}</h5>
                   <button class="btn fs-1" @click="toggleBookInEstante">
                     <i v-if="isBookInEstante" class="bi bi-bookmark-check-fill"></i>
                     <i v-else class="bi bi-bookmark-plus"></i>
@@ -155,20 +185,20 @@ getLivro()
                 <hr />
                 
                 <div class="text-start">
-                  <p class="card-text">Autor(a): {{ livro.Autor }}</p>
+                  <p class="card-text">Autor(a): {{ livro.attributes.Autor }}</p>
                   <p class="card-text">
                     <strong>
-                      Gênero: <small class="text-danger">{{ livro.Genero }}</small>
+                      Gênero: <small class="text-danger">{{ livro.attributes.Genero }}</small>
                     </strong>
                   </p>
                   <p class="card-text">
-                    Sinopse: {{ livro.Sinopse }}
+                    Sinopse: {{ livro.attributes.Sinopse }}
                   </p>
                   <p class="card-text">
-                    Nota: {{ livro.Nota }}/5
+                    Nota: {{ livro.attributes.Nota }}/5
                   </p>
                   <p class="card-text">
-                    Capítulos: {{ livro.nCapitulos }}
+                    Capítulos: {{ livro.attributes.nCapitulos }}
                   </p>
                 </div>
               </div>

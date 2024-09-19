@@ -26,7 +26,7 @@ type Role = {
 }
 
 export type Estante = {
-  username: string,
+  id: number
   livros: Livro[]
 }
 

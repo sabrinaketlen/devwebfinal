@@ -362,52 +362,6 @@ export interface AdminTransferTokenPermission extends Schema.CollectionType {
   };
 }
 
-export interface ApiComentarioComentario extends Schema.CollectionType {
-  collectionName: 'comentarios';
-  info: {
-    singularName: 'comentario';
-    pluralName: 'comentarios';
-    displayName: 'Comentario';
-    description: '';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    Conteudo: Attribute.Text &
-      Attribute.Required &
-      Attribute.SetMinMaxLength<{
-        minLength: 1;
-        maxLength: 300;
-      }>;
-    users_permissions_user: Attribute.Relation<
-      'api::comentario.comentario',
-      'manyToOne',
-      'plugin::users-permissions.user'
-    >;
-    post: Attribute.Relation<
-      'api::comentario.comentario',
-      'manyToOne',
-      'api::post.post'
-    >;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::comentario.comentario',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::comentario.comentario',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
 export interface ApiEstanteEstante extends Schema.CollectionType {
   collectionName: 'estantes';
   info: {
@@ -528,11 +482,6 @@ export interface ApiPostPost extends Schema.CollectionType {
       Attribute.SetMinMaxLength<{
         maxLength: 1000;
       }>;
-    comentarios: Attribute.Relation<
-      'api::post.post',
-      'oneToMany',
-      'api::comentario.comentario'
-    >;
     livro: Attribute.Relation<
       'api::post.post',
       'manyToOne',
@@ -914,21 +863,6 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'oneToMany',
       'api::post.post'
     >;
-    comentarios: Attribute.Relation<
-      'plugin::users-permissions.user',
-      'oneToMany',
-      'api::comentario.comentario'
-    >;
-    users_permissions_users: Attribute.Relation<
-      'plugin::users-permissions.user',
-      'manyToMany',
-      'plugin::users-permissions.user'
-    >;
-    users: Attribute.Relation<
-      'plugin::users-permissions.user',
-      'manyToMany',
-      'plugin::users-permissions.user'
-    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -1003,7 +937,6 @@ declare module '@strapi/types' {
       'admin::api-token-permission': AdminApiTokenPermission;
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
-      'api::comentario.comentario': ApiComentarioComentario;
       'api::estante.estante': ApiEstanteEstante;
       'api::livro.livro': ApiLivroLivro;
       'api::post.post': ApiPostPost;

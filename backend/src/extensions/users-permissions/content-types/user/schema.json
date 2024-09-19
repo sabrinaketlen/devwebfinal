@@ -70,24 +70,6 @@
       "relation": "oneToMany",
       "target": "api::post.post",
       "mappedBy": "users_permissions_user"
-    },
-    "comentarios": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::comentario.comentario",
-      "mappedBy": "users_permissions_user"
-    },
-    "users_permissions_users": {
-      "type": "relation",
-      "relation": "manyToMany",
-      "target": "plugin::users-permissions.user",
-      "inversedBy": "users"
-    },
-    "users": {
-      "type": "relation",
-      "relation": "manyToMany",
-      "target": "plugin::users-permissions.user",
-      "inversedBy": "users_permissions_users"
     }
   }
 }

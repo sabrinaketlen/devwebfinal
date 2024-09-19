@@ -34,12 +34,6 @@
       "type": "text",
       "maxLength": 1000
     },
-    "comentarios": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::comentario.comentario",
-      "mappedBy": "post"
-    },
     "livro": {
       "type": "relation",
       "relation": "manyToOne",

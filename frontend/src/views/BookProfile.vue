@@ -70,9 +70,18 @@ async function toggleBookInEstante() {
     //console.log(estante._rawValue);
     
     const currentLivros = toRaw(estante._rawValue)
-    console.log("currentLivros:");
+    //console.log("currentLivros:");
+
+    const currentLivros_id = []
+
+    for (let i = 0; i < currentLivros.length; i++) {
+      currentLivros_id.push(currentLivros[i].id)
+    }
+    console.log("IDS")
+    console.log(currentLivros_id)
     
-    console.log(currentLivros);
+    
+    //console.log(currentLivros);
     
     const livro_objeto = toRaw(livro._rawValue)
 
@@ -83,32 +92,27 @@ async function toggleBookInEstante() {
 
     if (action == 'add') {
       console.log("tentei add");
-      currentLivros.push(livro_objeto)
+      currentLivros_id.push(livro_objeto.id)
     } else if (action == 'remove') {
       console.log("tentei remover");
       let indexToRemove = -1; 
-      for (let i = 0; i < currentLivros.length; i++) {
-        if (currentLivros[i].id === livro_objeto.id) {
+      for (let i = 0; i < currentLivros_id.length; i++) {
+        if (currentLivros_id[i] === livro_objeto.id) {
           indexToRemove = i; 
           break;
         }
       }
       if (indexToRemove > -1) {
-        currentLivros.splice(indexToRemove, 1);
+        currentLivros_id.splice(indexToRemove, 1);
       }
     }
 
     const newdata = {
       data: {
-        data: {
-          attributes: {
-            livros:{
-                data: currentLivros
-            }
-          }
-        }
+        livros: currentLivros_id
       }
     };
+
     console.log('Payload enviado:', newdata)
     
 

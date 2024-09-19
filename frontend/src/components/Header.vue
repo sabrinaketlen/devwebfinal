@@ -15,21 +15,17 @@ import { RouterLink } from 'vue-router';
 import type { ApplicationError, Livro } from '@/types'
 import { isAxiosError } from 'axios'
 import { isApplicationError } from '@/composables/useApplicationError'
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 
 const loading = ref(true)
 const error = ref<ApplicationError>()
 const id = ref('')
 const router = useRouter();
+const route = useRoute();
 
 const livro = ref([] as Livro[])
 
 const searchQuery = ref('');
-    // Função para logar o valor do input no console
-async function logSearchQuery(){
-      console.log(searchQuery.value); // Exibe o valor atual do input no console quando "Enter" é pressionado
-      searchQuery.value = '';
-    }
 
 async function getLivro() {
       try {
@@ -37,13 +33,13 @@ async function getLivro() {
         livro.value = data.data
 
         const livro_objeto = toRaw(livro._rawValue)
+        const currentPath = route.path
+        console.log(searchQuery);
 
         let achado = false
         for (let i = 0; i < livro_objeto.length; i++) {
-          if (livro_objeto[i].attributes.Nome === searchQuery._rawValue) {
+          if (livro_objeto[i].attributes.Nome == searchQuery._rawValue) {
             id.value = livro_objeto[i].id
-            console.log(id._rawValue);
-            router.push(`/livros/${id._rawValue}`);
             achado = true
             break;
           }
@@ -52,8 +48,11 @@ async function getLivro() {
         if(achado == false){
           router.push({ path: '/:pathMatch(.*)*' });
         }
-        
-        
+        else{
+          router.push(`/livros/${id._rawValue}`);
+        }
+
+        searchQuery.value = ''
         
       } catch (e) {
         if (isAxiosError(e) && isApplicationError(e.response?.data)) {

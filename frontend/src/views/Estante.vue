@@ -7,7 +7,6 @@ import { isApplicationError } from '@/composables/useApplicationError';
 import { useUserStore } from '@/stores/userStore'
 import Book from '@/components/Book.vue';
 
-// Referência ao livro e a flag de carregamento
 const userStore = useUserStore()
 const estante = ref({} as Estante)
 const exception = ref<ApplicationError>()
@@ -15,10 +14,8 @@ const loading = ref(true)
 const livros = ref([] as Livro[])
 const user_id = userStore.user.id
 
-// Função para buscar os livros da "estante" do usuário atual
 const fetchEstanteByUserId = async () => {
   try {
-    // 2. Obter a estante com base no username
     const { data } = await api.get(`/estantes/${user_id}?populate=livros.Capa,users_permissions_user`, {
       headers: {
         Authorization: `Bearer ${userStore.jwt}`,
@@ -39,10 +36,6 @@ const fetchEstanteByUserId = async () => {
   }
 }
 
-// Exemplo de chamada da função com um userId específico
-// Função para limpar os livros
-
-// Requisição ao montar o componente e limpar ao sair
 onMounted(() => {
     fetchEstanteByUserId()
 });

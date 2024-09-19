@@ -7,19 +7,15 @@ import { isApplicationError } from '@/composables/useApplicationError';
 import { useRouter } from 'vue-router';
 import Book from '@/components/Book.vue';
 
-// Referência ao livro e a flag de carregamento
 const livros = ref([] as Livro[])
 const router = useRouter();
 const exception = ref<ApplicationError>()
 const loading = ref(true)
 
-// Função para buscar o livro
 const fetchLivro = async () => {
   try {
     const { data } = await api.get(`/livros?populate=Capa`);
-   
-    console.log(data); //Adicione isso para inspecionar a resposta
-    livros.value = data.data; 
+       livros.value = data.data; 
   } catch (e) {
     if (isAxiosError(e) && isApplicationError(e.response?.data)) {
       exception.value = e.response?.data
@@ -29,12 +25,10 @@ const fetchLivro = async () => {
   }
 };
 
-// Função para limpar o livro
 const clearLivro = () => {
   livros.value = [];
 };
 
-// Requisição ao montar o componente e limpar ao sair
 onMounted(() => {
   fetchLivro();
   router.beforeEach(() => {

@@ -54,42 +54,42 @@ function toggleSidebar() {
 #wrapper {
   display: flex;
   flex-wrap: nowrap;
-  transition: margin-left 0.3s; /* Transição suave para a margem esquerda */
+  transition: margin-left 0.3s; 
 }
 
 #sidebar-wrapper {
   height: 75vh;
   border: none;
   background-color: var(--item-color);
-  min-width: 250px; /* Ajuste a largura da sidebar */
-  transition: transform 0.3s; /* Transição suave para a transformação */
-  position: fixed; /* Fixa a sidebar no lado esquerdo */
-  z-index: 1000; /* Garante que a sidebar fique sobre outros conteúdos */
-  display: flex; /* Usa Flexbox */
-  flex-direction: column; /* Organiza os itens em coluna */
+  min-width: 250px; 
+  transition: transform 0.3s;
+  position: fixed;
+  z-index: 1000;
+  display: flex; 
+  flex-direction: column; 
   justify-content: center; 
 }
 
 #page-content-wrapper {
   flex: 1;
-  transition: margin-left 0.3s; /* Transição suave para a margem esquerda */
-  margin-left: 250px; /* Define a margem padrão para a largura da sidebar */
+  transition: margin-left 0.3s; 
+  margin-left: 250px;
 }
 
 .sidebar-hidden #sidebar-wrapper {
-  transform: translateX(-100%); /* Move a sidebar para fora da tela */
+  transform: translateX(-100%); 
 }
 
 .sidebar-visible #sidebar-wrapper {
-  transform: translateX(0); /* Move a sidebar para dentro da tela */
+  transform: translateX(0); 
 }
 
 .sidebar-hidden #page-content-wrapper {
-  margin-left: 0; /* Remove a margem quando a sidebar está oculta */
+  margin-left: 0; 
 }
 
 .sidebar-visible #page-content-wrapper {
-  margin-left: 250px; /* Define a margem quando a sidebar está visível */
+  margin-left: 250px;
 }
 
 nav {
@@ -99,16 +99,16 @@ nav {
   height: 100px;
   justify-content: space-between;
   align-items: center;
-  z-index: 2000;/* Garante que o nav fique sobre outros conteúdos */
+  z-index: 2000;
 }
 
 #sidebar-wrapper .list-group-item {
   margin-top: 10px;
-  margin-bottom: 10px; /* Adiciona margem entre os itens da lista */
+  margin-bottom: 10px; 
 }
 
 .btn-group-vertical .btn {
-  margin-bottom: 10px; /* Espaço entre os botões */
+  margin-bottom: 10px; 
 }
 
 </style>

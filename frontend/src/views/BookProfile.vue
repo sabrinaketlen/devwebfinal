@@ -75,6 +75,7 @@ async function toggleBookInEstante() {
       livros: currentLivros, 
     }
     console.log('Payload enviado:', payload)
+    
 
     const response = await api.put(`/estantes/${user_id}`, payload, {
       headers: {

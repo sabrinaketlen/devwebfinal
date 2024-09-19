@@ -5,6 +5,7 @@ import HomeView from '../views/HomeView.vue'
 import Login from '../views/Login.vue'
 import BookProfile from '../views/BookProfile.vue'
 import Estante from '../views/Estante.vue'
+import Amigos from '../views/Amigos.vue'
 
 
 const router = createRouter({
@@ -37,7 +38,16 @@ const router = createRouter({
         requiresAuth: true
       }
       // Habilita a passagem do parâmetro `id` como propriedade
-    }
+    },
+    {
+      path: '/amigos/:id',
+      name: 'amigos',
+      component: Amigos, // Componente que mostrará os detalhes do livro
+      meta: {
+        requiresAuth: true
+      }
+      // Habilita a passagem do parâmetro `id` como propriedade
+    },
   ]
 })
 

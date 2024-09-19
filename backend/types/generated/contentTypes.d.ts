@@ -743,11 +743,6 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'manyToMany',
       'plugin::users-permissions.user'
     >;
-    estante: Attribute.Relation<
-      'plugin::users-permissions.user',
-      'oneToOne',
-      'api::estante.estante'
-    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<

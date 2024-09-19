@@ -29,6 +29,12 @@ export type Estante = {
   username: string,
   livros: Livro[]
 }
+
+export type Amizades = {
+  username: string,
+  amigos: User[]
+}
+
 export interface ApplicationError {
   error: {
     name: string,

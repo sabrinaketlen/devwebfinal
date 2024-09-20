@@ -19,6 +19,8 @@ const route = useRoute()
 const post = ref({} as Poste)
 
 //parei aqui, JA ESTA PEGANDO O POST
+//preciso sinalizar qual o livro na pagina do post
+//preciso botar botao de editar ou excluir post
 
 async function getPost() {
   try {
@@ -45,20 +47,54 @@ async function getPost() {
   }
   
 }
-
+//@click="editarPost()
 getPost()
 
 </script>
 
 <template>
-    <Post
-    :key="post.id"
-    :conteudo = "post.attributes.Conteudo"
-    :dado= "post.attributes.Dado"
-    :tipo= "post.attributes.Tipo"
-    :livro= "post.attributes.livro"
-    :user= "post.attributes.users_permissions_user.data.attributes.username"
-    :id= "post.id"
-    />
-</template>
+    <div class="position-relative">
+      <span class="badge text-bg-warning">Post sobre {{ post.attributes.livro.data.attributes.Nome }}</span>
+      
+      <!-- Post component -->
+      <div class="post-content">
+        <Post
+          :key="post.id"
+          :conteudo="post.attributes.Conteudo"
+          :dado="post.attributes.Dado"
+          :tipo="post.attributes.Tipo"
+          :livro="post.attributes.livro"
+          :user="post.attributes.users_permissions_user.data.attributes.username"
+          :id="post.id"
+        />
+      </div>
+  
+      <!-- Ícones ao lado do post -->
+      <div class="icon-container">
+        <button class="btn btn-info" title="Editar Post">
+          <i class="bi bi-pencil-square"></i>
+        </button>
+        <button class="btn btn-danger" title="Apagar Post">
+          <i class="bi bi-trash"></i>
+        </button>
+      </div>
+    </div>
+  </template>
 
+<style scoped>
+.position-relative {
+  position: relative;
+}
+
+.icon-container {
+  position: absolute;
+  top: 10px; 
+  right: 10px; 
+  display: flex;
+  flex-direction: column;
+}
+
+.icon-container button {
+  margin-bottom: 50px; 
+}
+</style>

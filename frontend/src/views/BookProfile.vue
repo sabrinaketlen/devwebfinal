@@ -38,7 +38,8 @@ async function getPosts() {
 
     for(let i = 0; i < posts._rawValue.length; i++){
       if(posts._rawValue[i].attributes.users_permissions_user.data.id == user_id){
-        posts_sel.value.push(posts._rawValue[i])
+        if(posts._rawValue[i].attributes.livro.data.id == livro._rawValue.id)
+          posts_sel.value.push(posts._rawValue[i])
       }
     }
 
@@ -120,6 +121,9 @@ async function toggleBookInEstante() {
     
     
     //console.log(currentLivros);
+    console.log("livro raw value");
+
+    console.log(livro._rawValue);
     
     const livro_objeto = toRaw(livro._rawValue)
 

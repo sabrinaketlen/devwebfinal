@@ -7,11 +7,11 @@ import type { ApplicationError, Estante, Livro, Poste } from '@/types'
 import { useUserStore } from '../stores/userStore'
 import { isAxiosError } from 'axios'
 import { isApplicationError } from '@/composables/useApplicationError'
-import Post from '@/components/Post.vue';
+import Post from '../components/Post.vue';
 
 
 const posts = ref('')
-const posts_selecionados = ref([])
+let posts_selecionados = ref([])
 const route = useRoute()
 const livro = ref({} as Livro)
 const loading = ref(true)
@@ -33,7 +33,6 @@ async function getPosts() {
       },
     })
     posts.value = data.data
-    const posts_objeto = toRaw(posts)
     console.log(posts._rawValue)
     const posts_sel = ref([])
 
@@ -43,10 +42,10 @@ async function getPosts() {
       }
     }
 
-    posts_selecionados = toRaw(posts_sel)
+    posts_selecionados = toRaw(posts_sel._rawValue)
 
     console.log("a doidera dando certo")
-    console.log(posts_selecionados._rawValue)
+    console.log(posts_selecionados)
 
     //console.log(livro._rawValue);
     
@@ -252,14 +251,14 @@ checkIfBookInEstante()
         </div>
       </div>
       <Post
-        v-for="poste in posts_selecionados"
-        :key="poste.id"
-        :conteudo = "poste.attributes.Conteudo"
-        :dado= "poste.attributes.Dado"
-        :tipo= "poste.attributes.Dado"
-        :livro= "poste.attributes.livro"
-        :user= "poste.attributes.users_permissions_user.data.attributes.username"
-        :id= "poste.id"
+        v-for="posti in posts_selecionados"
+        :key="posti.id"
+        :conteudo = "posti.attributes.Conteudo"
+        :dado= "posti.attributes.Dado"
+        :tipo= "posti.attributes.Tipo"
+        :livro= "posti.attributes.livro"
+        :user= "posti.attributes.users_permissions_user.data.attributes.username"
+        :id= "posti.id"
       />
     </div>
   </template>

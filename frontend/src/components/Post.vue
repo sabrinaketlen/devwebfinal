@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import type { Poste } from '@/types';
-import { useUpload } from '@/composables/useUpload';
+console.log("TO AQUIIII")
 const props = defineProps<Poste>();
-
-const nota = true
 </script>
 
 <template>
@@ -13,11 +11,11 @@ const nota = true
           
               <div class="card-body">
                 <div class="d-flex justify-content-left align-items-center">
-                    <h5 class="card-title mb-0 me-2">{{ props.user }}</h5> <!-- Adicionando a classe 'me-2' -->
-                    <p class="card-text mb-0"> <!-- Removendo a margem inferior para melhor alinhamento -->
-                        <a v-if="nota">
+                    <h5 class="card-title mb-0 me-2">user</h5>
+                    <p class="card-text mb-0"> 
+                        <a>
                         <strong>
-                        <small>{{ props.tipo }}</small> <span class="badge bg-secondary">oii</span>
+                        <small>tipo</small> <span class="badge bg-secondary">oii</span>
                         </strong>
                         </a>
                     </p>
@@ -30,8 +28,6 @@ const nota = true
                                         </div>
                     </strong>
                 </a>
-                    
-                
                 <div class="text-start">
                     
                   <p class="card-text">ADHJKSDHAJKDHJKASDHJKADHJKDHAJKHDAJKSDHJKASDHASJKDHAJKDHAJKSDHAJKSDHAJKSDHAKJSDHAJKSDHAKSJDHAKSJDHASKDJHASDJKAHDAJKD</p>

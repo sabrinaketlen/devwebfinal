@@ -121,6 +121,7 @@ async function toggleBookInEstante() {
         Authorization: `Bearer ${userStore.jwt}`,
       },
     });
+    checkIfBookInEstante()
   } catch (e) {
     if (isAxiosError(e) && isApplicationError(e.response?.data)) {
       error.value = e.response?.data

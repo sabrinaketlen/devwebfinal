@@ -31,13 +31,13 @@ async function checkIfBookInEstante() {
 
     //console.log(data.data.attributes.livros.data);
 
-    console.log("data:");
+    //console.log("data:");
     
-    console.log(data);
+    //console.log(data);
     
     estante.value = data.data.attributes.livros.data
 
-    console.log(estante);
+    //console.log(estante);
     
 
     //const estante_objeto = toRaw(estante.value)
@@ -138,8 +138,8 @@ async function getLivro() {
   try {
     const { data } = await api.get(`/livros/${route.params.id}?populate=Capa`)
     livro.value = data.data
-    console.log("getlivro")
-    console.log(livro._rawValue);
+    //console.log("getlivro")
+    //console.log(livro._rawValue);
     
   } catch (e) {
     if (isAxiosError(e) && isApplicationError(e.response?.data)) {

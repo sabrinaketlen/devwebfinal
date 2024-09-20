@@ -33,23 +33,34 @@ async function getLivro() {
         livro.value = data.data
 
         const livro_objeto = toRaw(livro._rawValue)
-        const currentPath = route.path
-        console.log(searchQuery);
+        
 
         let achado = false
         for (let i = 0; i < livro_objeto.length; i++) {
-          if (livro_objeto[i].attributes.Nome == searchQuery._rawValue) {
+          if (livro_objeto[i].attributes.Nome == searchQuery._value) {
             id.value = livro_objeto[i].id
+            //console.log(id.value)
             achado = true
             break;
           }
         }
 
+        const currentPath = route.path
+        //const nextPath = id.value
+        //.log(currentPath);
+        //console.log(nextPath)
+        //console.log(searchQuery)
+
+        if(currentPath != '/'){
+          //console.log("NOT HOME")
+          await router.push('/')
+        }
+        
         if(achado == false){
           router.push({ path: '/:pathMatch(.*)*' });
         }
-        else{
-          router.replace( { path: `/livros/${id._rawValue}`});
+        else {
+          router.push( { path: `/livros/${id.value}`});
         }
 
         searchQuery.value = ''

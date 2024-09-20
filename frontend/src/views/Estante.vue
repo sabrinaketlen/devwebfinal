@@ -11,7 +11,6 @@ const userStore = useUserStore()
 const estante = ref({} as Estante)
 const exception = ref<ApplicationError>()
 const loading = ref(true)
-const livros = ref([] as Livro[])
 const user_id = userStore.user.id
 
 const fetchEstanteByUserId = async () => {

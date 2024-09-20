@@ -49,7 +49,7 @@ async function getLivro() {
           router.push({ path: '/:pathMatch(.*)*' });
         }
         else{
-          router.push(`/livros/${id._rawValue}`);
+          router.replace( { path: `/livros/${id._rawValue}`});
         }
 
         searchQuery.value = ''

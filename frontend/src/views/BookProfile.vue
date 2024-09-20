@@ -137,7 +137,8 @@ async function getLivro() {
   try {
     const { data } = await api.get(`/livros/${route.params.id}?populate=Capa`)
     livro.value = data.data
-    //console.log(livro);
+    console.log("getlivro")
+    console.log(livro._rawValue);
     
   } catch (e) {
     if (isAxiosError(e) && isApplicationError(e.response?.data)) {
@@ -171,8 +172,8 @@ checkIfBookInEstante()
             <div class="col-md-4">
               <!-- DANDO PROBLEMA -->
               <img
-                v-if="livro.capa" 
-                :src="uploadHelper(livro.capa.data.attributes.url)"
+                v-if="livro.attributes.Capa" 
+                :src="uploadHelper(livro.attributes.Capa.data.attributes.url)"
                 class="w-100 rounded-start"
                 :alt="livro.nome"
               />

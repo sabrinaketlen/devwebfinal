@@ -5,7 +5,7 @@
       <!-- VOU PRECISAR ALTERAR PRA QUANDO ESTIVER LOGADO -->
       <div class="btn-group-vertical" role="group" aria-label="Vertical button group">
         <button type="button" class="btn btn-light">Fazer post</button>
-        <RouterLink :to="`/estante/${username}`"><button type="button" class="btn btn-light">Estante</button></RouterLink>
+        <RouterLink :to="`/estante/${userStore.username}`"><button type="button" class="btn btn-light">Estante</button></RouterLink>
         <RouterLink to='/'><button type="button" class="btn btn-light">Catálogo</button></RouterLink>
       </div>
     </div>

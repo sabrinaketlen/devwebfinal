@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue';
-import type { ApplicationError, Estante, Livro } from '@/types';
+import { ref, onMounted } from 'vue';
+import type { ApplicationError, Estante } from '@/types';
 import { api } from '@/api';
 import { isAxiosError } from 'axios';
 import { isApplicationError } from '@/composables/useApplicationError';
@@ -13,7 +13,7 @@ const exception = ref<ApplicationError>()
 const loading = ref(true)
 const user_id = userStore.user.id
 
-const fetchEstanteByUserId = async () => {
+const fetchEstanteByUser = async () => {
   try {
     const { data } = await api.get(`/estantes?populate=livros.Capa, users_permissions_user`, {
       headers: {
@@ -46,7 +46,7 @@ const fetchEstanteByUserId = async () => {
 }
 
 onMounted(() => {
-    fetchEstanteByUserId()
+    fetchEstanteByUser()
 });
 
 </script>

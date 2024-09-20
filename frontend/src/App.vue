@@ -31,7 +31,9 @@ import SideBar from './components/SideBar.vue';
 export default {
   name: 'App',
   components: { myHeader, SideBar }
+  
 }
+
 </script>
 
 <style>

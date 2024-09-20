@@ -38,25 +38,25 @@ const router = createRouter({
       path: '/livros/:id',
       name: 'livro',
       component: BookProfile,
-      
+
     },
     {
       path: '/estante/:id',
       name: 'estante',
-      component: Estante, 
+      component: Estante,
       meta: {
         requiresAuth: true
       }
-      
+
     },
     {
       path: '/post/:id',
       name: 'post',
-      component: FazerPost, 
+      component: FazerPost,
       meta: {
         requiresAuth: true
       }
-    
+
     },
     { path: '/:pathMatch(.*)*', component: NotFound },
   ]

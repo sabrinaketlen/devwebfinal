@@ -37,10 +37,9 @@ async function getPosts() {
     const posts_sel = ref([])
 
     for(let i = 0; i < posts._rawValue.length; i++){
-      if(posts._rawValue[i].attributes.users_permissions_user.data.id == user_id){
         if(posts._rawValue[i].attributes.livro.data.id == livro._rawValue.id)
           posts_sel.value.push(posts._rawValue[i])
-      }
+      
     }
 
     posts_selecionados.value = toRaw(posts_sel._rawValue)

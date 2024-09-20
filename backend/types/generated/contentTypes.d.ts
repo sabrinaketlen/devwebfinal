@@ -470,7 +470,6 @@ export interface ApiPostPost extends Schema.CollectionType {
       'manyToOne',
       'plugin::users-permissions.user'
     >;
-    Tipo: Attribute.Enumeration<['Nota', 'Progresso']> & Attribute.Required;
     Dado: Attribute.Integer &
       Attribute.SetMinMax<
         {
@@ -487,6 +486,13 @@ export interface ApiPostPost extends Schema.CollectionType {
       'manyToOne',
       'api::livro.livro'
     >;
+    Tipo: Attribute.String &
+      Attribute.Required &
+      Attribute.SetMinMaxLength<{
+        minLength: 4;
+        maxLength: 9;
+      }> &
+      Attribute.DefaultTo<'Progresso'>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;

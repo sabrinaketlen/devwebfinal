@@ -12,7 +12,7 @@ export const useUserStore = defineStore('user', () => {
       name: localStorage.getItem('role') || ""
     }
   })
-
+  
   // Inicializar o JWT a partir do localStorage
   const jwt = ref(localStorage.getItem('jwt') || '')
 
@@ -42,3 +42,5 @@ export const useUserStore = defineStore('user', () => {
 
   return { user, username, jwt, role, isAuthenticated, authenticaded, logout }
 })
+
+

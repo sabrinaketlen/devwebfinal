@@ -38,6 +38,8 @@ async function authenticate() {
 
     userStore.authenticaded(res.data, jwt)
 
+    
+
     if (role == 'admin') {
       router.push('/admin')
     } else {

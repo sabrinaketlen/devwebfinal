@@ -23,6 +23,7 @@ const progressWidth = `${progressValue.value}%`;
 </script>
 
 <template>
+  <RouterLink :to="`/posts/${props.id}`" class="text-decoration-none">
     <div class="row justify-content-center">
       <div class="col-lg-8 col-sm-12">
         <div class="card mb-3">
@@ -55,6 +56,6 @@ const progressWidth = `${progressValue.value}%`;
         </div>
       </div> 
     </div>
-
+</RouterLink>
   </template>
   

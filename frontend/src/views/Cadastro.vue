@@ -24,14 +24,7 @@ async function register() {
         email: email.value,
         password: password.value
     })
-
-    const tentativa = await api.post('/estantes',{
-        data:{
-            user: username.value 
-        }
-    })
-    // Redirecionar após cadastro bem-sucedido
-    router.push('/login') // ou outra rota desejada após o cadastro
+    router.push('/login') 
   } catch (e) {
     if (isAxiosError(e) && isApplicationError(e.response?.data)) {
       exception.value = e.response?.data
@@ -40,6 +33,8 @@ async function register() {
     loading.value = false
   }
 }
+
+
 </script>
 
 <template>

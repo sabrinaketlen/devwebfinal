@@ -30,8 +30,7 @@ export type Poste = {
   dado: number,
   tipo: string,
   livro: Livro,
-  user: string,
-  id: number
+  user: User,
 }
 export type Estante = {
   id: number,

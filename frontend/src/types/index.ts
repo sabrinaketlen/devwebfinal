@@ -34,8 +34,9 @@ export type Poste = {
   id: number
 }
 export type Estante = {
-  id: number
-  livros: Livro[]
+  id: number,
+  livros: Livro[],
+  user: User,
 }
 
 

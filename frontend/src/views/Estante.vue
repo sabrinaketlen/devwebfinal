@@ -15,13 +15,23 @@ const user_id = userStore.user.id
 
 const fetchEstanteByUserId = async () => {
   try {
-    const { data } = await api.get(`/estantes/${user_id}?populate=livros.Capa,users_permissions_user`, {
+    const { data } = await api.get(`/estantes?populate=livros.Capa, users_permissions_user`, {
       headers: {
         Authorization: `Bearer ${userStore.jwt}`,
       }
     });
-    estante.value = data.data.attributes.livros.data
-    console.log(data.data.attributes.livros.data);
+    let biblioteca = data.data
+    console.log(biblioteca)
+
+    for(let i = 0; i < biblioteca.length; i++){
+      if(biblioteca[i].attributes.users_permissions_user.data.id = user_id){
+        estante.value = biblioteca[i].attributes.livros.data
+      }
+    }
+
+    console.log(estante)
+    //estante.value = data.data.attributes.livros.data
+    //console.log(data.data.attributes.livros.data);
     
     if (data.data.length === 0) {
       throw new Error('Estante não encontrada para o usuário')

@@ -17,10 +17,15 @@
           <i class="bi bi-list fs-1 text-white"></i>
         </button>
         <template v-if="userStore.username">
-                <RouterLink to="/login">
-                <a href="#" @click="userStore.logout" class="btn btn-outline-danger">Logout</a>
-                </RouterLink>
+          <div>
+            <!-- Exibir o nome do usuário -->
+            <span>Logged as {{ userStore.username }}</span>
+          </div>
+          <RouterLink to="/login">
+            <a href="#" @click="userStore.logout" class="btn btn-outline-danger">Logout</a>
+          </RouterLink>
         </template>
+
         <template v-else><RouterLink to="/login" class="btn btn-light">Login</RouterLink></template>
       </nav>
     </div>

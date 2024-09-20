@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useUserStore } from '@/stores/userStore'
 
+import VerPost from '../views/VerPost.vue'
 import HomeView from '../views/HomeView.vue'
 import Login from '../views/Login.vue'
 import BookProfile from '../views/BookProfile.vue'
@@ -59,15 +60,13 @@ const router = createRouter({
 
     },
     {
-      path: '/postar/:id',
-      name: 'postar',
-      component: FazerPost,
+      path: '/posts/:id',
+      name: 'post',
+      component: VerPost,
       meta: {
         requiresAuth: true
       }
-
     },
-
     { path: '/:pathMatch(.*)*', component: NotFound },
   ]
 })

@@ -1,32 +1,38 @@
-<script>
-import { ref, toRaw } from 'vue'
+
+<script setup lang="ts">
+import { ref, toRaw } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
+import type { ApplicationError, Poste } from '@/types'
+import { isAxiosError } from 'axios';
+import { isApplicationError } from '@/composables/useApplicationError';
 import { useUserStore } from '@/stores/userStore'
+import { api } from '@/api';
 
-const posts = ref('')
+
+import Post from '../components/Post.vue';
+
 const userStore = useUserStore()
+const loading = ref(true)
+const error = ref<ApplicationError>()
 
+const route = useRoute()
+const post = ref({} as Poste)
 
-async function getPosts() {
+//parei aqui, JA ESTA PEGANDO O POST
+
+async function getPost() {
   try {
-    const { data } = await api.get(`/posts?populate=livro,users_permissions_user`, {
+    const { data } = await api.get(`/posts/${route.params.id}?populate=livro,users_permissions_user`, {
       headers: {
         Authorization: `Bearer ${userStore.jwt}`,
       },
     })
-    posts.value = data.data
-    console.log(posts._rawValue)
-    const posts_sel = ref([])
+    post.value = data.data
+    console.log(post._rawValue)
 
-    for(let i = 0; i < posts._rawValue.length; i++){
-        if(posts._rawValue[i].attributes.livro.data.id == livro._rawValue.id)
-          posts_sel.value.push(posts._rawValue[i])
-      
-    }
-
-    posts_selecionados.value = toRaw(posts_sel._rawValue)
+    
 
     console.log("a doidera dando certo")
-    console.log(posts_selecionados)
 
     //console.log(livro._rawValue);
     
@@ -40,21 +46,19 @@ async function getPosts() {
   
 }
 
-getPosts()
+getPost()
+
 </script>
 
 <template>
-<div>
     <Post
-        v-for="posti in posts_selecionados"
-        :key="posti.id"
-        :conteudo = "posti.attributes.Conteudo"
-        :dado= "posti.attributes.Dado"
-        :tipo= "posti.attributes.Tipo"
-        :livro= "posti.attributes.livro"
-        :user= "posti.attributes.users_permissions_user.data.attributes.username"
-        :id= "posti.id"
-      />
-    </div>
+    :key="post.id"
+    :conteudo = "post.attributes.Conteudo"
+    :dado= "post.attributes.Dado"
+    :tipo= "post.attributes.Tipo"
+    :livro= "post.attributes.livro"
+    :user= "post.attributes.users_permissions_user.data.attributes.username"
+    :id= "post.id"
+    />
 </template>
 

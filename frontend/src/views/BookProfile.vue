@@ -252,17 +252,25 @@ checkIfBookInEstante()
             </div>
           </div>
         </div>
+      
       </div>
-      <Post
-        v-for="posti in posts_selecionados"
-        :key="posti.id"
-        :conteudo = "posti.attributes.Conteudo"
-        :dado= "posti.attributes.Dado"
-        :tipo= "posti.attributes.Tipo"
-        :livro= "posti.attributes.livro"
-        :user= "posti.attributes.users_permissions_user.data.attributes.username"
-        :id= "posti.id"
-      />
+      <div v-for="posti in posts_selecionados">
+      <RouterLink :to="`/posts/${posti.id}`" class="text-decoration-none">
+        <div>
+          <Post
+  
+            :key="posti.id"
+            :conteudo = "posti.attributes.Conteudo"
+            :dado= "posti.attributes.Dado"
+            :tipo= "posti.attributes.Tipo"
+            :livro= "posti.attributes.livro"
+            :user= "posti.attributes.users_permissions_user.data.attributes.username"
+            :id= "posti.id"
+          />
+        </div>
+      </RouterLink>
+      </div>
+      
     </div>
   </template>
   

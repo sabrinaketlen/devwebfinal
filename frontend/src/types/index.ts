@@ -26,6 +26,7 @@ type Role = {
 }
 
 export type Poste = {
+  id: number,
   conteudo: string,
   dado: number,
   tipo: string,

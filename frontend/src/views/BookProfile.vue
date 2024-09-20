@@ -3,12 +3,15 @@ import { ref, toRaw } from 'vue'
 import { useRoute } from 'vue-router'
 import { api } from '@/api'
 import { useUpload } from '@/composables/useUpload'
-import type { ApplicationError, Estante, Livro } from '@/types'
+import type { ApplicationError, Estante, Livro, Poste } from '@/types'
 import { useUserStore } from '../stores/userStore'
 import { isAxiosError } from 'axios'
 import { isApplicationError } from '@/composables/useApplicationError'
 import Post from '@/components/Post.vue';
 
+
+const posts = ref('')
+const posts_selecionados = ref([])
 const route = useRoute()
 const livro = ref({} as Livro)
 const loading = ref(true)
@@ -22,6 +25,41 @@ const user_id = userStore.user.id
 
 const isBookInEstante = ref(false)
 
+async function getPosts() {
+  try {
+    const { data } = await api.get(`/posts?populate=livro,users_permissions_user`, {
+      headers: {
+        Authorization: `Bearer ${userStore.jwt}`,
+      },
+    })
+    posts.value = data.data
+    const posts_objeto = toRaw(posts)
+    console.log(posts._rawValue)
+    const posts_sel = ref([])
+
+    for(let i = 0; i < posts._rawValue.length; i++){
+      if(posts._rawValue[i].attributes.users_permissions_user.data.id == user_id){
+        posts_sel.value.push(posts._rawValue[i])
+      }
+    }
+
+    posts_selecionados = toRaw(posts_sel)
+
+    console.log("a doidera dando certo")
+    console.log(posts_selecionados._rawValue)
+
+    //console.log(livro._rawValue);
+    
+  } catch (e) {
+    if (isAxiosError(e) && isApplicationError(e.response?.data)) {
+      error.value = e.response?.data
+    }
+  } finally {
+    loading.value = false
+  }
+  
+}
+
 async function checkIfBookInEstante() {
   try {
     const { data } = await api.get(`/estantes/${user_id}?populate=livros.Capa`, {
@@ -29,7 +67,7 @@ async function checkIfBookInEstante() {
         Authorization: `Bearer ${userStore.jwt}`,
       },
     })
-
+     getPosts()
     //console.log(data.data.attributes.livros.data);
 
     //console.log("data:");
@@ -213,7 +251,16 @@ checkIfBookInEstante()
           </div>
         </div>
       </div>
-      <Post/>
+      <Post
+        v-for="poste in posts_selecionados"
+        :key="poste.id"
+        :conteudo = "poste.attributes.Conteudo"
+        :dado= "poste.attributes.Dado"
+        :tipo= "poste.attributes.Dado"
+        :livro= "poste.attributes.livro"
+        :user= "poste.attributes.users_permissions_user.data.attributes.username"
+        :id= "poste.id"
+      />
     </div>
   </template>
   

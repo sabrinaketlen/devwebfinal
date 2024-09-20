@@ -471,7 +471,7 @@ export interface ApiPostPost extends Schema.CollectionType {
       'plugin::users-permissions.user'
     >;
     Tipo: Attribute.Enumeration<['Nota', 'Progresso']> & Attribute.Required;
-    Nota: Attribute.Integer &
+    Dado: Attribute.Integer &
       Attribute.SetMinMax<
         {
           max: 5;

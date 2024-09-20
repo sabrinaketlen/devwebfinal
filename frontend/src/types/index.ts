@@ -25,8 +25,13 @@ type Role = {
   name: string
 }
 
-export type Post = {
-  
+export type Poste = {
+  conteudo: string,
+  dado: number,
+  tipo: string,
+  livro: Livro,
+  user: User,
+  id: number
 }
 export type Estante = {
   id: number

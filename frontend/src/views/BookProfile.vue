@@ -11,7 +11,7 @@ import Post from '../components/Post.vue';
 
 
 const posts = ref('')
-let posts_selecionados = ref([])
+const posts_selecionados = ref([])
 const route = useRoute()
 const livro = ref({} as Livro)
 const loading = ref(true)
@@ -42,7 +42,7 @@ async function getPosts() {
       }
     }
 
-    posts_selecionados = toRaw(posts_sel._rawValue)
+    posts_selecionados.value = toRaw(posts_sel._rawValue)
 
     console.log("a doidera dando certo")
     console.log(posts_selecionados)

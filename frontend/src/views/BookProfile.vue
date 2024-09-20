@@ -7,6 +7,7 @@ import type { ApplicationError, Estante, Livro } from '@/types'
 import { useUserStore } from '../stores/userStore'
 import { isAxiosError } from 'axios'
 import { isApplicationError } from '@/composables/useApplicationError'
+import Post from '@/components/Post.vue';
 
 const route = useRoute()
 const livro = ref({} as Livro)
@@ -212,6 +213,7 @@ checkIfBookInEstante()
           </div>
         </div>
       </div>
+      <Post/>
     </div>
   </template>
   

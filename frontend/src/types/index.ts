@@ -25,15 +25,14 @@ type Role = {
   name: string
 }
 
+export type Post = {
+  
+}
 export type Estante = {
   id: number
   livros: Livro[]
 }
 
-export type Amizades = {
-  username: string,
-  amigos: User[]
-}
 
 export interface ApplicationError {
   error: {

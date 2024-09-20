@@ -11,13 +11,21 @@ if(props.tipo != "Nota"){
   nota = false
 }
 
+console.log("n de CAPS");
+console.log(props.livro.data.attributes.nCapitulos);
+let ncaps = (props.dado / props.livro.data.attributes.nCapitulos) * 100
+console.log(ncaps);
+
+
+const progressValue = ref(ncaps); // Valor da largura em porcentagem
+const progressWidth = `${progressValue.value}%`;
+
 </script>
 
 <template>
     <div class="row justify-content-center">
       <div class="col-lg-8 col-sm-12">
         <div class="card mb-3">
-          
               <div class="card-body">
                 <div class="d-flex justify-content-left align-items-center">
                     <h5 class="card-title mb-0 me-2">{{ user }}</h5>
@@ -32,9 +40,9 @@ if(props.tipo != "Nota"){
                 
                 <a v-if="!nota">
                     <strong>
-                    <small>{{tipo}}:</small> <div class="progress" role="progressbar" aria-label="Basic example" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
-                                            <div class="progress-bar" style="width: 70%"></div>
-                                        </div>
+                    <small>{{tipo}}:</small> <div class="progress" role="progressbar" aria-label="Basic example" aria-valuenow="value" aria-valuemin="0" aria-valuemax="100">
+                                                  <div class="progress-bar" :style="{ width: progressWidth }"></div>
+                                              </div>
                     </strong>
                 </a>
                 <div class="text-start">

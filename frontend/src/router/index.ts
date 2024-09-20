@@ -7,6 +7,7 @@ import BookProfile from '../views/BookProfile.vue'
 import Estante from '../views/Estante.vue'
 import NotFound from '../views/NotFound.vue'
 import Cadastro from '../views/Cadastro.vue'
+import FazerPost from '../views/FazerPost.vue'
 
 
 const router = createRouter({
@@ -36,17 +37,26 @@ const router = createRouter({
     {
       path: '/livros/:id',
       name: 'livro',
-      component: BookProfile, // Componente que mostrará os detalhes do livro
-      // Habilita a passagem do parâmetro `id` como propriedade
+      component: BookProfile,
+      
     },
     {
       path: '/estante/:id',
       name: 'estante',
-      component: Estante, // Componente que mostrará os detalhes do livro
+      component: Estante, 
       meta: {
         requiresAuth: true
       }
-      // Habilita a passagem do parâmetro `id` como propriedade
+      
+    },
+    {
+      path: '/post/:id',
+      name: 'post',
+      component: FazerPost, 
+      meta: {
+        requiresAuth: true
+      }
+    
     },
     { path: '/:pathMatch(.*)*', component: NotFound },
   ]

@@ -28,7 +28,7 @@
     },
     "Dado": {
       "type": "integer",
-      "max": 5
+      "min": 1
     },
     "Conteudo": {
       "type": "text",

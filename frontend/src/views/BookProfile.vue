@@ -33,7 +33,7 @@ async function getPosts() {
       },
     })
     posts.value = data.data
-    console.log(posts._rawValue)
+    //console.log(posts._rawValue)
     const posts_sel = ref([])
 
     for(let i = 0; i < posts._rawValue.length; i++){
@@ -44,8 +44,7 @@ async function getPosts() {
 
     posts_selecionados.value = toRaw(posts_sel._rawValue)
 
-    console.log("a doidera dando certo")
-    console.log(posts_selecionados)
+    //console.log(posts_selecionados)
 
     //console.log(livro._rawValue);
     
@@ -115,27 +114,26 @@ async function toggleBookInEstante() {
     for (let i = 0; i < currentLivros.length; i++) {
       currentLivros_id.push(currentLivros[i].id)
     }
-    console.log("IDS")
-    console.log(currentLivros_id)
+    //console.log(currentLivros_id)
     
     
     //console.log(currentLivros);
-    console.log("livro raw value");
+    //console.log("livro raw value");
 
-    console.log(livro._rawValue);
+    //console.log(livro._rawValue);
     
     const livro_objeto = toRaw(livro._rawValue)
 
-    console.log("livro_objeto");
+    //console.log("livro_objeto");
 
-    console.log(livro_objeto);
+    //console.log(livro_objeto);
     
 
     if (action == 'add') {
-      console.log("tentei add");
+      //console.log("tentei add");
       currentLivros_id.push(livro_objeto.id)
     } else if (action == 'remove') {
-      console.log("tentei remover");
+      //console.log("tentei remover");
       let indexToRemove = -1; 
       for (let i = 0; i < currentLivros_id.length; i++) {
         if (currentLivros_id[i] === livro_objeto.id) {

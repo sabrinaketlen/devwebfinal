@@ -15,6 +15,7 @@ const livros = ref([] as Livro[])
 const livro_selecionado = ref({} as Livro);
 const tipo = ref('');
 const dado = ref(0);
+const dado_edit = ref(0);
 const edit = ref(false);
 
 const route = useRoute()
@@ -73,6 +74,9 @@ async function getLivro() {
     });
     livro_selecionado.value = data.data.attributes.livro
     console.log(livro_selecionado)
+    tipo.value = data.data.attributes.Tipo
+    console.log(data.data)
+    dado_edit.value = data.data.attributes.Dado
     //for (let i = 0; i < livros.value.length; i++){
     // if(livros.value[i].id == )    
     //}
@@ -85,12 +89,11 @@ async function Postar() {
     errorMessage.value = null; 
     //console.log(livro_selecionado);
 
-    if ((tipo.value == 'Nota') && (dado.value > '5' || dado.value < 1)) {
+    if ((tipo.value == 'Nota') && (dado.value > 5 || dado.value < 1)) {
       errorMessage.value = "Postagem do tipo 'Nota' deve ter 'Dado' entre 1 e 5";
       throw new Error(errorMessage.value);
     }
-
-    if ((tipo.value == 'Progresso') && (dado.value > livro_selecionado._rawValue.attributes.nCapitulos || dado.value < 1)) {
+    else if ((tipo.value == 'Progresso') && (dado.value > livro_selecionado._rawValue.attributes.nCapitulos || dado.value < 1)) {
       errorMessage.value = `Postagem do tipo 'Progresso' pro livro ${livro_selecionado._rawValue.attributes.Nome} deve ter 'Dado' entre 1 e ${livro_selecionado._rawValue.attributes.nCapitulos}`;
       throw new Error(errorMessage.value);
     }
@@ -142,13 +145,15 @@ async function Editar() {
     errorMessage.value = null; 
     //console.log(livro_selecionado);
     await getLivro()
+    if(tipo._rawValue == 'Nota'){
+        console.log("dado inserido foi maior que 5")        
+    }
 
-    if ((tipo.value == 'Nota') && (dado.value > '5' || dado.value < 1)) {
+    if ((tipo._rawValue == 'Nota') && (((dado_edit._rawValue > 5) || (dado_edit._rawValue < 1)) || ((dado._rawValue > 5) || (dado._rawValue < 1)) )) {
       errorMessage.value = "Postagem do tipo 'Nota' deve ter 'Dado' entre 1 e 5";
       throw new Error(errorMessage.value);
     }
-
-    if ((tipo.value == 'Progresso') && (dado.value > livro_selecionado._rawValue.attributes.nCapitulos || dado.value < 1)) {
+    else if ((tipo.value == 'Progresso') && (dado.value > livro_selecionado._rawValue.attributes.nCapitulos || dado.value < 1)) {
       errorMessage.value = `Postagem do tipo 'Progresso' pro livro ${livro_selecionado._rawValue.attributes.Nome} deve ter 'Dado' entre 1 e ${livro_selecionado._rawValue.attributes.nCapitulos}`;
       throw new Error(errorMessage.value);
     }
@@ -196,7 +201,7 @@ async function Editar() {
     <div class="col-lg-8 col-sm-12">
       <div class="card mb-3">
         <div class="card-body">
-            <h5 class="card-title">{{ edit ? 'Editar Postagem' : 'Nova Postagem' }}</h5>
+            <h5 class="card-title">{{ edit ? 'Editar Postagem': 'Nova Postagem' }}</h5>
           <form @submit.prevent=" edit? Editar(): Postar()">
             <div v-if="!edit" class="mb-3">
                 <label for="livroInput" class="form-label">Selecione o livro da sua estante: </label>
@@ -221,7 +226,6 @@ async function Editar() {
             <div class="mb-3">
               <label for="conteudoInput" class="form-label">Conteúdo</label>
               <input type="text" class="form-control" id="conteudoInput" v-model="conteudo"/>
-              <div class="invalid-feedback">Conteúdo é um campo obrigatório.</div>
             </div>
 
             <div v-if="!edit" class="mb-3">

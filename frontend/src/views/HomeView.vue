@@ -6,11 +6,16 @@ import { isAxiosError } from 'axios';
 import { isApplicationError } from '@/composables/useApplicationError';
 import { useRouter } from 'vue-router';
 import Book from '@/components/Book.vue';
+import { useUserStore } from '@/stores/userStore';
 
+
+const userStore = useUserStore()
 const livros = ref([] as Livro[])
 const router = useRouter();
 const exception = ref<ApplicationError>()
 const loading = ref(true)
+
+console.log(userStore.user.role.name)
 
 const fetchLivro = async () => {
   try {

@@ -9,6 +9,7 @@ import Estante from '../views/Estante.vue'
 import NotFound from '../views/NotFound.vue'
 import Cadastro from '../views/Cadastro.vue'
 import FazerPost from '../views/FazerPost.vue'
+import adminHome from '@/views/admin/adminHome.vue'
 
 
 const router = createRouter({
@@ -74,8 +75,16 @@ const router = createRouter({
       meta: {
         requiresAuth: true
       }
-
     },
+    {
+      path: '/admin',
+      name: 'MODO EDIÇÃO',
+      component: adminHome,
+      meta: {
+        requiresAuth: true
+      }
+    },
+
     { path: '/:pathMatch(.*)*', component: NotFound },
   ]
 })

@@ -40,7 +40,7 @@ async function authenticate() {
 
     
 
-    if (role == 'admin') {
+    if (role == 'organizador') {
       router.push('/admin')
     } else {
       router.push('/')

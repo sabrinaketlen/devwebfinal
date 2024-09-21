@@ -2,7 +2,6 @@
   <div class="d-flex" id="wrapper">
     <!-- Sidebar -->
     <div v-if="isSidebarVisible" id="sidebar-wrapper">
-      <!-- VOU PRECISAR ALTERAR PRA QUANDO ESTIVER LOGADO -->
       <div class="btn-group-vertical" role="group" aria-label="Vertical button group">
         <RouterLink :to="`/posts/${userStore.username}`"><button type="button" class="btn btn-light">Fazer post</button></RouterLink>
         <RouterLink :to="`/estante/${userStore.username}`"><button type="button" class="btn btn-light">Estante</button></RouterLink>
@@ -17,9 +16,12 @@
           <i class="bi bi-list fs-1 text-white"></i>
         </button>
         <template v-if="userStore.username">
+          
           <div>
             <!-- Exibir o nome do usuário -->
             <span>Logged as {{ userStore.username }}</span>
+            <template v-if="userStore.user.role.name == 'Organizador'"><button type="button" class="btn btn-light">MODO EDIÇÃO</button></template>
+
           </div>
           <RouterLink to="/login">
             <a href="#" @click="userStore.logout" class="btn btn-outline-danger">Logout</a>

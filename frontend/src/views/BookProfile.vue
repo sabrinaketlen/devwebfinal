@@ -190,7 +190,10 @@ async function getLivro() {
 }
 
 getLivro()
-checkIfBookInEstante()
+
+if(userStore.user.role.name != 'Organizador'){
+  checkIfBookInEstante()
+}
 
 
 
@@ -222,10 +225,12 @@ checkIfBookInEstante()
               <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center">
                   <h5 class="card-title mb-0">{{ livro.attributes.Nome }}</h5>
-                  <button class="btn fs-1" @click="toggleBookInEstante">
-                    <i v-if="isBookInEstante" class="bi bi-bookmark-check-fill"></i>
-                    <i v-else class="bi bi-bookmark-plus"></i>
-                </button>
+                  <template v-if="userStore.user.role.name != 'Organizador'">
+                    <button class="btn fs-1" @click="toggleBookInEstante">
+                      <i v-if="isBookInEstante" class="bi bi-bookmark-check-fill"></i>
+                      <i v-else class="bi bi-bookmark-plus"></i>
+                    </button>
+                  </template>
                 </div>
                 <hr />
                 
@@ -252,22 +257,24 @@ checkIfBookInEstante()
         </div>
       
       </div>
-      <div v-for="posti in posts_selecionados">
-      <RouterLink :to="`/post/${posti.id}`" class="text-decoration-none">
-        <div>
-          <Post
-  
-            :key="posti.id"
-            :conteudo = "posti.attributes.Conteudo"
-            :dado= "posti.attributes.Dado"
-            :tipo= "posti.attributes.Tipo"
-            :livro= "posti.attributes.livro"
-            :user= "posti.attributes.users_permissions_user.data.attributes.username"
-            :id= "posti.id"
-          />
+      <template v-if="userStore.user.role.name != 'Organizador'">
+        <div v-for="posti in posts_selecionados">
+          <RouterLink :to="`/post/${posti.id}`" class="text-decoration-none">
+            <div>
+              <Post
+      
+                :key="posti.id"
+                :conteudo = "posti.attributes.Conteudo"
+                :dado= "posti.attributes.Dado"
+                :tipo= "posti.attributes.Tipo"
+                :livro= "posti.attributes.livro"
+                :user= "posti.attributes.users_permissions_user.data.attributes.username"
+                :id= "posti.id"
+              />
+            </div>
+          </RouterLink>
         </div>
-      </RouterLink>
-      </div>
+    </template>
       
     </div>
   </template>

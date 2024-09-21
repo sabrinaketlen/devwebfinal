@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import type { Livro } from '@/types';
 import { useUpload } from '@/composables/useUpload';
+import { useUserStore } from '@/stores/userStore';
+
+const userStore = useUserStore()
 const props = defineProps<Livro>();
 const uploadHelper = useUpload();
 </script>

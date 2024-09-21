@@ -362,147 +362,6 @@ export interface AdminTransferTokenPermission extends Schema.CollectionType {
   };
 }
 
-export interface ApiEstanteEstante extends Schema.CollectionType {
-  collectionName: 'estantes';
-  info: {
-    singularName: 'estante';
-    pluralName: 'estantes';
-    displayName: 'Estante';
-    description: '';
-  };
-  options: {
-    draftAndPublish: false;
-  };
-  attributes: {
-    users_permissions_user: Attribute.Relation<
-      'api::estante.estante',
-      'oneToOne',
-      'plugin::users-permissions.user'
-    >;
-    livros: Attribute.Relation<
-      'api::estante.estante',
-      'oneToMany',
-      'api::livro.livro'
-    >;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::estante.estante',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::estante.estante',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface ApiLivroLivro extends Schema.CollectionType {
-  collectionName: 'livros';
-  info: {
-    singularName: 'livro';
-    pluralName: 'livros';
-    displayName: 'Livros';
-    description: '';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    Nome: Attribute.String & Attribute.Required & Attribute.Unique;
-    Autor: Attribute.String & Attribute.Required;
-    Genero: Attribute.String & Attribute.Required;
-    Sinopse: Attribute.Text &
-      Attribute.SetMinMaxLength<{
-        minLength: 100;
-        maxLength: 500;
-      }>;
-    Capa: Attribute.Media<'images'> & Attribute.Required;
-    Nota: Attribute.Decimal &
-      Attribute.SetMinMax<
-        {
-          max: 5;
-        },
-        number
-      >;
-    nCapitulos: Attribute.Integer & Attribute.Required;
-    posts: Attribute.Relation<
-      'api::livro.livro',
-      'oneToMany',
-      'api::post.post'
-    >;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::livro.livro',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::livro.livro',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface ApiPostPost extends Schema.CollectionType {
-  collectionName: 'posts';
-  info: {
-    singularName: 'post';
-    pluralName: 'posts';
-    displayName: 'Posts';
-    description: '';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    users_permissions_user: Attribute.Relation<
-      'api::post.post',
-      'manyToOne',
-      'plugin::users-permissions.user'
-    >;
-    Dado: Attribute.Integer &
-      Attribute.SetMinMax<
-        {
-          min: 1;
-        },
-        number
-      >;
-    Conteudo: Attribute.Text &
-      Attribute.SetMinMaxLength<{
-        maxLength: 1000;
-      }>;
-    livro: Attribute.Relation<
-      'api::post.post',
-      'manyToOne',
-      'api::livro.livro'
-    >;
-    Tipo: Attribute.String &
-      Attribute.Required &
-      Attribute.SetMinMaxLength<{
-        minLength: 4;
-        maxLength: 9;
-      }> &
-      Attribute.DefaultTo<'Progresso'>;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<'api::post.post', 'oneToOne', 'admin::user'> &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<'api::post.post', 'oneToOne', 'admin::user'> &
-      Attribute.Private;
-  };
-}
-
 export interface PluginUploadFile extends Schema.CollectionType {
   collectionName: 'files';
   info: {
@@ -933,6 +792,147 @@ export interface PluginI18NLocale extends Schema.CollectionType {
   };
 }
 
+export interface ApiEstanteEstante extends Schema.CollectionType {
+  collectionName: 'estantes';
+  info: {
+    singularName: 'estante';
+    pluralName: 'estantes';
+    displayName: 'Estante';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    users_permissions_user: Attribute.Relation<
+      'api::estante.estante',
+      'oneToOne',
+      'plugin::users-permissions.user'
+    >;
+    livros: Attribute.Relation<
+      'api::estante.estante',
+      'oneToMany',
+      'api::livro.livro'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::estante.estante',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::estante.estante',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiLivroLivro extends Schema.CollectionType {
+  collectionName: 'livros';
+  info: {
+    singularName: 'livro';
+    pluralName: 'livros';
+    displayName: 'Livros';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    Nome: Attribute.String & Attribute.Required & Attribute.Unique;
+    Autor: Attribute.String & Attribute.Required;
+    Genero: Attribute.String & Attribute.Required;
+    Sinopse: Attribute.Text &
+      Attribute.SetMinMaxLength<{
+        minLength: 100;
+        maxLength: 500;
+      }>;
+    Capa: Attribute.Media<'images'> & Attribute.Required;
+    Nota: Attribute.Decimal &
+      Attribute.SetMinMax<
+        {
+          max: 5;
+        },
+        number
+      >;
+    nCapitulos: Attribute.Integer & Attribute.Required;
+    posts: Attribute.Relation<
+      'api::livro.livro',
+      'oneToMany',
+      'api::post.post'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::livro.livro',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::livro.livro',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiPostPost extends Schema.CollectionType {
+  collectionName: 'posts';
+  info: {
+    singularName: 'post';
+    pluralName: 'posts';
+    displayName: 'Posts';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    users_permissions_user: Attribute.Relation<
+      'api::post.post',
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+    Dado: Attribute.Integer &
+      Attribute.SetMinMax<
+        {
+          min: 1;
+        },
+        number
+      >;
+    Conteudo: Attribute.Text &
+      Attribute.SetMinMaxLength<{
+        maxLength: 1000;
+      }>;
+    livro: Attribute.Relation<
+      'api::post.post',
+      'manyToOne',
+      'api::livro.livro'
+    >;
+    Tipo: Attribute.String &
+      Attribute.Required &
+      Attribute.SetMinMaxLength<{
+        minLength: 4;
+        maxLength: 9;
+      }> &
+      Attribute.DefaultTo<'Progresso'>;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<'api::post.post', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<'api::post.post', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+  };
+}
+
 declare module '@strapi/types' {
   export module Shared {
     export interface ContentTypes {
@@ -943,9 +943,6 @@ declare module '@strapi/types' {
       'admin::api-token-permission': AdminApiTokenPermission;
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
-      'api::estante.estante': ApiEstanteEstante;
-      'api::livro.livro': ApiLivroLivro;
-      'api::post.post': ApiPostPost;
       'plugin::upload.file': PluginUploadFile;
       'plugin::upload.folder': PluginUploadFolder;
       'plugin::content-releases.release': PluginContentReleasesRelease;
@@ -954,6 +951,9 @@ declare module '@strapi/types' {
       'plugin::users-permissions.role': PluginUsersPermissionsRole;
       'plugin::users-permissions.user': PluginUsersPermissionsUser;
       'plugin::i18n.locale': PluginI18NLocale;
+      'api::estante.estante': ApiEstanteEstante;
+      'api::livro.livro': ApiLivroLivro;
+      'api::post.post': ApiPostPost;
     }
   }
 }

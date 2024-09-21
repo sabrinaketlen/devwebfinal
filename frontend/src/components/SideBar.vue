@@ -20,8 +20,6 @@
           <div>
             <!-- Exibir o nome do usuário -->
             <span>Logged as {{ userStore.username }}</span>
-            <template v-if="userStore.user.role.name == 'Organizador'"><button type="button" class="btn btn-light">MODO EDIÇÃO</button></template>
-
           </div>
           <RouterLink to="/login">
             <a href="#" @click="userStore.logout" class="btn btn-outline-danger">Logout</a>

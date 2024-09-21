@@ -1,22 +1,38 @@
 <script setup lang="ts">
-import type { Poste } from '@/types';
+import type { Livro, Poste, User } from '@/types';
 import { ref, toRaw } from 'vue'
+const props = defineProps<Poste>();
 
+const id = ref(0)
+const conteudo = ref('')
+const dado = ref(0)
+const tipo = ref('')
+const livro = ref({} as Livro)
+const user= ref({} as User)
+const caps = ref(0)
+
+
+id.value = props.id
+conteudo.value = props.conteudo
+dado.value = props.dado
+tipo.value = props.tipo
+livro.value = props.livro
+user.value = props.user
+caps.value = props.livro.data.attributes.nCapitulos
 
 console.log("TO AQUIIII")
-const props = defineProps<Poste>();
+console.log(livro.value)
 let nota = true
 
 if(props.tipo != "Nota"){
   nota = false
 }
-console.log(props.livro.data.attributes.nCapitulos);
-let ncaps = (props.dado / props.livro.data.attributes.nCapitulos) * 100
-console.log(ncaps);
 
 
-const progressValue = ref(ncaps); 
-const progressWidth = `${progressValue.value}%`;
+livro.value = props.livro
+let progresso = (dado.value / caps.value ) * 100
+
+const progressWidth = `${progresso}%`;
 
 </script>
 

@@ -55,9 +55,12 @@ onMounted(() => {
     </div>
     
     <div v-else class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-8">
+    <RouterLink 
+      v-for="livro in livros" 
+      :key="livro.id" 
+      :to="`/admin/livros/${livro.id}`" 
+      class="text-decoration-none">
       <Book
-        v-for="livro in livros"
-        :key="livro.id"
         :id="livro.id"
         :nome="livro.attributes.Nome"
         :autor="livro.attributes.Autor"
@@ -67,7 +70,8 @@ onMounted(() => {
         :capa="livro.attributes.Capa"
         :caps="livro.attributes.nCapitulos"
       />
-    </div>
+    </RouterLink>
+  </div>
 
     <!-- Alteração 2: Botão flutuante "Adicionar" -->
      

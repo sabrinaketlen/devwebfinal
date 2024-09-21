@@ -10,7 +10,7 @@ import NotFound from '../views/NotFound.vue'
 import Cadastro from '../views/Cadastro.vue'
 import FazerPost from '../views/FazerPost.vue'
 import adminHome from '@/views/admin/adminHome.vue'
-
+import BookProfile4admin from '@/views/admin/BookProfile4admin.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -76,10 +76,19 @@ const router = createRouter({
         requiresAuth: true
       }
     },
+
     {
       path: '/admin',
-      name: 'MODO EDIÇÃO',
+      name: 'CRIAR',
       component: adminHome,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/admin/livros/:id',
+      name: 'LIVROS ADMIN',
+      component: BookProfile4admin,
       meta: {
         requiresAuth: true
       }

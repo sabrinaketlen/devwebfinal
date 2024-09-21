@@ -1,13 +1,14 @@
 <script setup lang="ts">
+
 import { ref, toRaw } from 'vue'
 import { useRoute } from 'vue-router'
 import { api } from '@/api'
 import { useUpload } from '@/composables/useUpload'
 import type { ApplicationError, Estante, Livro, Poste } from '@/types'
-import { useUserStore } from '../stores/userStore'
+import { useUserStore } from '@/stores/userStore'
 import { isAxiosError } from 'axios'
 import { isApplicationError } from '@/composables/useApplicationError'
-import Post from '../components/Post.vue';
+import Post from '@/components/Post.vue';
 
 
 const posts = ref('')
@@ -24,154 +25,6 @@ const userStore = useUserStore()
 const user_id = userStore.user.id
 
 const isBookInEstante = ref(false)
-
-async function getPosts() {
-  try {
-    const { data } = await api.get(`/posts?populate=livro,users_permissions_user`, {
-      headers: {
-        Authorization: `Bearer ${userStore.jwt}`,
-      },
-    })
-    posts.value = data.data
-    //console.log(posts._rawValue)
-    const posts_sel = ref([])
-
-    for(let i = 0; i < posts._rawValue.length; i++){
-        if(posts._rawValue[i].attributes.livro.data.id == livro._rawValue.id)
-          posts_sel.value.push(posts._rawValue[i])
-      
-    }
-
-    posts_selecionados.value = toRaw(posts_sel._rawValue)
-
-    //console.log(posts_selecionados)
-
-    //console.log(livro._rawValue);
-    
-  } catch (e) {
-    if (isAxiosError(e) && isApplicationError(e.response?.data)) {
-      error.value = e.response?.data
-    }
-  } finally {
-    loading.value = false
-  }
-  
-}
-
-async function checkIfBookInEstante() {
-  try {
-    const { data } = await api.get(`/estantes/${user_id}?populate=livros.Capa`, {
-      headers: {
-        Authorization: `Bearer ${userStore.jwt}`,
-      },
-    })
-     getPosts()
-    //console.log(data.data.attributes.livros.data);
-
-    //console.log("data:");
-    
-    //console.log(data);
-    
-    estante.value = data.data.attributes.livros.data
-
-    //console.log(estante);
-    
-
-    //const estante_objeto = toRaw(estante.value)
-    //console.log(estante_objeto);
-    
-
-    // Verifica se o livro está na estante
-    let found = false
-    for (let i = 0; i < data.data.attributes.livros.data.length; i++) {
-    
-        if (data.data.attributes.livros.data[i].id == route.params.id) {
-            found = true
-            break
-        }
-    }
-
-    isBookInEstante.value = found
-  } catch (e) {
-    console.error('Erro ao checar estante', e)
-  }
-}
-
-async function toggleBookInEstante() {
-  checkIfBookInEstante()
-  const action = isBookInEstante.value ? 'remove' : 'add'
-
-  try {
-    loading.value = true
-    
-    //console.log(estante._rawValue);
-    
-    const currentLivros = toRaw(estante._rawValue)
-    //console.log("currentLivros:");
-
-    const currentLivros_id = []
-
-    for (let i = 0; i < currentLivros.length; i++) {
-      currentLivros_id.push(currentLivros[i].id)
-    }
-    //console.log(currentLivros_id)
-    
-    
-    //console.log(currentLivros);
-    //console.log("livro raw value");
-
-    //console.log(livro._rawValue);
-    
-    const livro_objeto = toRaw(livro._rawValue)
-
-    //console.log("livro_objeto");
-
-    //console.log(livro_objeto);
-    
-
-    if (action == 'add') {
-      //console.log("tentei add");
-      currentLivros_id.push(livro_objeto.id)
-    } else if (action == 'remove') {
-      //console.log("tentei remover");
-      let indexToRemove = -1; 
-      for (let i = 0; i < currentLivros_id.length; i++) {
-        if (currentLivros_id[i] === livro_objeto.id) {
-          indexToRemove = i; 
-          break;
-        }
-      }
-      if (indexToRemove > -1) {
-        currentLivros_id.splice(indexToRemove, 1);
-      }
-    }
-
-    const newdata = {
-      data: {
-        livros: currentLivros_id
-      }
-    };
-
-    console.log('Payload enviado:', newdata)
-    
-
-    const { data } = await api.put(`/estantes/${user_id}`, newdata, {
-      headers: {
-        Authorization: `Bearer ${userStore.jwt}`,
-      },
-    });
-    checkIfBookInEstante()
-  } catch (e) {
-    if (isAxiosError(e) && isApplicationError(e.response?.data)) {
-      error.value = e.response?.data
-      feedback.value = error.value.error.message
-    } else {
-      console.error('Erro inesperado:', e)
-    }
-  } finally {
-    loading.value = false
-  }
-}
 
 async function getLivro() {
   try {
@@ -190,12 +43,10 @@ async function getLivro() {
 }
 
 getLivro()
-
-checkIfBookInEstante()
-
 </script>
 
 <template>
+    <template>
     <div v-if="error" class="alert alert-danger" role="alert">
       {{ error.error.message }}
     </div>
@@ -221,10 +72,12 @@ checkIfBookInEstante()
               <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center">
                   <h5 class="card-title mb-0">{{ livro.attributes.Nome }}</h5>
+                  <template v-if="userStore.user.role.name != 'Organizador'">
                     <button class="btn fs-1" @click="toggleBookInEstante">
                       <span v-if="isBookInEstante" class="bi bi-bookmark-check-fill"></span>
                       <span v-else class="bi bi-bookmark-plus"></span>
                     </button>
+                  </template>
                 </div>
                 <hr />
                 
@@ -251,10 +104,12 @@ checkIfBookInEstante()
         </div>
       
       </div>
+      <template v-if="userStore.user.role.name != 'Organizador'">
         <div v-for="posti in posts_selecionados">
           <RouterLink :to="`/post/${posti.id}`" class="text-decoration-none">
             <div>
               <Post
+      
                 :key="posti.id"
                 :conteudo = "posti.attributes.Conteudo"
                 :dado= "posti.attributes.Dado"
@@ -266,6 +121,8 @@ checkIfBookInEstante()
             </div>
           </RouterLink>
         </div>
+    </template>
+      
     </div>
   </template>
-  
+</template>

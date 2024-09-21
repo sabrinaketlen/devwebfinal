@@ -2,14 +2,17 @@
 import type { Livro } from '@/types';
 import { useUpload } from '@/composables/useUpload';
 import { useUserStore } from '@/stores/userStore';
+import { useRoute } from 'vue-router'
 
+const route = useRoute()
 const userStore = useUserStore()
 const props = defineProps<Livro>();
 const uploadHelper = useUpload();
+
+console.log(route.params)
 </script>
 
 <template>
-  <RouterLink :to="`/livros/${props.id}`" class="text-decoration-none">
     <div class="col">
       <div class="card shadow-sm">
         <img 
@@ -24,7 +27,8 @@ const uploadHelper = useUpload();
         </div>
       </div>
     </div>
-  </RouterLink>
+  
+  
 </template>
 
 <style scoped>

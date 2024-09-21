@@ -5,15 +5,65 @@ import { api } from '@/api/'
 import { useUserStore } from '@/stores/userStore'
 import { isAxiosError } from 'axios'
 import { isApplicationError } from '@/composables/useApplicationError'
-import type { ApplicationError } from '@/types'
+import type { ApplicationError, Estante } from '@/types'
 
 const identifier = ref('')
 const password = ref('')
 const loading = ref(false)
 const exception = ref<ApplicationError>()
 const router = useRouter()
-
+const id = ref(0)
+const estante = ref({} as Estante)
 const userStore = useUserStore()
+
+async function createEstante() {
+  try{
+  const { data } = await api.get('/estantes?populate=users_permissions_user', {
+      headers: {
+        Authorization: `Bearer ${userStore.jwt}`
+      },
+    })
+
+    let achado = false
+    estante.value= data.data
+    console.log(estante.value)
+
+    for(let i = 0; i < estante._rawValue.length; i++){
+      if(estante._rawValue[i].attributes.users_permissions_user.data.id == userStore.user.id){
+      console.log("ja tem estante")
+      achado = true
+      }
+    }
+    console.log(achado)
+    if(!achado){
+      const newdata = {
+      data: {
+        users_permissions_user: userStore.user.id
+        }
+      };
+
+      console.log('Payload enviado:', newdata)
+    
+
+      const res = await api.post(`/estantes`, newdata, {
+       headers: {
+          Authorization: `Bearer ${userStore.jwt}`,
+        },
+      });
+      console.log("ESTANTE CRIADA")
+    }
+    else{
+      console.log("tem estante")
+    }
+  } catch (e) {
+    if (isAxiosError(e) && isApplicationError(e.response?.data)) {
+      exception.value = e.response?.data
+    }
+  } finally {
+    loading.value = false
+  }
+
+}
 
 async function authenticate() {
   try {
@@ -35,9 +85,11 @@ async function authenticate() {
     })
 
     const role = res.data.role.type
+    id.value = res.data.id
+    console.log(id.value)
 
     userStore.authenticaded(res.data, jwt)
-
+    createEstante()
     
 
     if (role == 'organizador') {

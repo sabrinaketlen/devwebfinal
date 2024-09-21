@@ -14,6 +14,8 @@ const loading = ref(false)
 const exception = ref<ApplicationError>()
 const router = useRouter()
 
+
+
 async function register() {
   try {
     loading.value = true

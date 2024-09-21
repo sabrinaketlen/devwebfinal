@@ -15,7 +15,9 @@ const livros = ref([] as Livro[])
 const livro_selecionado = ref({} as Livro);
 const tipo = ref('');
 const dado = ref(0);
+const edit = ref(false);
 
+const route = useRoute()
 const router = useRouter()
 const conteudo = ref('');
 const loading = ref(false);
@@ -25,23 +27,24 @@ const userStore = useUserStore()
 const user_id = userStore.user.id
 const user = userStore.user
 
+console.log(route.params)
 const getEstante = async () => {
   try {
         const { data } = await api.get(`/estantes/${user_id}?populate=livros.Capa,users_permissions_user`, {
         headers: {
                 Authorization: `Bearer ${userStore.jwt}`,
             }
-            });
+        });
         estante.value = data.data.attributes.livros.data
-        console.log(estante.value);
+        //console.log(estante.value);
         estante_raw.value = toRaw(estante.value)
-        console.log(estante_raw._rawValue);
+        //console.log(estante_raw._rawValue);
 
         for (let i = 0; i < estante_raw._rawValue.length; i++){
             livros.value.push(estante_raw._rawValue[i])   
         }
 
-        console.log(livros._rawValue)
+        //(livros._rawValue)
         
         if (data.data.length === 0) {
           throw new Error('Estante não encontrada para o usuário')
@@ -74,13 +77,13 @@ async function Postar() {
       throw new Error(errorMessage.value);
     }
 
-    console.log(conteudo._rawValue);
-    console.log(livro_selecionado._rawValue.attributes.nCapitulos);
-    console.log(dado._rawValue);
-    console.log(tipo._rawValue);
-    console.log(livro_selecionado);
-    console.log(toRaw(user));
-    console.log(user_id);
+    //console.log(conteudo._rawValue);
+    //console.log(livro_selecionado._rawValue.attributes.nCapitulos);
+   // console.log(dado._rawValue);
+    //console.log(tipo._rawValue);
+    //console.log(livro_selecionado);
+    //console.log(toRaw(user));
+    //console.log(user_id);
 
     const newdata = {
       data: {
@@ -92,7 +95,7 @@ async function Postar() {
       }
     };
 
-    console.log('Payload enviado:', newdata)
+    //console.log('Payload enviado:', newdata)
     
 
     const { data } = await api.post(`/posts`, newdata, {

@@ -255,7 +255,7 @@ checkIfBookInEstante()
       
       </div>
       <div v-for="posti in posts_selecionados">
-      <RouterLink :to="`/posts/${posti.id}`" class="text-decoration-none">
+      <RouterLink :to="`/post/${posti.id}`" class="text-decoration-none">
         <div>
           <Post
   

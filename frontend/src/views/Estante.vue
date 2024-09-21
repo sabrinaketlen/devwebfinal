@@ -23,8 +23,11 @@ const fetchEstanteByUser = async () => {
     let biblioteca = data.data
     console.log(biblioteca)
 
+    console.log(user_id);
+
     for(let i = 0; i < biblioteca.length; i++){
-      if(biblioteca[i].attributes.users_permissions_user.data.id = user_id){
+      if(biblioteca[i].attributes.users_permissions_user.data.id == user_id){
+        console.log(biblioteca[i].attributes.users_permissions_user.data.id);
         estante.value = biblioteca[i].attributes.livros.data
       }
     }

@@ -51,8 +51,8 @@ const router = createRouter({
 
     },
     {
-      path: '/postar/:id',
-      name: 'postar',
+      path: '/posts/:id',
+      name: 'posts',
       component: FazerPost,
       meta: {
         requiresAuth: true
@@ -60,12 +60,21 @@ const router = createRouter({
 
     },
     {
-      path: '/posts/:id',
+      path: '/post/:id',
       name: 'post',
       component: VerPost,
       meta: {
         requiresAuth: true
       }
+    },
+    {
+      path: '/posts/editar/:id',
+      name: 'editar posts',
+      component: FazerPost,
+      meta: {
+        requiresAuth: true
+      }
+
     },
     { path: '/:pathMatch(.*)*', component: NotFound },
   ]

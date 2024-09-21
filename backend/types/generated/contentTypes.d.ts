@@ -368,9 +368,10 @@ export interface ApiEstanteEstante extends Schema.CollectionType {
     singularName: 'estante';
     pluralName: 'estantes';
     displayName: 'Estante';
+    description: '';
   };
   options: {
-    draftAndPublish: true;
+    draftAndPublish: false;
   };
   attributes: {
     users_permissions_user: Attribute.Relation<
@@ -385,7 +386,6 @@ export interface ApiEstanteEstante extends Schema.CollectionType {
     >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
       'api::estante.estante',
       'oneToOne',

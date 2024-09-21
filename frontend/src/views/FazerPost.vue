@@ -201,7 +201,7 @@ async function Editar() {
     <div class="col-lg-8 col-sm-12">
       <div class="card mb-3">
         <div class="card-body">
-            <h5 class="card-title">{{ edit ? 'Editar Postagem': 'Nova Postagem' }}</h5>
+            <h5 class="card-title">{{ edit ? 'Editar Postagem' : 'Nova Postagem' }}</h5>
           <form @submit.prevent=" edit? Editar(): Postar()">
             <div v-if="!edit" class="mb-3">
                 <label for="livroInput" class="form-label">Selecione o livro da sua estante: </label>

@@ -63,7 +63,7 @@ onMounted(() => {
     <span class="visually-hidden">Loading...</span>
   </div>
   
-  <div v-else class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+  <div v-else class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-8">
     <Book
       v-for="livro in estante"
       :key="livro.id"

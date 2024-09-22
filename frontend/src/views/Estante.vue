@@ -64,18 +64,22 @@ onMounted(() => {
   </div>
   
   <div v-else class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-8">
-    <Book
-      v-for="livro in estante"
-      :key="livro.id"
-      :id="livro.id"
-      :nome="livro.attributes.Nome"
-      :autor="livro.attributes.Autor"
-      :genero="livro.attributes.Genero"
-      :sinopse="livro.attributes.Sinopse"
-      :nota="livro.attributes.Nota"
-      :capa="livro.attributes.Capa"
-      :caps="livro.attributes.nCapitulos"
-    />
+    <RouterLink 
+      v-for="livro in estante" 
+      :key="livro.id" 
+      :to="`/livros/${livro.id}`" 
+      class="text-decoration-none">
+      <Book
+        :id="livro.id"
+        :nome="livro.attributes.Nome"
+        :autor="livro.attributes.Autor"
+        :genero="livro.attributes.Genero"
+        :sinopse="livro.attributes.Sinopse"
+        :nota="livro.attributes.Nota"
+        :capa="livro.attributes.Capa"
+        :caps="livro.attributes.nCapitulos"
+      />
+    </RouterLink>
   </div>
 
 </template>

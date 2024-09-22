@@ -153,8 +153,8 @@ async function Editar() {
       errorMessage.value = "Postagem do tipo 'Nota' deve ter 'Dado' entre 1 e 5";
       throw new Error(errorMessage.value);
     }
-    else if ((tipo.value == 'Progresso') && (dado.value > livro_selecionado._rawValue.attributes.nCapitulos || dado.value < 1)) {
-      errorMessage.value = `Postagem do tipo 'Progresso' pro livro ${livro_selecionado._rawValue.attributes.Nome} deve ter 'Dado' entre 1 e ${livro_selecionado._rawValue.attributes.nCapitulos}`;
+    if ((tipo._rawValue == 'Progresso') && (((dado._rawValue > livro_selecionado._rawValue.data.attributes.nCapitulos || dado._rawValue < 1)) || ((dado_edit._rawValue > livro_selecionado._rawValue.data.attributes.nCapitulos ) || (dado_edit._rawValue < 1)))) {
+      errorMessage.value = `Postagem do tipo 'Progresso' pro livro ${livro_selecionado._rawValue.data.attributes.nCapitulos} deve ter 'Dado' entre 1 e ${livro_selecionado._rawValue.data.attributes.nCapitulos}`;
       throw new Error(errorMessage.value);
     }
 

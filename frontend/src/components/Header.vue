@@ -82,7 +82,7 @@ header {
   width: 100%;
   gap: 20px;
   height: 25vh;
-  padding: 20px 50px;
+  padding: 5% 50px;
   justify-content: start;
   align-items: center;
   background-color: var(--white-color);
@@ -95,6 +95,8 @@ header input {
   font-size: 24px;
   text-align: center;
   width: 80%;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.8);
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   border: none;
   height: 45px;
   border-radius: 20px;
@@ -102,6 +104,15 @@ header input {
 }
 
 header img {
-  width: 220px;
+  width: 100%;
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  transition: 0.3s;
+  height: auto;
+}
+
+header img:hover {
+  transform: scale(1.1);
+  rotate: 360deg;
+  transition: 0.8s;
 }
 </style>

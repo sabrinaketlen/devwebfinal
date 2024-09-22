@@ -71,10 +71,11 @@ onMounted(() => {
         />
       </RouterLink>
     </div>
-
-    <button class="floating-button">
-      <i class="bi bi-feather"></i>
-    </button>
+    <RouterLink :to="`/admin/criarlivro/${userStore.user.username}`"> 
+      <button class="floating-button">
+        <i class="bi bi-feather"></i>
+      </button>
+    </RouterLink>
 
   </div>
 </template>

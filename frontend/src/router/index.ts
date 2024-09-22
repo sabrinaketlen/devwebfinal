@@ -11,6 +11,7 @@ import Cadastro from '../views/Cadastro.vue'
 import FazerPost from '../views/FazerPost.vue'
 import adminHome from '@/views/admin/adminHome.vue'
 import BookProfile4admin from '@/views/admin/BookProfile4admin.vue'
+import ManageBook from '@/views/admin/ManageBook.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -43,7 +44,7 @@ const router = createRouter({
 
     },
     {
-      path: '/estante/:id',
+      path: '/estante/:username',
       name: 'estante',
       component: Estante,
       meta: {
@@ -52,7 +53,7 @@ const router = createRouter({
 
     },
     {
-      path: '/posts/:id',
+      path: '/posts/:username',
       name: 'posts',
       component: FazerPost,
       meta: {
@@ -95,7 +96,24 @@ const router = createRouter({
         role: 'Organizador',
       },
     },
-
+    {
+      path: '/admin/editarlivro/:id',
+      name: 'EDITAR LIVRO',
+      component: ManageBook,
+      meta: {
+        requiresAuth: true,
+        role: 'Organizador',
+      },
+    },
+    {
+      path: '/admin/criarlivro/:username',
+      name: 'CRIAR LIVRO',
+      component: ManageBook,
+      meta: {
+        requiresAuth: true,
+        role: 'Organizador',
+      },
+    },
     { path: '/:pathMatch(.*)*', component: NotFound },
   ]
 })

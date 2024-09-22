@@ -7,7 +7,6 @@ import type { ApplicationError, Estante, Livro, Poste } from '@/types'
 import { useUserStore } from '@/stores/userStore'
 import { isAxiosError } from 'axios'
 import { isApplicationError } from '@/composables/useApplicationError'
-import Post from '@/components/Post.vue';
 
 
 const posts = ref([] as Poste[])
@@ -128,9 +127,11 @@ getLivro()
                 <button class="btn fs-1" @click="apagarLivro">
                   <i class="bi bi-trash"></i>
                 </button>
-                <button class="btn fs-1" @click="toggleBookInEstante">
-                  <i class="bi bi-pencil-square"></i>
-                </button>
+                <RouterLink :to="`/admin/editarlivro/${route.params.id}`"> 
+                  <button class="btn fs-1">
+                    <i class="bi bi-pencil-square"></i>
+                  </button>
+                </RouterLink>
               </div>
               <hr />
               

@@ -480,11 +480,6 @@ export interface ApiPostPost extends Schema.CollectionType {
       Attribute.SetMinMaxLength<{
         maxLength: 1000;
       }>;
-    livro: Attribute.Relation<
-      'api::post.post',
-      'manyToOne',
-      'api::livro.livro'
-    >;
     Tipo: Attribute.String &
       Attribute.Required &
       Attribute.SetMinMaxLength<{
@@ -492,6 +487,11 @@ export interface ApiPostPost extends Schema.CollectionType {
         maxLength: 9;
       }> &
       Attribute.DefaultTo<'Progresso'>;
+    livro: Attribute.Relation<
+      'api::post.post',
+      'manyToOne',
+      'api::livro.livro'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;

@@ -20,8 +20,6 @@ livro.value = props.livro
 user.value = props.user
 caps.value = props.livro.data.attributes.nCapitulos
 
-console.log("TO AQUIIII")
-console.log(livro.value)
 let nota = true
 
 if(props.tipo != "Nota"){

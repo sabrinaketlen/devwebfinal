@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, toRaw } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { api } from '@/api'
 import { useUpload } from '@/composables/useUpload'
 import type { ApplicationError, Estante, Livro, Poste } from '@/types'
@@ -10,9 +10,10 @@ import { isApplicationError } from '@/composables/useApplicationError'
 import Post from '@/components/Post.vue';
 
 
-const posts = ref('')
-const posts_selecionados = ref([])
+const posts = ref([] as Poste[])
+const posts_selecionados = ref([] as Poste[])
 const route = useRoute()
+const router = useRouter()
 const livro = ref({} as Livro)
 const loading = ref(true)
 const error = ref<ApplicationError>()
@@ -25,15 +26,49 @@ const user_id = userStore.user.id
 
 const isBookInEstante = ref(false)
 
+async function deletePosts() {
+  try {
+    const { data } = await api.get(`/posts?populate=livro`, {
+      headers: {
+        Authorization: `Bearer ${userStore.jwt}`,
+      },
+    })
+
+    posts.value = data.data
+    console.log(posts)
+    for (let i = 0; i < posts._rawValue.length; i++){
+      if(posts._rawValue[i].attributes.livro.data.id == route.params.id){
+        posts_selecionados.value.push(posts._rawValue[i])
+      }
+    }
+    console.log(posts_selecionados)
+
+    for (let item of posts_selecionados.value) {
+    await api.delete(`/posts/${item.id}`, {
+      headers: {
+        Authorization: `Bearer ${userStore.jwt}`,
+      },
+    });
+  }
+
+  } catch (error) {
+    console.error('Erro ao deletar itens:', error);
+  }
+}
+
 
 async function apagarLivro() {
     try {
+    await deletePosts()
+
     const { data } = await api.delete(`/livros/${route.params.id}`, {
       headers: {
         Authorization: `Bearer ${userStore.jwt}`
       }
     })
-    router.push('/admin');
+
+    
+    router.replace('/admin');
   } catch (e) {
     if (isAxiosError(e) && isApplicationError(e.response?.data)) {
       exception.value = e.response?.data
@@ -46,12 +81,12 @@ async function apagarLivro() {
 }
 
 async function getLivro() {
+  
   try {
     const { data } = await api.get(`/livros/${route.params.id}?populate=Capa`)
     livro.value = data.data
     //console.log("getlivro")
-    console.log(livro);
-    
+    //console.log(livro);
   } catch (e) {
     if (isAxiosError(e) && isApplicationError(e.response?.data)) {
       error.value = e.response?.data
@@ -60,6 +95,7 @@ async function getLivro() {
     loading.value = false
   }
 }
+
 
 getLivro()
 </script>

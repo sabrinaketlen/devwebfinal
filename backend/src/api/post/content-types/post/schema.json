@@ -26,18 +26,18 @@
       "type": "text",
       "maxLength": 1000
     },
-    "livro": {
-      "type": "relation",
-      "relation": "manyToOne",
-      "target": "api::livro.livro",
-      "inversedBy": "posts"
-    },
     "Tipo": {
       "type": "string",
       "required": true,
       "minLength": 4,
       "maxLength": 9,
       "default": "Progresso"
+    },
+    "livro": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::livro.livro",
+      "inversedBy": "posts"
     }
   }
 }

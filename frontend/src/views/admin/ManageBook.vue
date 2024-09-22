@@ -28,6 +28,7 @@ const route = useRoute()
 
 console.log(route.params)
 
+
 function handleUpload(event: Event) {
   const inputEvent = event as InputEvent
   const target = inputEvent.target as HTMLInputElement
@@ -40,10 +41,11 @@ if(route.fullPath == `/admin/criarlivro/${route.params.username}`){
 }
 
 async function createLivro() {
+  console.log(cover.value)
   try {
     loading.value = true
     const formData = new FormData()
-    formData.append('files.cover', cover.value as File)
+    formData.append('files.Capa', cover.value as File)
     formData.append(
       'data',
       JSON.stringify({
@@ -52,7 +54,7 @@ async function createLivro() {
         Genero: genero.value,
         Sinopse: sinopse.value,
         Nota: nota.value,
-        nCapitulos: caps.value
+        nCapitulos: caps.value,
     })
     )
 
@@ -63,7 +65,7 @@ async function createLivro() {
     })
 
     console.log(data.data)
-    feedback.value = 'Manga criado com sucesso.'
+    feedback.value = 'Livro criado com sucesso.'
   } catch (e) {
     if (isAxiosError(e) && isApplicationError(e.response?.data)) {
       error.value = e.response?.data

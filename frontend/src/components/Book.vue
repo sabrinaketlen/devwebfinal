@@ -6,24 +6,18 @@ import { useRoute } from 'vue-router'
 
 const route = useRoute()
 const userStore = useUserStore()
-const props = defineProps<Livro>();
+defineProps<Livro>();
 const uploadHelper = useUpload();
 
-console.log(route.params)
 </script>
 
 <template>
     <div class="col card-style">
       <div class="card shadow-sm">
-        <img
-          v-if="props.capa"
-          :src="uploadHelper(props.capa.data.attributes.url)"
-          :alt="`Capa do Livro ${props.nome}`"
-          class="cover"
-        />
+        <img :src="uploadHelper(Capa.url)" :alt="`Capa do Livro ${Nome}`" class="cover">
         <div class="card-body">
-          <h5 class="card-title">{{ props.nome }}</h5>
-          <p class="card-text">{{ props.autor }}</p>
+          <h5 class="card-title">{{ Nome }}</h5>
+          <p class="card-text">{{ Autor }}</p>
         </div>
       </div>
     </div>

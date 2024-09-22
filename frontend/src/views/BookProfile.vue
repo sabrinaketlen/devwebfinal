@@ -10,8 +10,8 @@ import { isApplicationError } from '@/composables/useApplicationError'
 import Post from '../components/Post.vue';
 
 
-const posts = ref('')
-const posts_selecionados = ref([])
+const posts = ref([] as Poste[])
+const posts_selecionados = ref([] as Poste[])
 const route = useRoute()
 const livro = ref({} as Livro)
 const loading = ref(true)
@@ -32,17 +32,17 @@ async function getPosts() {
         Authorization: `Bearer ${userStore.jwt}`,
       },
     })
-    posts.value = data.data
+    posts.value = data.data.map((post: any) => ({
+      id: post.id,
+      ...post.attributes,
+    }));
     //console.log(posts._rawValue)
-    const posts_sel = ref([])
 
-    for(let i = 0; i < posts._rawValue.length; i++){
-        if(posts._rawValue[i].attributes.livro.data.id == livro._rawValue.id)
-          posts_sel.value.push(posts._rawValue[i])
-      
+    for(let i = 0; i < posts.value.length; i++){
+        if(posts.value[i].id == livro.value.id)
+          posts_selecionados.value.push(posts.value[i])
+    
     }
-
-    posts_selecionados.value = toRaw(posts_sel._rawValue)
 
     //console.log(posts_selecionados)
 
@@ -176,9 +176,17 @@ async function toggleBookInEstante() {
 async function getLivro() {
   try {
     const { data } = await api.get(`/livros/${route.params.id}?populate=Capa`)
-    livro.value = data.data
-    //console.log("getlivro")
-    //console.log(livro._rawValue);
+    livro.value = {
+      id: data.data.id,
+      Nome: data.data.attributes.Nome, // Certifique-se de que a chave esteja correta
+      Autor: data.data.attributes.Autor,
+      Genero: data.data.attributes.Genero,
+      Sinopse: data.data.attributes.Sinopse,
+      Nota: data.data.attributes.Nota,
+      Capa: data.data.attributes.Capa, // Certifique-se de que a estrutura da Capa esteja correta
+      nCapitulos: data.data.attributes.nCapitulos,
+    };
+    console.log(livro.value)
     
   } catch (e) {
     if (isAxiosError(e) && isApplicationError(e.response?.data)) {
@@ -211,16 +219,16 @@ checkIfBookInEstante()
             <div class="col-md-4">
               <!-- DANDO PROBLEMA -->
               <img
-                v-if="livro.attributes.Capa" 
-                :src="uploadHelper(livro.attributes.Capa.data.attributes.url)"
+                v-if="livro.Capa" 
+                :src="uploadHelper(livro.Capa.url)"
                 class="w-100 rounded-start"
-                :alt="livro.nome"
+                :alt="livro.Nome"
               />
             </div>
             <div class="col-md-8">
               <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center">
-                  <h5 class="card-title mb-0">{{ livro.attributes.Nome }}</h5>
+                  <h5 class="card-title mb-0">{{ livro.Nome }}</h5>
                     <button class="btn fs-1" @click="toggleBookInEstante">
                       <span v-if="isBookInEstante" class="bi bi-bookmark-check-fill"></span>
                       <span v-else class="bi bi-bookmark-plus"></span>
@@ -229,20 +237,20 @@ checkIfBookInEstante()
                 <hr />
                 
                 <div class="text-start">
-                  <p class="card-text">Autor(a): {{ livro.attributes.Autor }}</p>
+                  <p class="card-text">Autor(a): {{ livro.Autor }}</p>
                   <p class="card-text">
                     <strong>
-                      Gênero: <small class="text-danger">{{ livro.attributes.Genero }}</small>
+                      Gênero: <small class="text-danger">{{ livro.Genero }}</small>
                     </strong>
                   </p>
                   <p class="card-text">
-                    Sinopse: {{ livro.attributes.Sinopse }}
+                    Sinopse: {{ livro.Sinopse }}
                   </p>
                   <p class="card-text">
-                    Nota: {{ livro.attributes.Nota }}/5
+                    Nota: {{ livro.Nota }}/5
                   </p>
                   <p class="card-text">
-                    Capítulos: {{ livro.attributes.nCapitulos }}
+                    Capítulos: {{ livro.nCapitulos }}
                   </p>
                 </div>
               </div>
@@ -251,21 +259,21 @@ checkIfBookInEstante()
         </div>
       
       </div>
-        <div v-for="posti in posts_selecionados">
-          <RouterLink :to="`/post/${posti.id}`" class="text-decoration-none">
-            <div>
-              <Post
-                :key="posti.id"
-                :conteudo = "posti.attributes.Conteudo"
-                :dado= "posti.attributes.Dado"
-                :tipo= "posti.attributes.Tipo"
-                :livro= "posti.attributes.livro"
-                :user= "posti.attributes.users_permissions_user.data.attributes.username"
-                :id= "posti.id"
-              />
-            </div>
-          </RouterLink>
-        </div>
+      <RouterLink 
+      v-for="post in posts" 
+      :key="post.id" 
+      :to="`/post/${post.id}`" 
+      class="text-decoration-none">
+        <Post
+        :key="post.id"
+        :id="post.id"
+        :Conteudo="post.Conteudo"
+        :Dado="post.Dado"
+        :Tipo="post.Tipo"
+        :livro="post.livro"
+        :users_permissions_user="post.users_permissions_user"
+        />
+    </RouterLink>
     </div>
   </template>
   

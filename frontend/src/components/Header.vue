@@ -19,7 +19,7 @@ import { useRouter, useRoute } from 'vue-router';
 
 const loading = ref(true)
 const error = ref<ApplicationError>()
-const id = ref('')
+const id = ref(0)
 const router = useRouter();
 const route = useRoute();
 
@@ -29,16 +29,16 @@ const searchQuery = ref('');
 
 async function getLivro() {
       try {
-        const { data } = await api.get(`/livros?populate=Capa`)
-        livro.value = data.data
-
-        const livro_objeto = toRaw(livro._rawValue)
-        
+        const { data } = await api.get(`/livros?populate=Capa`);
+        livro.value = data.data.map((livro: any) => ({
+          id: livro.id,
+          ...livro.attributes,
+        }));        
 
         let achado = false
-        for (let i = 0; i < livro_objeto.length; i++) {
-          if (livro_objeto[i].attributes.Nome == searchQuery._value) {
-            id.value = livro_objeto[i].id
+        for (let i = 0; i < livro.value.length; i++) {
+          if (livro.value[i].Nome == searchQuery.value) {
+            id.value = livro.value[i].id
             //console.log(id.value)
             achado = true
             break;

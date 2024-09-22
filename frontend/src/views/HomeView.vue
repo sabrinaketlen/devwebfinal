@@ -17,9 +17,21 @@ const loading = ref(true);
 console.log(userStore.user.role.name);
 
 const fetchLivro = async () => {
+  
+};
+
+const clearLivro = () => {
+  livros.value = [];
+};
+
+onMounted(async () => {
   try {
     const { data } = await api.get(`/livros?populate=Capa`);
-    livros.value = data.data;
+    livros.value = data.data.map((livro: any) => ({
+      id: livro.id,
+      ...livro.attributes,
+    }) 
+  );
   } catch (e) {
     if (isAxiosError(e) && isApplicationError(e.response?.data)) {
       exception.value = e.response?.data;
@@ -27,17 +39,6 @@ const fetchLivro = async () => {
   } finally {
     loading.value = false;
   }
-};
-
-const clearLivro = () => {
-  livros.value = [];
-};
-
-onMounted(() => {
-  fetchLivro();
-  router.beforeEach(() => {
-    clearLivro();
-  });
 });
 </script>
 
@@ -58,13 +59,13 @@ onMounted(() => {
       class="text-decoration-none">
       <Book
         :id="livro.id"
-        :nome="livro.attributes.Nome"
-        :autor="livro.attributes.Autor"
-        :genero="livro.attributes.Genero"
-        :sinopse="livro.attributes.Sinopse"
-        :nota="livro.attributes.Nota"
-        :capa="livro.attributes.Capa"
-        :caps="livro.attributes.nCapitulos"
+        :Nome="livro.Nome"
+        :Autor="livro.Autor"
+        :Genero="livro.Genero"
+        :Sinopse="livro.Sinopse"
+        :Nota="livro.Nota"
+        :Capa="livro.Capa"
+        :nCapitulos="livro.nCapitulos"
       />
     </RouterLink>
   </div>

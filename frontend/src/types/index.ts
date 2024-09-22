@@ -1,12 +1,12 @@
 export type Livro = {
   id: number,
-  nome: string   // Permitir undefined caso o dado não esteja presente
-  autor: string
-  genero: string
-  sinopse: string
-  capa: Capa    // O objeto Capa pode ser undefined se não estiver carregado
-  nota?: number   // Pode ser undefined se ainda não tiver nota atribuída
-  caps: number    // Pode ser undefined caso o número de capítulos não esteja definido
+  Nome: string   // Permitir undefined caso o dado não esteja presente
+  Autor: string
+  Genero: string
+  Sinopse: string
+  Capa: Capa    // O objeto Capa pode ser undefined se não estiver carregado
+  Nota?: number   // Pode ser undefined se ainda não tiver nota atribuída
+  nCapitulos: number    // Pode ser undefined caso o número de capítulos não esteja definido
 }
 
 type Capa = {
@@ -26,13 +26,14 @@ type Role = {
 }
 
 export type Poste = {
-  id: number,
-  conteudo: string,
-  dado: number,
-  tipo: string,
-  livro: Livro,
-  user: User,
+  id: number;
+  Conteudo: string;
+  Dado: number;
+  Tipo: string;
+  livro: Livro; // Supondo que Livro já está definido corretamente
+  users_permissions_user: User; // Verifique a definição do tipo User
 }
+
 export type Estante = {
   id: number,
   livros: Livro[],

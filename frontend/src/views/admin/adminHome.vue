@@ -43,8 +43,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <!-- Alteração 1: Fundo roxo aplicado diretamente no div principal -->
-  <div style="background-color: purple; min-height: 100vh;">
+  <div class="main-container">
     
     <div v-if="exception" class="alert alert-danger" role="alert">
       {{ exception.error.message }}
@@ -55,34 +54,37 @@ onMounted(() => {
     </div>
     
     <div v-else class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-8">
-    <RouterLink 
-      v-for="livro in livros" 
-      :key="livro.id" 
-      :to="`/admin/livros/${livro.id}`" 
-      class="text-decoration-none">
-      <Book
-        :id="livro.id"
-        :nome="livro.attributes.Nome"
-        :autor="livro.attributes.Autor"
-        :genero="livro.attributes.Genero"
-        :sinopse="livro.attributes.Sinopse"
-        :nota="livro.attributes.Nota"
-        :capa="livro.attributes.Capa"
-        :caps="livro.attributes.nCapitulos"
-      />
-    </RouterLink>
-  </div>
+      <RouterLink 
+        v-for="livro in livros" 
+        :key="livro.id" 
+        :to="`/admin/livros/${livro.id}`" 
+        class="text-decoration-none">
+        <Book
+          :id="livro.id"
+          :nome="livro.attributes.Nome"
+          :autor="livro.attributes.Autor"
+          :genero="livro.attributes.Genero"
+          :sinopse="livro.attributes.Sinopse"
+          :nota="livro.attributes.Nota"
+          :capa="livro.attributes.Capa"
+          :caps="livro.attributes.nCapitulos"
+        />
+      </RouterLink>
+    </div>
 
-    <!-- Alteração 2: Botão flutuante "Adicionar" -->
-     
     <button class="floating-button">
-    <i class="bi bi-feather"></i>
+      <i class="bi bi-feather"></i>
     </button>
 
   </div>
 </template>
 
 <style scoped>
+.main-container {
+  background-color: purple;
+  min-height: 100vh;
+}
+
 .floating-button {
   position: fixed;
   bottom: 20px;
@@ -104,3 +106,4 @@ onMounted(() => {
   font-size: 24px;
 }
 </style>
+

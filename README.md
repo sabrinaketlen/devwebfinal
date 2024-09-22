@@ -25,8 +25,6 @@ Uma rede social voltada para a interação social entre leitores, permitindo que
 
 Pesquisa de livros e visualização de informações sobre eles.
 
-Criação de perfil pessoal.
-
 - Funcionalidades Restritas a Usuários Logados:
 
 Adminstração da estante pessoal.

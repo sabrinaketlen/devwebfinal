@@ -26,7 +26,7 @@ const error = ref<ApplicationError>()
 const criando = ref(false)
 const route = useRoute()
 
-console.log(route.params)
+console.log(route.params.id)
 
 
 function handleUpload(event: Event) {
@@ -81,30 +81,33 @@ async function createLivro() {
 async function editLivro() {
   try {
     loading.value = true
-    const formData = new FormData()
+    const formData = new FormData();
+    const data = {};
 
     if (cover.value) {
-      formData.append('files.Capa', cover.value as File)
+      formData.append('files.Capa', cover.value as File);
     }
-    if(nome.value != ''){
-      formData.append('data[Nome]', nome.value)
+    if (nome.value.trim() !== '') {
+      data.Nome = nome.value;
     }
-    if(autor.value  != ''){
-      formData.append('data[Autor]', autor.value)
+    if (autor.value.trim() !== '') {
+      data.Autor = autor.value;
     }
-    if(genero.value  != ''){
-      formData.append('data[Genero]', genero.value)
+    if (genero.value.trim() !== '') {
+      data.Genero = genero.value;
     }
-    if(sinopse.value  != ''){
-      formData.append('data[Sinopse]', sinopse.value)
+    if (sinopse.value.trim() !== '') {
+      data.Sinopse = sinopse.value;
     }
-    if(nota.value !== undefined ){
-      formData.append('data[Nota]', String(nota.value))
+    if (nota.value !== undefined) {
+      data.Nota = String(nota.value);
     }
-    if(caps.value !== undefined){
-      formData.append('data[nCapitulos]', String(caps.value))
+    if (caps.value !== undefined) {
+      data.nCapitulos = String(caps.value);
     }
-    const { data } = await api.put(`/livros/${route.params.id}`, formData, {
+
+  formData.append('data', JSON.stringify(data));
+    const response = await api.put(`/livros/${route.params.id}`, formData, {
         headers: {
           Authorization: `Bearer ${userStore.jwt}`
         }

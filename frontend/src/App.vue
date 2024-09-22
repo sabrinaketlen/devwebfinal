@@ -1,5 +1,3 @@
-
-
 <template>
   <!-- <header>
     <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
@@ -17,23 +15,16 @@
     <myHeader></myHeader>
     <SideBar></SideBar>
   </div>
-
-<router-view/>
-  
 </template>
 
 <script>
-import { RouterView } from 'vue-router';
-import myHeader from './components/Header.vue'
-import SideBar from './components/SideBar.vue';
-
+import myHeader from "./components/Header.vue";
+import SideBar from "./components/SideBar.vue";
 
 export default {
-  name: 'App',
-  components: { myHeader, SideBar }
-  
-}
-
+  name: "App",
+  components: { myHeader, SideBar },
+};
 </script>
 
 <style>

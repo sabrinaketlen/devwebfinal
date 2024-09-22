@@ -50,7 +50,7 @@ onMounted(() => {
     <span class="visually-hidden">Loading...</span>
   </div>
 
-  <div v-else class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-8">
+  <div v-else class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-4">
     <RouterLink 
       v-for="livro in livros" 
       :key="livro.id" 

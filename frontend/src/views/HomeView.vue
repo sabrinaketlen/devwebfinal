@@ -1,32 +1,31 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue';
-import type { ApplicationError, Livro } from '@/types';
-import { api } from '@/api';
-import { isAxiosError } from 'axios';
-import { isApplicationError } from '@/composables/useApplicationError';
-import { useRouter } from 'vue-router';
-import Book from '@/components/Book.vue';
-import { useUserStore } from '@/stores/userStore';
+import { ref, onMounted, onUnmounted } from "vue";
+import type { ApplicationError, Livro } from "@/types";
+import { api } from "@/api";
+import { isAxiosError } from "axios";
+import { isApplicationError } from "@/composables/useApplicationError";
+import { useRouter } from "vue-router";
+import Book from "@/components/Book.vue";
+import { useUserStore } from "@/stores/userStore";
 
-
-const userStore = useUserStore()
-const livros = ref([] as Livro[])
+const userStore = useUserStore();
+const livros = ref([] as Livro[]);
 const router = useRouter();
-const exception = ref<ApplicationError>()
-const loading = ref(true)
+const exception = ref<ApplicationError>();
+const loading = ref(true);
 
-console.log(userStore.user.role.name)
+console.log(userStore.user.role.name);
 
 const fetchLivro = async () => {
   try {
     const { data } = await api.get(`/livros?populate=Capa`);
-       livros.value = data.data; 
+    livros.value = data.data;
   } catch (e) {
     if (isAxiosError(e) && isApplicationError(e.response?.data)) {
-      exception.value = e.response?.data
+      exception.value = e.response?.data;
     }
   } finally {
-    loading.value = false
+    loading.value = false;
   }
 };
 
@@ -40,7 +39,6 @@ onMounted(() => {
     clearLivro();
   });
 });
-
 </script>
 
 <template>
@@ -51,7 +49,7 @@ onMounted(() => {
   <div v-if="loading" class="spinner-border" role="status">
     <span class="visually-hidden">Loading...</span>
   </div>
-  
+
   <div v-else class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-8">
     <RouterLink 
       v-for="livro in livros" 
@@ -71,3 +69,13 @@ onMounted(() => {
     </RouterLink>
   </div>
 </template>
+
+<style scoped>
+.books {
+  display: flex;
+  justify-content: space-around;
+  align-content: center;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+</style>

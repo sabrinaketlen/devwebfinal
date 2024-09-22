@@ -82,16 +82,18 @@ const router = createRouter({
       name: 'CRIAR',
       component: adminHome,
       meta: {
-        requiresAuth: true
-      }
+        requiresAuth: true,
+        role: 'Organizador',
+      },
     },
     {
       path: '/admin/livros/:id',
       name: 'LIVROS ADMIN',
       component: BookProfile4admin,
       meta: {
-        requiresAuth: true
-      }
+        requiresAuth: true,
+        role: 'Organizador',
+      },
     },
 
     { path: '/:pathMatch(.*)*', component: NotFound },
@@ -104,5 +106,8 @@ router.beforeEach((to, from) => {
   const userStore = useUserStore()
   if (to.meta.requiresAuth && !userStore.isAuthenticated) {
     return '/login'
+  }
+  if (to.meta.role && userStore.user.role.name !== to.meta.role) {
+    return '/unauthorized'
   }
 })

@@ -33,7 +33,7 @@
           <i class="bi bi-list fs-1 text-white"></i>
         </button>
         <template v-if="userStore.username">
-          <template v-if="userStore.role == 'Organizador'"> <RouterLink to="/admin" class="btn btn-light">EDIT MODE</RouterLink></template>
+          <template v-if="userStore.role == 'Organizador'"> <RouterLink to="/admin" class="btn btn-light">PODERES DE ORGANIZADOR</RouterLink></template>
           <RouterLink to="/login">
             <a href="#" @click="userStore.logout" class="btn btn-outline-danger">Logout</a>
           </RouterLink>

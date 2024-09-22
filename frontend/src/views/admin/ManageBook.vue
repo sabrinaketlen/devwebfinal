@@ -13,13 +13,12 @@ const nome = ref('')
 const autor = ref('')
 const genero = ref('')
 const sinopse = ref('')
-const router = useRouter()
-
 const cover = ref<File>()
 const coverURL = ref('')
 const nota = ref<number>()
 const caps = ref<number>()
 
+const router = useRouter()
 const userStore = useUserStore()
 const loading = ref(false)
 const feedback = ref('')
@@ -80,7 +79,45 @@ async function createLivro() {
 
 
 async function editLivro() {
-    console.log("editei foi nada kkkkk")
+  try {
+    loading.value = true
+    const formData = new FormData()
+
+    if (cover.value) {
+      formData.append('files.Capa', cover.value as File)
+    }
+    if(nome.value != ''){
+      formData.append('data[Nome]', nome.value)
+    }
+    if(autor.value  != ''){
+      formData.append('data[Autor]', autor.value)
+    }
+    if(genero.value  != ''){
+      formData.append('data[Genero]', genero.value)
+    }
+    if(sinopse.value  != ''){
+      formData.append('data[Sinopse]', sinopse.value)
+    }
+    if(nota.value !== undefined ){
+      formData.append('data[Nota]', String(nota.value))
+    }
+    if(caps.value !== undefined){
+      formData.append('data[nCapitulos]', String(caps.value))
+    }
+    const { data } = await api.put(`/livros/${route.params.id}`, formData, {
+        headers: {
+          Authorization: `Bearer ${userStore.jwt}`
+        }
+      })
+    router.replace('/admin');
+  } catch (e) {
+    if (isAxiosError(e) && isApplicationError(e.response?.data)) {
+      error.value = e.response?.data
+      feedback.value = error.value.error.message
+    }
+  } finally {
+    loading.value = false
+  }
 }
 
 </script>

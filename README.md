@@ -33,6 +33,8 @@ Atualização de status de leitura em posts.
 
 Avaliação de livros em posts.
 
+Ver posts de outros usuários.
+
 - Funcionalidades Restritas ao Organizador do catálogo:
 
 Adicionar livros ao catálogo

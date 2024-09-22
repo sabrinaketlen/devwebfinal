@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, toRaw } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { api } from '@/api'
 import { useUpload } from '@/composables/useUpload'
 import type { ApplicationError, Estante, Livro, Poste } from '@/types'
@@ -13,6 +13,7 @@ const nome = ref('')
 const autor = ref('')
 const genero = ref('')
 const sinopse = ref('')
+const router = useRouter()
 
 const cover = ref<File>()
 const coverURL = ref('')
@@ -66,6 +67,7 @@ async function createLivro() {
 
     console.log(data.data)
     feedback.value = 'Livro criado com sucesso.'
+    router.replace('/admin');
   } catch (e) {
     if (isAxiosError(e) && isApplicationError(e.response?.data)) {
       error.value = e.response?.data

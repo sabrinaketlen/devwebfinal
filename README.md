@@ -25,13 +25,9 @@ Uma rede social voltada para a interação social entre leitores, permitindo que
 
 Pesquisa de livros e visualização de informações sobre eles.
 
-Visualização de perfis de usuários.
-
-Acesso a informações gerais sobre a plataforma e seus recursos.
+Criação de perfil pessoal.
 
 - Funcionalidades Restritas a Usuários Logados:
-
-Criação e gerenciamento de perfil pessoal.
 
 Adminstração da estante pessoal.
 
@@ -58,21 +54,21 @@ Editar informações de livros do catálogo
 
 **Frontend:**
 
-Lista as tecnologias, frameworks e bibliotecas utilizados.
+Vue.js, Pinia, Vue Router, Vite, Vitest, @vue/test-utils, vite-plugin-vue-devtools, TypeScript, vue-tsc, @tsconfig/node20, @types/node, @types/jsdom, jsdom 
 
 **Backend:**
 
-Lista as tecnologias, frameworks e bibliotecas utilizados.
-
+Strapi, React, React DOM, React Router DOM, Styled Components, @strapi/plugin-users-permissions, @strapi/plugin-i18n, @strapi/plugin-cloud, better-sqlite3, Node.js, NPM
 
 ## :shipit: Operações implementadas para cada entidade da aplicação
 
 
 | Entidade| Criação | Leitura | Atualização | Remoção |
 | --- | --- | --- | --- | --- |
-| Entidade 1 | X |  X  |  | X |
-| Entidade 2 | X |    |  X | X |
-| Entidade 3 | X |    |  |  |
+| Usuário | X |   |   |   |
+| Livros | X | X |  X  |  X  |
+| Posts | X | X | X | X |
+| Estantes | X | X | X |  |
 
 > Lembre-se que é necessário implementar o CRUD de pelo menos duas entidades.
 
@@ -80,5 +76,24 @@ Lista as tecnologias, frameworks e bibliotecas utilizados.
 
 | Método HTTP | URL |
 | --- | --- |
-| GET | api/entidade1/|
-| POST | api/entidade2 |
+| GET | api/livros|
+| GET | api/livros/|
+| POST | api/livros |
+| PUT | api/livros/ |
+| DELETE | api/livros/ |
+| GET | api/posts |
+| GET | api/posts/ |
+| POST | api/posts/ |
+| DELETE | api/posts/ |
+| GET | api/estantes |
+| GET | api/estantes/ |
+| POST | api/estantes |
+| PUT | api/estantes/ |
+| POST | api/auth/local|
+| PUT | api/auth/local/register |
+| GET | api/users/me |
+
+
+
+
+

@@ -9,6 +9,7 @@ import { isAxiosError } from 'axios'
 import { isApplicationError } from '@/composables/useApplicationError'
 import Post from '../components/Post.vue';
 
+
 const estantes = ref([] as Estante[])
 const posts = ref([] as Poste[])
 const posts_selecionados = ref([] as Poste[])
@@ -266,7 +267,7 @@ checkIfBookInEstante()
             <div class="col-md-4">
               <!-- DANDO PROBLEMA -->
               <img
-                v-if="livro.Capa" 
+                v-if="livro.Capa.url" 
                 :src="uploadHelper(livro.Capa.url)"
                 class="w-100 rounded-start"
                 :alt="livro.Nome"

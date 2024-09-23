@@ -1,17 +1,17 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useUserStore } from '@/stores/userStore'
 
-import VerPost from '../views/VerPost.vue'
-import HomeView from '../views/HomeView.vue'
-import Login from '../views/Login.vue'
-import BookProfile from '../views/BookProfile.vue'
-import Estante from '../views/Estante.vue'
-import NotFound from '../views/NotFound.vue'
-import Cadastro from '../views/Cadastro.vue'
-import FazerPost from '../views/FazerPost.vue'
-import adminHome from '@/views/admin/adminHome.vue'
-import BookProfile4admin from '@/views/admin/BookProfile4admin.vue'
-import ManageBook from '@/views/admin/ManageBook.vue'
+import VerPost from '../pages/VerPost.vue'
+import HomeView from '../pages/HomeView.vue'
+import Login from '../pages/Login.vue'
+import BookProfile from '../pages/BookProfile.vue'
+import Estante from '../pages/Estante.vue'
+import NotFound from '../pages/NotFound.vue'
+import Cadastro from '../pages/Cadastro.vue'
+import FazerPost from '../pages/FazerPost.vue'
+import adminHome from '@/pages/Admin/adminHome.vue'
+import BookProfile4admin from '@/pages/Admin/BookProfile4admin.vue'
+import ManageBook from '@/pages/Admin/ManageBook.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),

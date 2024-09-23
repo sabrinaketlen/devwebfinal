@@ -16,28 +16,24 @@ const loading = ref(true)
 
 console.log(userStore.user.role.name)
 
-const fetchLivro = async () => {
+onMounted(async () => {
   try {
     const { data } = await api.get(`/livros?populate=Capa`);
-       livros.value = data.data; 
+    livros.value = data.data.map((livro: any) => ({
+    id: livro.id,
+    ...livro.attributes,
+    Capa: {
+          id: livro.attributes.Capa.data.id,
+          url: livro.attributes.Capa.data.attributes.url,
+        }
+    }));
   } catch (e) {
     if (isAxiosError(e) && isApplicationError(e.response?.data)) {
-      exception.value = e.response?.data
+      exception.value = e.response?.data;
     }
   } finally {
-    loading.value = false
+    loading.value = false;
   }
-};
-
-const clearLivro = () => {
-  livros.value = [];
-};
-
-onMounted(() => {
-  fetchLivro();
-  router.beforeEach(() => {
-    clearLivro();
-  });
 });
 
 </script>
@@ -53,23 +49,24 @@ onMounted(() => {
       <span class="visually-hidden">Loading...</span>
     </div>
     
+    
     <div v-else class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-8">
       <RouterLink 
-        v-for="livro in livros" 
-        :key="livro.id" 
-        :to="`/admin/livros/${livro.id}`" 
-        class="text-decoration-none">
-        <Book
-          :id="livro.id"
-          :nome="livro.attributes.Nome"
-          :autor="livro.attributes.Autor"
-          :genero="livro.attributes.Genero"
-          :sinopse="livro.attributes.Sinopse"
-          :nota="livro.attributes.Nota"
-          :capa="livro.attributes.Capa"
-          :caps="livro.attributes.nCapitulos"
-        />
-      </RouterLink>
+      v-for="livro in livros" 
+      :key="livro.id" 
+      :to="`/admin/livros/${livro.id}`" 
+      class="text-decoration-none">
+      <Book
+        :id="livro.id"
+        :Nome="livro.Nome"
+        :Autor="livro.Autor"
+        :Genero="livro.Genero"
+        :Sinopse="livro.Sinopse"
+        :Nota="livro.Nota"
+        :Capa="livro.Capa"
+        :nCapitulos="livro.nCapitulos"
+      />
+    </RouterLink>
     </div>
     <RouterLink :to="`/admin/criarlivro/${userStore.user.username}`"> 
       <button class="floating-button">

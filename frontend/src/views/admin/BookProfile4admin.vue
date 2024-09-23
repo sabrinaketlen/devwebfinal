@@ -17,27 +17,50 @@ const livro = ref({} as Livro)
 const loading = ref(true)
 const error = ref<ApplicationError>()
 const uploadHelper = useUpload()
-const estante = ref({} as Estante)
+const exception = ref<ApplicationError>()
 
-const feedback = ref('')
 const userStore = useUserStore()
-const user_id = userStore.user.id
 
-const isBookInEstante = ref(false)
 
 async function deletePosts() {
   try {
-    const { data } = await api.get(`/posts?populate=livro`, {
+    const { data } = await api.get(`/posts?populate=livro.Capa,users_permissions_user.role`, {
       headers: {
         Authorization: `Bearer ${userStore.jwt}`,
       },
     })
-
-    posts.value = data.data
+    console.log(data.data)
+    posts.value = data.data.map((post: any) => ({
+      id: post.id,
+      Conteudo: post.attributes.Conteudo,
+      Dado: post.attributes.Dado,
+      Tipo: post.attributes.Tipo,
+      livro: {
+        id: post.attributes.livro.data.id,
+        Nome: post.attributes.livro.data.attributes.Nome,
+        Autor: post.attributes.livro.data.attributes.Autor,
+        Genero: post.attributes.livro.data.attributes.Genero,
+        Sinopse: post.attributes.livro.data.attributes.Sinopse,
+        Capa: 
+           {
+              id: post.attributes.livro.data.attributes.Capa.data.id,
+              url: post.attributes.livro.data.attributes.Capa.data.attributes.url,
+            },
+        Nota: post.attributes.livro.data.attributes.Nota,
+        nCapitulos: post.attributes.livro.data.attributes.nCapitulos,
+      },
+      users_permissions_user: {
+        id: post.attributes.users_permissions_user.data.id,
+        username: post.attributes.users_permissions_user.data.attributes.username,
+        role: post.attributes.users_permissions_user.data.attributes.role,
+        email: post.attributes.users_permissions_user.data.attributes.email,
+      }
+    }));
     console.log(posts)
-    for (let i = 0; i < posts._rawValue.length; i++){
-      if(posts._rawValue[i].attributes.livro.data.id == route.params.id){
-        posts_selecionados.value.push(posts._rawValue[i])
+    const idParam = Number(route.params.id)
+    for (let i = 0; i < posts.value.length; i++){
+      if(posts.value[i].livro.id == idParam){
+        posts_selecionados.value.push(posts.value[i])
       }
     }
     console.log(posts_selecionados)
@@ -83,7 +106,16 @@ async function getLivro() {
   
   try {
     const { data } = await api.get(`/livros/${route.params.id}?populate=Capa`)
-    livro.value = data.data
+    livro.value = {
+      id: data.data.id,
+      Nome: data.data.attributes.Nome, // Certifique-se de que a chave esteja correta
+      Autor: data.data.attributes.Autor,
+      Genero: data.data.attributes.Genero,
+      Sinopse: data.data.attributes.Sinopse,
+      Nota: data.data.attributes.Nota,
+      Capa: data.data.attributes.Capa, // Certifique-se de que a estrutura da Capa esteja correta
+      nCapitulos: data.data.attributes.nCapitulos,
+    };
     //console.log("getlivro")
     //console.log(livro);
   } catch (e) {
@@ -114,16 +146,16 @@ getLivro()
         <div class="row g-0">
           <div class="col-md-4">
             <img
-              v-if="livro.attributes.Capa" 
-              :src="uploadHelper(livro.attributes.Capa.data.attributes.url)"
+              v-if="livro.Capa" 
+              :src="uploadHelper(livro.Capa.url)"
               class="w-100 rounded-start"
-              :alt="livro.nome"
+              :alt="livro.Nome"
             />
           </div>
           <div class="col-md-8">
             <div class="card-body">
               <div class="d-flex justify-content-between align-items-center">
-                <h5 class="card-title mb-0">{{ livro.attributes.Nome }}</h5>
+                <h5 class="card-title mb-0">{{ livro.Nome }}</h5>
                 <button class="btn fs-1" @click="apagarLivro">
                   <i class="bi bi-trash"></i>
                 </button>
@@ -136,20 +168,20 @@ getLivro()
               <hr />
               
               <div class="text-start">
-                <p class="card-text">Autor(a): {{ livro.attributes.Autor }}</p>
+                <p class="card-text">Autor(a): {{ livro.Autor }}</p>
                 <p class="card-text">
                   <strong>
-                    Gênero: <small class="text-danger">{{ livro.attributes.Genero }}</small>
+                    Gênero: <small class="text-danger">{{ livro.Genero }}</small>
                   </strong>
                 </p>
                 <p class="card-text">
-                  Sinopse: {{ livro.attributes.Sinopse }}
+                  Sinopse: {{ livro.Sinopse }}
                 </p>
                 <p class="card-text">
-                  Nota: {{ livro.attributes.Nota }}/5
+                  Nota: {{ livro.Nota }}/5
                 </p>
                 <p class="card-text">
-                  Capítulos: {{ livro.attributes.nCapitulos }}
+                  Capítulos: {{ livro.nCapitulos }}
                 </p>
               </div>
             </div>

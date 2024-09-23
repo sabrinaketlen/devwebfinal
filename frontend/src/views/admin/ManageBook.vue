@@ -80,9 +80,11 @@ async function createLivro() {
 
 async function editLivro() {
   try {
-    loading.value = true
+    loading.value = true;
     const formData = new FormData();
-    const data = {};
+
+    // Defina um tipo específico para 'data' com todas as propriedades possíveis
+    const data: Partial<{ Nome: string, Autor: string, Genero: string, Sinopse: string, Nota: string, nCapitulos: string }> = {};
 
     if (cover.value) {
       formData.append('files.Capa', cover.value as File);
@@ -106,20 +108,22 @@ async function editLivro() {
       data.nCapitulos = String(caps.value);
     }
 
-  formData.append('data', JSON.stringify(data));
+    formData.append('data', JSON.stringify(data));
+
     const response = await api.put(`/livros/${route.params.id}`, formData, {
-        headers: {
-          Authorization: `Bearer ${userStore.jwt}`
-        }
-      })
+      headers: {
+        Authorization: `Bearer ${userStore.jwt}`,
+      },
+    });
+
     router.replace('/admin');
   } catch (e) {
     if (isAxiosError(e) && isApplicationError(e.response?.data)) {
-      error.value = e.response?.data
-      feedback.value = error.value.error.message
+      error.value = e.response?.data;
+      feedback.value = error.value.error.message;
     }
   } finally {
-    loading.value = false
+    loading.value = false;
   }
 }
 

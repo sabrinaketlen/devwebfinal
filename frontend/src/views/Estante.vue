@@ -7,31 +7,55 @@ import { isApplicationError } from "@/composables/useApplicationError";
 import { useUserStore } from "@/stores/userStore";
 import Book from "@/components/Book.vue";
 
+console.log("Componente renderizado");
+
 const userStore = useUserStore();
 const estante = ref({} as Estante);
+const estantes = ref([] as Estante[]);
 const exception = ref<ApplicationError>();
 const loading = ref(true);
 const user_id = userStore.user.id;
+console.log("Token JWT:", userStore.jwt);
 
-const fetchEstanteByUser = async () => {
+
+async function getEstantes(){
+  console.log("getEstantes chamada");
   try {
-    const { data } = await api.get(
-      `/estantes?populate=livros.Capa, users_permissions_user`,
-      {
-        headers: {
-          Authorization: `Bearer ${userStore.jwt}`,
-        },
-      }
-    );
-    let biblioteca = data.data;
-    console.log(biblioteca);
+    const { data } = await api.get(`/estantes?populate=livros.Capa, users_permissions_user`, {
+      headers: {
+        Authorization: `Bearer ${userStore.jwt}`,
+      },
+    });
+    console.log(data.data)
+    estantes.value = data.data.map((estante: any) => ({
+      user: {
+        id: estante.attributes.users_permissions_user.data.id,
+        username: estante.attributes.users_permissions_user.data.attributes.username,
+        role: estante.attributes.users_permissions_user.data.attributes.role,
+        email: estante.attributes.users_permissions_user.data.attributes.email,
+      },
+      livros: estante.attributes.livros.data.map((livro: any) => ({
+        id: livro.id,
+        Nome: livro.attributes.Nome,
+        Autor: livro.attributes.Autor,
+        Genero: livro.attributes.Genero,
+        Sinopse: livro.attributes.Sinopse,
+        Capa: livro.attributes.Capa?.data
+          ? {
+              id: livro.attributes.Capa.data.id,
+              url: livro.attributes.Capa.data.attributes.url,
+            }
+          : undefined,
+        Nota: livro.attributes.Nota,
+        nCapitulos: livro.attributes.nCapitulos,
+      })),
+    }));
+    console.log(estantes.value.length);
 
-    console.log(user_id);
-
-    for (let i = 0; i < biblioteca.length; i++) {
-      if (biblioteca[i].attributes.users_permissions_user.data.id == user_id) {
-        console.log(biblioteca[i].attributes.users_permissions_user.data.id);
-        estante.value = biblioteca[i].attributes.livros.data;
+    console.log(estantes.value)
+    for(let i = 0; i < estantes.value.length; i++){
+      if(estantes.value[i].user.id == user_id){
+        estante.value = estantes.value[i]
       }
     }
 
@@ -49,11 +73,12 @@ const fetchEstanteByUser = async () => {
   } finally {
     loading.value = false;
   }
-};
+}
 
 onMounted(() => {
-  fetchEstanteByUser();
+  getEstantes();
 });
+
 </script>
 
 <template>
@@ -67,19 +92,19 @@ onMounted(() => {
 
   <div v-else class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-8">
     <RouterLink 
-      v-for="livro in estante" 
-      :key="livro.id" 
+      v-for="livro in estante.livros" 
       :to="`/livros/${livro.id}`" 
       class="text-decoration-none">
       <Book
+        :key="livro.id"
         :id="livro.id"
-        :nome="livro.attributes.Nome"
-        :autor="livro.attributes.Autor"
-        :genero="livro.attributes.Genero"
-        :sinopse="livro.attributes.Sinopse"
-        :nota="livro.attributes.Nota"
-        :capa="livro.attributes.Capa"
-        :caps="livro.attributes.nCapitulos"
+        :Nome="livro.Nome"
+        :Autor="livro.Autor"
+        :Genero="livro.Genero"
+        :Sinopse="livro.Sinopse"
+        :Nota="livro.Nota"
+        :Capa="livro.Capa"
+        :nCapitulos="livro.nCapitulos"
       />
     </RouterLink>
   </div>

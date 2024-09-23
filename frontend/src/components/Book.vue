@@ -3,11 +3,14 @@ import type { Livro } from '@/types';
 import { useUpload } from '@/composables/useUpload';
 import { useUserStore } from '@/stores/userStore';
 import { useRoute } from 'vue-router'
+import { markRaw, toRaw } from 'vue';
+
 
 const route = useRoute()
 const userStore = useUserStore()
 defineProps<Livro>();
 const uploadHelper = useUpload();
+
 
 </script>
 

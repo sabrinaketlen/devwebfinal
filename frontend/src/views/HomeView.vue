@@ -28,10 +28,15 @@ onMounted(async () => {
   try {
     const { data } = await api.get(`/livros?populate=Capa`);
     livros.value = data.data.map((livro: any) => ({
-      id: livro.id,
-      ...livro.attributes,
-    }) 
-  );
+    id: livro.id,
+    ...livro.attributes,
+    Capa: livro.attributes.Capa?.data 
+      ? {
+          id: livro.attributes.Capa.data.id,
+          url: livro.attributes.Capa.data.attributes.url,
+        }
+    : undefined, 
+    }));
   } catch (e) {
     if (isAxiosError(e) && isApplicationError(e.response?.data)) {
       exception.value = e.response?.data;

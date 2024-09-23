@@ -17,7 +17,7 @@ const livro = ref({} as Livro)
 const loading = ref(true)
 const error = ref<ApplicationError>()
 const uploadHelper = useUpload()
-const estante = ref({} as Estante)
+const estante = ref([] as Estante[])
 
 const feedback = ref('')
 const userStore = useUserStore()
@@ -106,15 +106,15 @@ async function toggleBookInEstante() {
     
     //console.log(estante._rawValue);
     
-    const currentLivros = toRaw(estante._rawValue)
+    console.log(estante.value)
     //console.log("currentLivros:");
 
-    const currentLivros_id = []
+    const currentLivros_id = ref<number[]>([]);
 
-    for (let i = 0; i < currentLivros.length; i++) {
-      currentLivros_id.push(currentLivros[i].id)
+    for (let i = 0; i < estante.value.length; i++) {
+      currentLivros_id.value.push(estante.value[i].id)
     }
-    //console.log(currentLivros_id)
+    console.log(currentLivros_id)
     
     
     //console.log(currentLivros);
@@ -122,8 +122,6 @@ async function toggleBookInEstante() {
 
     //console.log(livro._rawValue);
     
-    const livro_objeto = toRaw(livro._rawValue)
-
     //console.log("livro_objeto");
 
     //console.log(livro_objeto);
@@ -131,24 +129,25 @@ async function toggleBookInEstante() {
 
     if (action == 'add') {
       //console.log("tentei add");
-      currentLivros_id.push(livro_objeto.id)
+      currentLivros_id.value.push(livro.value.id)
+      console.log(currentLivros_id);
     } else if (action == 'remove') {
       //console.log("tentei remover");
       let indexToRemove = -1; 
-      for (let i = 0; i < currentLivros_id.length; i++) {
-        if (currentLivros_id[i] === livro_objeto.id) {
+      for (let i = 0; i < currentLivros_id.value.length; i++) {
+        if (currentLivros_id.value[i] === livro.value.id) {
           indexToRemove = i; 
           break;
         }
       }
       if (indexToRemove > -1) {
-        currentLivros_id.splice(indexToRemove, 1);
+        currentLivros_id.value.splice(indexToRemove, 1);
+        console.log(currentLivros_id.value);
       }
     }
-
     const newdata = {
       data: {
-        livros: currentLivros_id
+        livros: toRaw(currentLivros_id.value)
       }
     };
 

@@ -10,7 +10,7 @@ import { useRouter, useRoute } from 'vue-router';
 
 
 const estante = ref({} as Estante)
-const estante_raw = ref({} as Estante)
+const estantes = ref([] as Estante[])
 const livros = ref([] as Livro[])
 const livro_selecionado = ref({} as Livro);
 const tipo = ref('');
@@ -37,21 +37,44 @@ const user = userStore.user
 
 const getEstante = async () => {
   try {
-        const { data } = await api.get(`/estantes/${user_id}?populate=livros.Capa,users_permissions_user`, {
-        headers: {
-                Authorization: `Bearer ${userStore.jwt}`,
-            }
-        });
-        estante.value = data.data.attributes.livros.data
-        //console.log(estante.value);
-        estante_raw.value = toRaw(estante.value)
-        //console.log(estante_raw._rawValue);
-
-        for (let i = 0; i < estante_raw._rawValue.length; i++){
-            livros.value.push(estante_raw._rawValue[i])   
-        }
-
-        //(livros._rawValue)
+    const { data } = await api.get(`/estantes?populate=livros.Capa, users_permissions_user`, {
+      headers: {
+        Authorization: `Bearer ${userStore.jwt}`,
+      },
+    });
+    console.log(data.data)
+    estantes.value = data.data.map((estante: any) => ({
+      id: estante.id,
+      user: {
+        id: estante.attributes.users_permissions_user.data.id,
+        username: estante.attributes.users_permissions_user.data.attributes.username,
+        role: estante.attributes.users_permissions_user.data.attributes.role,
+        email: estante.attributes.users_permissions_user.data.attributes.email,
+      },
+      livros: estante.attributes.livros.data.map((livro: any) => ({
+        id: livro.id,
+        Nome: livro.attributes.Nome,
+        Autor: livro.attributes.Autor,
+        Genero: livro.attributes.Genero,
+        Sinopse: livro.attributes.Sinopse,
+        Capa:
+           {
+              id: livro.attributes.Capa.data.id,
+              url: livro.attributes.Capa.data.attributes.url,
+            },
+        Nota: livro.attributes.Nota,
+        nCapitulos: livro.attributes.nCapitulos,
+        
+      })),
+    }));
+    console.log(estantes.value);
+    for(let i = 0; i < estantes.value.length ; i++){
+      if(estantes.value[i].user.id == userStore.user.id){
+        console.log(estantes.value[i])
+      estante.value = estantes.value[i]
+      }
+    }
+    console.log(estante.value)
         if (data.data.length === 0) {
           throw new Error('Estante não encontrada para o usuário')
         }
@@ -72,7 +95,14 @@ async function getLivro() {
                 Authorization: `Bearer ${userStore.jwt}`,
             }
     });
-    livro_selecionado.value = data.data.attributes.livro
+    livro_selecionado.value = {
+    id: data.data.attributes.livro.id,
+    ...data.data.attributes,
+    Capa: {
+          id: data.data.attributes.Capa.data.id,
+          url: data.data.attributes.Capa.data.attributes.url,
+        }
+    }
     console.log(livro_selecionado)
     tipo.value = data.data.attributes.Tipo
     console.log(data.data)
@@ -93,8 +123,8 @@ async function Postar() {
       errorMessage.value = "Postagem do tipo 'Nota' deve ter 'Dado' entre 1 e 5";
       throw new Error(errorMessage.value);
     }
-    else if ((tipo.value == 'Progresso') && (dado.value > livro_selecionado._rawValue.attributes.nCapitulos || dado.value < 1)) {
-      errorMessage.value = `Postagem do tipo 'Progresso' pro livro ${livro_selecionado._rawValue.attributes.Nome} deve ter 'Dado' entre 1 e ${livro_selecionado._rawValue.attributes.nCapitulos}`;
+    else if ((tipo.value == 'Progresso') && (dado.value > livro_selecionado.value.nCapitulos || dado.value < 1)) {
+      errorMessage.value = `Postagem do tipo 'Progresso' pro livro ${livro_selecionado.value.Nome} deve ter 'Dado' entre 1 e ${livro_selecionado.value.nCapitulos}`;
       throw new Error(errorMessage.value);
     }
     console.log("CREATE")
@@ -110,10 +140,10 @@ async function Postar() {
 
     const newdata = {
       data: {
-        Conteudo: conteudo._rawValue,
-        Dado: dado._rawValue,
-        Tipo: tipo._rawValue,
-        livro: livro_selecionado._rawValue.id,
+        Conteudo: conteudo.value,
+        Dado: dado.value,
+        Tipo: tipo.value,
+        livro: livro_selecionado.value.id,
         users_permissions_user: user_id,
       }
     };
@@ -127,7 +157,7 @@ async function Postar() {
       },
     });
 
-    router.push( { path: `/livros/${livro_selecionado._rawValue.id}`});
+    router.push( { path: `/livros/${livro_selecionado.value.id}`});
 
   } catch (e) {
     if (isAxiosError(e) && isApplicationError(e.response?.data)) {
@@ -139,25 +169,28 @@ async function Postar() {
 }
 
 async function Editar() {
+  console.log("Método Editar chamado");
   try {
     loading.value = true;
     exception.value = undefined;
     errorMessage.value = null; 
     //console.log(livro_selecionado);
     await getLivro()
-    if(tipo._rawValue == 'Nota'){
+    console.log(livro_selecionado.value)
+    
+    if(tipo.value == 'Nota'){
         console.log("dado inserido foi maior que 5")        
     }
 
-    if ((tipo._rawValue == 'Nota') && (((dado_edit._rawValue > 5) || (dado_edit._rawValue < 1)) || ((dado._rawValue > 5) || (dado._rawValue < 1)) )) {
+    if ((tipo.value == 'Nota') && (((dado_edit.value > 5) || (dado_edit.value < 1)) || ((dado.value > 5) || (dado.value < 1)) )) {
       errorMessage.value = "Postagem do tipo 'Nota' deve ter 'Dado' entre 1 e 5";
       throw new Error(errorMessage.value);
     }
-    if ((tipo._rawValue == 'Progresso') && (((dado._rawValue > livro_selecionado._rawValue.data.attributes.nCapitulos || dado._rawValue < 1)) || ((dado_edit._rawValue > livro_selecionado._rawValue.data.attributes.nCapitulos ) || (dado_edit._rawValue < 1)))) {
-      errorMessage.value = `Postagem do tipo 'Progresso' pro livro ${livro_selecionado._rawValue.data.attributes.Nome} deve ter 'Dado' entre 1 e ${livro_selecionado._rawValue.data.attributes.nCapitulos}`;
+    if ((tipo.value == 'Progresso') && (((dado.value > livro_selecionado.value.nCapitulos || dado.value < 1)) || ((dado_edit.value > livro_selecionado.value.nCapitulos ) || (dado_edit.value < 1)))) {
+      errorMessage.value = `Postagem do tipo 'Progresso' pro livro ${livro_selecionado.value.Nome} deve ter 'Dado' entre 1 e ${livro_selecionado.value.nCapitulos}`;
       throw new Error(errorMessage.value);
     }
-
+    
     //console.log(conteudo._rawValue);
     //console.log(livro_selecionado._rawValue.attributes.nCapitulos);
    // console.log(dado._rawValue);
@@ -168,12 +201,12 @@ async function Editar() {
 
     const newdata = {
       data: {
-        Conteudo: conteudo._rawValue,
-        Dado: dado._rawValue,
+        Conteudo: conteudo.value,
+        Dado: dado.value,
       }
     };
 
-    //console.log('Payload enviado:', newdata)
+    console.log('Payload enviado:', newdata)
     
 
     const { data } = await api.put(`/posts/${route.params.id}`, newdata, {
@@ -183,7 +216,7 @@ async function Editar() {
     });
     console.log("UPDATE")
 
-    router.push( { path: `/livros/${livro_selecionado._rawValue.data.id}`});
+    router.push( { path: `/livros/${livro_selecionado.value.id}`});
 
   } catch (e) {
     if (isAxiosError(e) && isApplicationError(e.response?.data)) {
@@ -206,8 +239,8 @@ async function Editar() {
             <div v-if="!edit" class="mb-3">
                 <label for="livroInput" class="form-label">Selecione o livro da sua estante: </label>
                 <select class="form-select form-select-sm" aria-label="Small select example" id="livroInput" v-model="livro_selecionado" required>
-                <option v-for="livro in livros" :key="livro.attributes.Nome" :value="livro">
-                    {{ livro.attributes.Nome }}
+                <option v-for="livro in estante.livros" :key="livro.Nome" :value="livro">
+                    {{ livro.Nome }}
                 </option>
             </select>
             </div>

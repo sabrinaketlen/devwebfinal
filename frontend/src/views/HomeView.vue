@@ -30,12 +30,10 @@ onMounted(async () => {
     livros.value = data.data.map((livro: any) => ({
     id: livro.id,
     ...livro.attributes,
-    Capa: livro.attributes.Capa?.data 
-      ? {
+    Capa: {
           id: livro.attributes.Capa.data.id,
           url: livro.attributes.Capa.data.attributes.url,
         }
-    : undefined, 
     }));
   } catch (e) {
     if (isAxiosError(e) && isApplicationError(e.response?.data)) {

@@ -9,7 +9,7 @@ import { isAxiosError } from 'axios'
 import { isApplicationError } from '@/composables/useApplicationError'
 import Post from '../components/Post.vue';
 
-
+const estantes = ref([] as Estante[])
 const posts = ref([] as Poste[])
 const posts_selecionados = ref([] as Poste[])
 const route = useRoute()
@@ -17,13 +17,54 @@ const livro = ref({} as Livro)
 const loading = ref(true)
 const error = ref<ApplicationError>()
 const uploadHelper = useUpload()
-const estante = ref([] as Estante[])
+const estante = ref({} as Estante)
 
 const feedback = ref('')
 const userStore = useUserStore()
 const user_id = userStore.user.id
 
 const isBookInEstante = ref(false)
+
+async function getEstante() {
+  const { data } = await api.get(`/estantes?populate=livros.Capa, users_permissions_user`, {
+      headers: {
+        Authorization: `Bearer ${userStore.jwt}`,
+      },
+    });
+    console.log(data.data)
+    estantes.value = data.data.map((estante: any) => ({
+      id: estante.id,
+      user: {
+        id: estante.attributes.users_permissions_user.data.id,
+        username: estante.attributes.users_permissions_user.data.attributes.username,
+        role: estante.attributes.users_permissions_user.data.attributes.role,
+        email: estante.attributes.users_permissions_user.data.attributes.email,
+      },
+      livros: estante.attributes.livros.data.map((livro: any) => ({
+        id: livro.id,
+        Nome: livro.attributes.Nome,
+        Autor: livro.attributes.Autor,
+        Genero: livro.attributes.Genero,
+        Sinopse: livro.attributes.Sinopse,
+        Capa:
+           {
+              id: livro.attributes.Capa.data.id,
+              url: livro.attributes.Capa.data.attributes.url,
+            },
+        Nota: livro.attributes.Nota,
+        nCapitulos: livro.attributes.nCapitulos,
+        
+      })),
+    }));
+    console.log(estantes.value);
+    for(let i = 0; i < estantes.value.length ; i++){
+      if(estantes.value[i].user.id == userStore.user.id){
+        console.log(estantes.value[i])
+      estante.value = estantes.value[i]
+      }
+    }
+    console.log(estante.value)
+}
 
 async function getPosts() {
   try {
@@ -81,39 +122,24 @@ async function getPosts() {
 }
 
 async function checkIfBookInEstante() {
+  getLivro()
   try {
-    const { data } = await api.get(`/estantes/${user_id}?populate=livros.Capa`, {
-      headers: {
-        Authorization: `Bearer ${userStore.jwt}`,
-      },
-    })
-     getPosts()
-    //console.log(data.data.attributes.livros.data);
+    getEstante()
+    getPosts()
 
-    //console.log("data:");
+    let achado = false
+    const idParam = Number(route.params.id);
+    console.log(estante.value.livros)
+    // ERRO ESTA AQUI
+    for (const livro of estante.value.livros) {
     
-    //console.log(data);
-    
-    estante.value = data.data.attributes.livros.data
-
-    //console.log(estante);
-    
-
-    //const estante_objeto = toRaw(estante.value)
-    //console.log(estante_objeto);
-    
-
-    // Verifica se o livro está na estante
-    let found = false
-    for (let i = 0; i < data.data.attributes.livros.data.length; i++) {
-    
-        if (data.data.attributes.livros.data[i].id == route.params.id) {
-            found = true
+        if (livro.id == idParam ) {
+            achado = true
             break
         }
     }
 
-    isBookInEstante.value = found
+    isBookInEstante.value = achado
   } catch (e) {
     console.error('Erro ao checar estante', e)
   }
@@ -131,13 +157,13 @@ async function toggleBookInEstante() {
     console.log(estante.value)
     //console.log("currentLivros:");
 
-    const currentLivros_id = ref<number[]>([]);
+    let currentLivros_id: number[] = [];
 
-    for (let i = 0; i < estante.value.length; i++) {
-      console.log(estante.value[i].id)
+    for (let i = 0; i < estante.value.livros.length; i++) {
+      currentLivros_id.push(estante.value.livros[i].id)
     }
     console.log(currentLivros_id)
-    
+    console.log(livro.value.id)
     
     //console.log(currentLivros);
     //console.log("livro raw value");
@@ -151,32 +177,32 @@ async function toggleBookInEstante() {
 
     if (action == 'add') {
       //console.log("tentei add");
-      currentLivros_id.value.push(livro.value.id)
+      currentLivros_id.push(livro.value.id)
       console.log(currentLivros_id);
     } else if (action == 'remove') {
       //console.log("tentei remover");
       let indexToRemove = -1; 
-      for (let i = 0; i < currentLivros_id.value.length; i++) {
-        if (currentLivros_id.value[i] === livro.value.id) {
+      for (let i = 0; i < currentLivros_id.length; i++) {
+        if (currentLivros_id[i] === livro.value.id) {
           indexToRemove = i; 
           break;
         }
       }
       if (indexToRemove > -1) {
-        currentLivros_id.value.splice(indexToRemove, 1);
-        console.log(currentLivros_id.value);
+        currentLivros_id.splice(indexToRemove, 1);
+        console.log(currentLivros_id);
       }
     }
     const newdata = {
       data: {
-        livros: toRaw(currentLivros_id.value)
+        livros: currentLivros_id
       }
     };
 
     console.log('Payload enviado:', newdata)
     
 
-    const { data } = await api.put(`/estantes/${user_id}`, newdata, {
+    const { data } = await api.put(`/estantes/${estante.value.id}`, newdata, {
       headers: {
         Authorization: `Bearer ${userStore.jwt}`,
       },
@@ -218,7 +244,7 @@ async function getLivro() {
   }
 }
 
-getLivro()
+
 
 checkIfBookInEstante()
 

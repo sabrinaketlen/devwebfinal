@@ -13,23 +13,45 @@ const loading = ref(false)
 const exception = ref<ApplicationError>()
 const router = useRouter()
 const id = ref(0)
-const estante = ref({} as Estante)
+const estante = ref([] as Estante[])
 const userStore = useUserStore()
 
 async function createEstante() {
   try{
-  const { data } = await api.get('/estantes?populate=users_permissions_user', {
+  const { data } = await api.get('/estantes?populate=livros.Capa, users_permissions_user', {
       headers: {
         Authorization: `Bearer ${userStore.jwt}`
       },
     })
-
+    console.log(data.data)
     let achado = false
-    estante.value= data.data
+    estante.value = data.data.map((estante: any) => ({
+      user: {
+        id: estante.attributes.users_permissions_user.data.id,
+        username: estante.attributes.users_permissions_user.data.attributes.username,
+        role: estante.attributes.users_permissions_user.data.attributes.role,
+        email: estante.attributes.users_permissions_user.data.attributes.email,
+      },
+      livros: estante.attributes.livros.data.map((livro: any) => ({
+        id: livro.id,
+        Nome: livro.attributes.Nome,
+        Autor: livro.attributes.Autor,
+        Genero: livro.attributes.Genero,
+        Sinopse: livro.attributes.Sinopse,
+        Capa: livro.attributes.Capa?.data
+          ? {
+              id: livro.attributes.Capa.data.id,
+              url: livro.attributes.Capa.data.attributes.url,
+            }
+          : undefined,
+        Nota: livro.attributes.Nota,
+        nCapitulos: livro.attributes.nCapitulos,
+      })),
+    }));
     console.log(estante.value)
 
-    for(let i = 0; i < estante._rawValue.length; i++){
-      if(estante._rawValue[i].attributes.users_permissions_user.data.id == userStore.user.id){
+    for(let i = 0; i < estante.value.length ; i++){
+      if(estante.value[i].user.id == userStore.user.id){
       console.log("ja tem estante")
       achado = true
       }

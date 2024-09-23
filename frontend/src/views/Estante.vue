@@ -28,6 +28,7 @@ async function getEstantes(){
     });
     console.log(data.data)
     estantes.value = data.data.map((estante: any) => ({
+      id: estante.id,
       user: {
         id: estante.attributes.users_permissions_user.data.id,
         username: estante.attributes.users_permissions_user.data.attributes.username,
@@ -40,14 +41,14 @@ async function getEstantes(){
         Autor: livro.attributes.Autor,
         Genero: livro.attributes.Genero,
         Sinopse: livro.attributes.Sinopse,
-        Capa: livro.attributes.Capa?.data
-          ? {
+        Capa:
+           {
               id: livro.attributes.Capa.data.id,
               url: livro.attributes.Capa.data.attributes.url,
-            }
-          : undefined,
+            },
         Nota: livro.attributes.Nota,
         nCapitulos: livro.attributes.nCapitulos,
+        
       })),
     }));
     console.log(estantes.value.length);

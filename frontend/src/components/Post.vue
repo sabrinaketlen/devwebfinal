@@ -24,7 +24,7 @@ const progressWidth = `${progresso}%`;
       <div class="card mb-3">
             <div class="card-body">
               <div class="d-flex justify-content-left align-items-center">
-                  <h5 class="card-title mb-0 me-2">{{ username }}</h5>
+                  <h5 v-if="props.users_permissions_user" class="card-title mb-0 me-2">{{ props.users_permissions_user.username }}</h5>
                   <p class="card-text mb-0"> 
                       <div v-if="nota">
                       <strong>

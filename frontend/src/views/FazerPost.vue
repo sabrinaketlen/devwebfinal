@@ -95,14 +95,8 @@ async function getLivro() {
                 Authorization: `Bearer ${userStore.jwt}`,
             }
     });
-    livro_selecionado.value = {
-    id: data.data.attributes.livro.id,
-    ...data.data.attributes,
-    Capa: {
-          id: data.data.attributes.Capa.data.id,
-          url: data.data.attributes.Capa.data.attributes.url,
-        }
-    }
+    console.log(data.data)
+    livro_selecionado.value = data.data.attributes.livro.data
     console.log(livro_selecionado)
     tipo.value = data.data.attributes.Tipo
     console.log(data.data)
@@ -111,6 +105,7 @@ async function getLivro() {
     // if(livros.value[i].id == )    
     //}
 }
+getLivro()
 
 async function Postar() {
   try {
@@ -177,7 +172,7 @@ async function Editar() {
     //console.log(livro_selecionado);
     await getLivro()
     console.log(livro_selecionado.value)
-    
+
     if(tipo.value == 'Nota'){
         console.log("dado inserido foi maior que 5")        
     }

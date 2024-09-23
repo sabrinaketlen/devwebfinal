@@ -2,15 +2,17 @@
 import type { Livro, Poste, User } from '@/types';
 import { ref, toRaw, watch } from 'vue'
 const props = defineProps<Poste>();
-const username = props.users_permissions_user.data.attributes.username
+const username = props.users_permissions_user.username
 let nota = true
 
 if(props.Tipo != "Nota"){
   nota = false
 }
 
+console.log(props)
 
-let progresso = ( props.Dado / props.livro.data.attributes.nCapitulos ) * 100
+
+let progresso = ( props.Dado / props.livro.nCapitulos ) * 100
 
 const progressWidth = `${progresso}%`;
 

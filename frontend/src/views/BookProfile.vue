@@ -27,21 +27,43 @@ const isBookInEstante = ref(false)
 
 async function getPosts() {
   try {
-    const { data } = await api.get(`/posts?populate=livro,users_permissions_user`, {
+    const { data } = await api.get(`/posts?populate=livro.Capa,users_permissions_user.role`, {
       headers: {
         Authorization: `Bearer ${userStore.jwt}`,
       },
     })
+    console.log(data.data)
     posts.value = data.data.map((post: any) => ({
       id: post.id,
-      ...post.attributes,
+      Conteudo: post.attributes.Conteudo,
+      Dado: post.attributes.Dado,
+      Tipo: post.attributes.Tipo,
+      livro: {
+        id: post.attributes.livro.data.id,
+        Nome: post.attributes.livro.data.attributes.Nome,
+        Autor: post.attributes.livro.data.attributes.Autor,
+        Genero: post.attributes.livro.data.attributes.Genero,
+        Sinopse: post.attributes.livro.data.attributes.Sinopse,
+        Capa: 
+           {
+              id: post.attributes.livro.data.attributes.Capa.data.id,
+              url: post.attributes.livro.data.attributes.Capa.data.attributes.url,
+            },
+        Nota: post.attributes.livro.data.attributes.Nota,
+        nCapitulos: post.attributes.livro.data.attributes.nCapitulos,
+      },
+      users_permissions_user: {
+        id: post.attributes.users_permissions_user.data.id,
+        username: post.attributes.users_permissions_user.data.attributes.username,
+        role: post.attributes.users_permissions_user.data.attributes.role,
+        email: post.attributes.users_permissions_user.data.attributes.email,
+      }
     }));
-    //console.log(posts._rawValue)
+    console.log(posts)
 
     for(let i = 0; i < posts.value.length; i++){
         if(posts.value[i].id == livro.value.id)
           posts_selecionados.value.push(posts.value[i])
-    
     }
 
     //console.log(posts_selecionados)
@@ -112,7 +134,7 @@ async function toggleBookInEstante() {
     const currentLivros_id = ref<number[]>([]);
 
     for (let i = 0; i < estante.value.length; i++) {
-      currentLivros_id.value.push(estante.value[i].id)
+      console.log(estante.value[i].id)
     }
     console.log(currentLivros_id)
     
@@ -260,7 +282,6 @@ checkIfBookInEstante()
       </div>
       <RouterLink 
       v-for="post in posts" 
-      :key="post.id" 
       :to="`/post/${post.id}`" 
       class="text-decoration-none">
         <Post

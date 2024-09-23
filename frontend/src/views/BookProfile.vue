@@ -122,10 +122,10 @@ async function getPosts() {
 }
 
 async function checkIfBookInEstante() {
-  getLivro()
+  await getLivro()
   try {
-    getEstante()
-    getPosts()
+    await getEstante()
+    await getPosts()
 
     let achado = false
     const idParam = Number(route.params.id);

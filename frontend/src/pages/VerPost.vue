@@ -33,7 +33,7 @@ async function getPost() {
     
     post.value = data.data
     if (!post.value) {
-      throw new Error('Post não encontrado'); // Lança erro se o post não for encontrado
+      throw new Error('Post não encontrado'); 
     }
     console.log(post.value)
 

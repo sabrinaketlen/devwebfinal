@@ -19,6 +19,7 @@ const error = ref<ApplicationError>()
 const route = useRoute()
 const router = useRouter()
 const conteudo = ref('');
+const conteudo_edit  = ref('');
 const loading = ref(false);
 const exception = ref<ApplicationError>()
 const errorMessage = ref<string | null>(null);
@@ -57,6 +58,21 @@ async function getEstante(){
 
 getEstante()
 
+
+async function validacao() {
+  const currentDado = edit.value ? dado_edit.value : dado.value;
+
+  if ((tipo.value === 'Nota') && (currentDado > 5 || currentDado < 1)) {
+    errorMessage.value = "Postagem do tipo 'Nota' deve ter 'Dado' entre 1 e 5";
+    return false;
+  } else if ((tipo.value === 'Progresso') && (currentDado > livro_selecionado.value.nCapitulos || currentDado < 1)) {
+    errorMessage.value = `Postagem do tipo 'Progresso' para o livro ${livro_selecionado.value.Nome} deve ter 'Dado' entre 1 e ${livro_selecionado.value.nCapitulos}`;
+    return false;
+  }
+  
+  errorMessage.value = null; 
+  return true; 
+}
 //async function getLivro() {
 //    const { data } = await api.get(`/livros?filters`, {
  //       headers: {
@@ -81,13 +97,9 @@ async function Postar() {
     exception.value = undefined;
     errorMessage.value = null; 
 
-    if ((tipo.value == 'Nota') && (dado.value > 5 || dado.value < 1)) {
-      errorMessage.value = "Postagem do tipo 'Nota' deve ter 'Dado' entre 1 e 5";
-      throw new Error(errorMessage.value);
-    }
-    else if ((tipo.value == 'Progresso') && (dado.value > livro_selecionado.value.nCapitulos || dado.value < 1)) {
-      errorMessage.value = `Postagem do tipo 'Progresso' pro livro ${livro_selecionado.value.Nome} deve ter 'Dado' entre 1 e ${livro_selecionado.value.nCapitulos}`;
-      throw new Error(errorMessage.value);
+    const isValid = await validacao();
+    if (!isValid) {
+      throw new Error(errorMessage.value || "Erro de validação"); 
     }
     console.log("CREATE")
 
@@ -131,6 +143,8 @@ async function isTherePost() {
     });
     console.log(data.data)
     livro_selecionado.value = data.data.livro
+    tipo.value = data.data.Tipo
+  
     console.log(livro_selecionado)
   }
   catch(e){
@@ -157,23 +171,15 @@ async function Editar() {
     //await getLivro()
     console.log(livro_selecionado.value)
 
-    if(tipo.value == 'Nota'){
-        console.log("dado inserido foi maior que 5")        
-    }
-
-    if ((tipo.value == 'Nota') && (((dado_edit.value > 5) || (dado_edit.value < 1)) || ((dado.value > 5) || (dado.value < 1)) )) {
-      errorMessage.value = "Postagem do tipo 'Nota' deve ter 'Dado' entre 1 e 5";
-      throw new Error(errorMessage.value);
-    }
-    if ((tipo.value == 'Progresso') && (((dado.value > livro_selecionado.value.nCapitulos || dado.value < 1)) || ((dado_edit.value > livro_selecionado.value.nCapitulos ) || (dado_edit.value < 1)))) {
-      errorMessage.value = `Postagem do tipo 'Progresso' pro livro ${livro_selecionado.value.Nome} deve ter 'Dado' entre 1 e ${livro_selecionado.value.nCapitulos}`;
-      throw new Error(errorMessage.value);
+    const isValid = await validacao();
+    if (!isValid) {
+      throw new Error(errorMessage.value || "Erro de validação"); 
     }
   
     const newdata = {
       data: {
-        Conteudo: conteudo.value,
-        Dado: dado.value,
+        Conteudo: conteudo_edit.value,
+        Dado: dado_edit.value,
       }
     };
 
@@ -222,14 +228,23 @@ async function Editar() {
                 <option value="Progresso">Progresso</option>
               </select>
             </div>
-            <div class="mb-3">
+            <div v-if="!edit" class="mb-3">
               <label for="dadoInput" class="form-label">Dado (Nota ou Capitulo Lido)</label>
               <input type="number" class="form-control" id="dadoInput" v-model="dado" required />
               <div v-if="errorMessage" class="invalid-feedback" style="display: block;">{{ errorMessage }}</div>
             </div>
-            <div class="mb-3">
+            <div v-else class="mb-3">
+              <label for="dadoInput" class="form-label">Dado (Nota ou Capitulo Lido)</label>
+              <input type="number" class="form-control" id="dadoInput" v-model="dado_edit" required />
+              <div v-if="errorMessage" class="invalid-feedback" style="display: block;">{{ errorMessage }}</div>
+            </div>
+            <div  v-if="!edit" class="mb-3">
               <label for="conteudoInput" class="form-label">Conteúdo</label>
               <input type="text" class="form-control" id="conteudoInput" v-model="conteudo"/>
+            </div>
+            <div v-else>
+              <label for="conteudoInput" class="form-label">Conteúdo</label>
+              <input type="text" class="form-control" id="conteudoInput" v-model="conteudo_edit"/>
             </div>
 
             <div v-if="!edit" class="mb-3">

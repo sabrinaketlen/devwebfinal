@@ -16,8 +16,7 @@ const userStore = useUserStore();
 const estante = ref({} as Estante);
 const exception = ref<ApplicationError>();
 const loading = ref(true);
-const user_id = userStore.user.id;
-console.log("Token JWT:", userStore.jwt);
+const isEmpty = ref(false)
 
 console.log(route.params.username)
 
@@ -34,6 +33,10 @@ async function getEstantes(){
     });
 
     console.log(data.data[0])
+    if(data.data[0].livros.length == 0){
+      isEmpty.value = true
+    }
+    console.log(isEmpty.value)
     estante.value = data.data[0]
     console.log(estante.value)
   } catch (e) {
@@ -59,6 +62,11 @@ onMounted(() => {
 
   <div v-if="loading" class="spinner-border" role="status">
     <span class="visually-hidden">Loading...</span>
+  </div>
+
+  <div v-if="isEmpty" class="empty-shelf">
+    <h1>😞</h1>
+    <p>Sua estante está vazia, explore o catálogo para escolher qual livro adicionar.</p>
   </div>
 
   <div v-else class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-8">
@@ -90,4 +98,25 @@ onMounted(() => {
   gap: 30px;
   flex-wrap: wrap;
 }
+
+.empty-shelf {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  text-align: center;
+  color: #333;
+}
+
+h1 {
+  font-size: 6rem;
+  margin: 0;
+}
+
+p {
+  font-size: 1.2rem;
+  margin: 10px 0;
+}
+
 </style>

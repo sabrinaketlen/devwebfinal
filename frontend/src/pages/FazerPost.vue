@@ -11,7 +11,6 @@ import { useRouter, useRoute } from 'vue-router';
 
 const estante = ref({} as Estante)
 const estantes = ref([] as Estante[])
-const livros = ref([] as Livro[])
 const livro_selecionado = ref({} as Livro);
 const tipo = ref('');
 const dado = ref(0);

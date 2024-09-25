@@ -19,55 +19,47 @@ import { useRouter, useRoute } from 'vue-router';
 
 const loading = ref(true)
 const error = ref<ApplicationError>()
-const id = ref(0)
 const router = useRouter();
 const route = useRoute();
+const errorMessage = ref<string | null>(null);
 
-const livro = ref([] as Livro[])
+const livro = ref({} as Livro)
 
 const searchQuery = ref('');
 
 async function getLivro() {
       try {
-        const { data } = await api.get(`/livros?populate=Capa`);
-        livro.value = data.data.map((livro: any) => ({
-          id: livro.id,
-          ...livro.attributes,
-        }));        
+        const { data } = await api.get(`/livros?populate=Capa&filters[Nome][$eqi]=${searchQuery.value}`);
+        console.log(data.data)
 
         let achado = false
-        for (let i = 0; i < livro.value.length; i++) {
-          if (livro.value[i].Nome == searchQuery.value) {
-            id.value = livro.value[i].id
-            //console.log(id.value)
-            achado = true
-            break;
-          }
+        errorMessage.value = null
+
+        if(data.data.length == 0){
+          errorMessage.value = "Livro não existe";
+          throw new Error(errorMessage.value);
+        }else{
+          achado = true
+          console.log("tem livro")
+          livro.value = data.data[0]
         }
 
-        const currentPath = route.path
-        //const nextPath = id.value
-        //.log(currentPath);
-        //console.log(nextPath)
-        //console.log(searchQuery)
-
-        if(currentPath != '/'){
-          //console.log("NOT HOME")
+        if(route.path!= '/'){
           await router.push('/')
         }
         
-        if(achado == false){
-          router.push({ path: '/:pathMatch(.*)*' });
-        }
-        else {
-          router.push( { path: `/livros/${id.value}`});
-        }
-
+          router.push( { path: `/livros/${livro.value.id}`});
+  
         searchQuery.value = ''
         
       } catch (e) {
         if (isAxiosError(e) && isApplicationError(e.response?.data)) {
-          error.value = e.response?.data
+          error.value = e.response?.data;
+          console.error("Erro de aplicação:", error.value);
+          router.push('/NotFound');
+        } else {
+          console.error("Erro:", (e as Error).message || e);
+          router.push('/NotFound');
         }
       } finally {
         loading.value = false

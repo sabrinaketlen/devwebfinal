@@ -114,6 +114,11 @@ const router = createRouter({
         role: 'Organizador',
       },
     },
+    {
+      path: '/NotFound',
+      name: "NOT FOUND",
+      component: NotFound
+    },
     { path: '/:pathMatch(.*)*', component: NotFound },
   ]
 })

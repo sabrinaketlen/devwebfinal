@@ -22,10 +22,6 @@ const route = useRoute()
 const post = ref({} as Poste)
 const post_owner = ref(false)
 
-//parei aqui, JA ESTA PEGANDO O POST
-//preciso sinalizar qual o livro na pagina do post
-//preciso botar botao de editar ou excluir post
-
 async function getPost() {
   try {
     const { data } = await api.get(`/posts/${route.params.id}?populate=livro.Capa,users_permissions_user.role`, {

@@ -25,10 +25,13 @@ const errorMessage = ref<string | null>(null);
 const userStore = useUserStore()
 const user_id = userStore.user.id
 
-    if (route.fullPath == `/editarpost/${route.params.id}`){
-        edit.value = true 
-        console.log(edit.value)
-    }
+onMounted(() => {
+  if (route.fullPath === `/editarpost/${route.params.id}`) {
+    edit.value = true; 
+    console.log(edit.value);
+    isTherePost(); // Chama a função para verificar se a postagem existe
+  }
+});
 
 
 async function getEstante(){
@@ -121,11 +124,14 @@ async function Postar() {
 
 async function isTherePost() {
   try{
-    const { data } = await api.get(`/posts/${route.params.id}`, {
+    const { data } = await api.get(`/posts/${route.params.id}?populate=livro`, {
       headers: {
         Authorization: `Bearer ${userStore.jwt}`,
       },
     });
+    console.log(data.data)
+    livro_selecionado.value = data.data.livro
+    console.log(livro_selecionado)
   }
   catch(e){
     if (isAxiosError(e) && isApplicationError(e.response?.data)) {
@@ -138,7 +144,7 @@ async function isTherePost() {
   }
 
 }
-isTherePost()
+
 
 async function Editar() {
   console.log("Método Editar chamado");
@@ -180,7 +186,7 @@ async function Editar() {
       },
     });
     console.log("UPDATE")
-
+    console.log(livro_selecionado)
     router.push( { path: `/livros/${livro_selecionado.value.id}`});
 
   } catch (e) {

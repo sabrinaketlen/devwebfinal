@@ -10,7 +10,6 @@ import { useRouter, useRoute } from 'vue-router';
 
 
 const estante = ref({} as Estante)
-const estantes = ref([] as Estante[])
 const livro_selecionado = ref({} as Livro);
 const tipo = ref('');
 const dado = ref(0);
@@ -25,8 +24,6 @@ const exception = ref<ApplicationError>()
 const errorMessage = ref<string | null>(null);
 const userStore = useUserStore()
 const user_id = userStore.user.id
-const user = userStore.user
-
 
     if (route.fullPath == `/posts/editar/${route.params.id}`){
         edit.value = true 
@@ -34,84 +31,52 @@ const user = userStore.user
     }
 
 
-const getEstante = async () => {
+async function getEstante(){
+  console.log("getEstantes chamada");
   try {
-    const { data } = await api.get(`/estantes?populate=livros.Capa, users_permissions_user`, {
+    const { data } = await api.get(`/estantes?populate=livros.Capa, users_permissions_user&filters[users_permissions_user][id]=${user_id}`, {
       headers: {
         Authorization: `Bearer ${userStore.jwt}`,
       },
     });
-    console.log(data.data)
-    estantes.value = data.data.map((estante: any) => ({
-      id: estante.id,
-      user: {
-        id: estante.attributes.users_permissions_user.data.id,
-        username: estante.attributes.users_permissions_user.data.attributes.username,
-        role: estante.attributes.users_permissions_user.data.attributes.role,
-        email: estante.attributes.users_permissions_user.data.attributes.email,
-      },
-      livros: estante.attributes.livros.data.map((livro: any) => ({
-        id: livro.id,
-        Nome: livro.attributes.Nome,
-        Autor: livro.attributes.Autor,
-        Genero: livro.attributes.Genero,
-        Sinopse: livro.attributes.Sinopse,
-        Capa:
-           {
-              id: livro.attributes.Capa.data.id,
-              url: livro.attributes.Capa.data.attributes.url,
-            },
-        Nota: livro.attributes.Nota,
-        nCapitulos: livro.attributes.nCapitulos,
-        
-      })),
-    }));
-    console.log(estantes.value);
-    for(let i = 0; i < estantes.value.length ; i++){
-      if(estantes.value[i].user.id == userStore.user.id){
-        console.log(estantes.value[i])
-      estante.value = estantes.value[i]
-      }
-    }
+
+    console.log(data.data[0])
+    estante.value = data.data[0]
     console.log(estante.value)
-        if (data.data.length === 0) {
-          throw new Error('Estante não encontrada para o usuário')
-        }
-      } catch (e) {
-        if (isAxiosError(e) && isApplicationError(e.response?.data)) {
-          exception.value = e.response?.data
-        }
-      } finally {
-        loading.value = false
-      }
+  } catch (e) {
+    if (isAxiosError(e) && isApplicationError(e.response?.data)) {
+      exception.value = e.response?.data;
     }
+  } finally {
+    loading.value = false;
+  }
+}
 
 getEstante()
 
-async function getLivro() {
-    const { data } = await api.get(`/posts/${route.params.id}?populate=livro`, {
-        headers: {
-                Authorization: `Bearer ${userStore.jwt}`,
-            }
-    });
-    console.log(data.data)
-    livro_selecionado.value = data.data.attributes.livro.data
-    console.log(livro_selecionado)
-    tipo.value = data.data.attributes.Tipo
-    console.log(data.data)
-    dado_edit.value = data.data.attributes.Dado
-    //for (let i = 0; i < livros.value.length; i++){
-    // if(livros.value[i].id == )    
-    //}
-}
-getLivro()
+//async function getLivro() {
+//    const { data } = await api.get(`/livros?filters`, {
+ //       headers: {
+//                Authorization: `Bearer ${userStore.jwt}`,
+//            }
+//    });
+//    console.log(data.data)
+//    livro_selecionado.value = data.data.attributes.livro.data
+//    console.log(livro_selecionado)
+//    tipo.value = data.data.attributes.Tipo
+//    console.log(data.data)
+ //   dado_edit.value = data.data.attributes.Dado
+
+//}
+//if(edit){
+//  getLivro()
+//}
 
 async function Postar() {
   try {
     loading.value = true;
     exception.value = undefined;
     errorMessage.value = null; 
-    //console.log(livro_selecionado);
 
     if ((tipo.value == 'Nota') && (dado.value > 5 || dado.value < 1)) {
       errorMessage.value = "Postagem do tipo 'Nota' deve ter 'Dado' entre 1 e 5";
@@ -123,14 +88,6 @@ async function Postar() {
     }
     console.log("CREATE")
 
-
-    //console.log(conteudo._rawValue);
-    //console.log(livro_selecionado._rawValue.attributes.nCapitulos);
-   // console.log(dado._rawValue);
-    //console.log(tipo._rawValue);
-    //console.log(livro_selecionado);
-    //console.log(toRaw(user));
-    //console.log(user_id);
 
     const newdata = {
       data: {
@@ -169,7 +126,7 @@ async function Editar() {
     exception.value = undefined;
     errorMessage.value = null; 
     //console.log(livro_selecionado);
-    await getLivro()
+    //await getLivro()
     console.log(livro_selecionado.value)
 
     if(tipo.value == 'Nota'){

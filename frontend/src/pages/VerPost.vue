@@ -20,7 +20,7 @@ const user_id = userStore.user.id
 const router = useRouter()
 const route = useRoute()
 const post = ref({} as Poste)
-const post_owner = ref(0)
+const post_owner = ref(false)
 
 //parei aqui, JA ESTA PEGANDO O POST
 //preciso sinalizar qual o livro na pagina do post
@@ -34,42 +34,19 @@ async function getPost() {
       },
     })
     console.log(data.data)
-    post.value = {
-      id: data.data.id,
-      Conteudo: data.data.attributes.Conteudo,
-      Dado: data.data.attributes.Dado,
-      Tipo: data.data.attributes.Tipo,
-      livro: {
-        id: data.data.attributes.livro.data.id,
-        Nome: data.data.attributes.livro.data.attributes.Nome,
-        Autor: data.data.attributes.livro.data.attributes.Autor,
-        Genero: data.data.attributes.livro.data.attributes.Genero,
-        Sinopse: data.data.attributes.livro.data.attributes.Sinopse,
-        Capa: 
-           {
-              id: data.data.attributes.livro.data.attributes.Capa.data.id,
-              url: data.data.attributes.livro.data.attributes.Capa.data.attributes.url,
-            },
-        Nota: data.data.attributes.livro.data.attributes.Nota,
-        nCapitulos: data.data.attributes.livro.data.attributes.nCapitulos,
-      },
-      users_permissions_user: {
-        id: data.data.attributes.users_permissions_user.data.id,
-        username: data.data.attributes.users_permissions_user.data.attributes.username,
-        role: data.data.attributes.users_permissions_user.data.attributes.role,
-        email: data.data.attributes.users_permissions_user.data.attributes.email,
-      }
-    }
+    post.value = data.data
+    console.log(post.value)
+    //post_owner.value = post.value.users_permissions_user.id
 
-    console.log(post)
-    post_owner.value = post.value.users_permissions_user.id
-
-    console.log(post_owner.value)
-    console.log(user_id)
-    if(post_owner.value != user_id){
+    //console.log(post_owner.value)
+    //console.log(user_id)
+    if(post.value.users_permissions_user.id != user_id){
         console.log("NAO EH MEU POST")
     }
-    console.log("a doidera dando certo")
+    else{
+      console.log("eh meu post")
+      post_owner.value = true
+    }
 
     //console.log(livro._rawValue);
     
@@ -122,7 +99,7 @@ getPost()
       </div>
       
       <!-- Ícones com v-if para mostrar apenas se o usuário for o dono do post -->
-      <div v-if="post_owner == user_id" class="icon-container">
+      <div v-if="post_owner" class="icon-container">
         <RouterLink :to="`/posts/editar/${post.id}`">
         <button class="btn btn-info" title="Editar Post">
           <i class="bi bi-pencil-square"></i>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, toRaw } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { api } from '@/api'
 import { useUpload } from '@/composables/useUpload'
 import type { ApplicationError, Estante, Livro, Poste } from '@/types'
@@ -9,7 +9,7 @@ import { isAxiosError } from 'axios'
 import { isApplicationError } from '@/composables/useApplicationError'
 import Post from '../components/Post.vue';
 
-
+const router = useRouter()
 const posts = ref([] as Poste[])
 const route = useRoute()
 const livro = ref({} as Livro)
@@ -20,6 +20,7 @@ const estante = ref({} as Estante)
 
 const feedback = ref('')
 const userStore = useUserStore()
+const isAuthenticated = userStore.isAuthenticated;
 const user_id = userStore.user.id
 
 const isBookInEstante = ref(false)
@@ -43,12 +44,16 @@ async function getPosts() {
       },
     })
     console.log(data.data[0])
+    if(data.data[0] == undefined){
+      throw new Error();
+    }
     posts.value = data.data[0].posts
     
   } catch (e) {
     if (isAxiosError(e) && isApplicationError(e.response?.data)) {
       error.value = e.response?.data
     }
+    router.push('/NotFound')
   } finally {
     loading.value = false
   }
@@ -79,6 +84,11 @@ async function checkIfBookInEstante() {
 }
 
 async function toggleBookInEstante() {
+  if (!isAuthenticated) {
+    router.push('/login');
+    return; 
+  }
+
   checkIfBookInEstante()
   const action = isBookInEstante.value ? 'remove' : 'add'
 

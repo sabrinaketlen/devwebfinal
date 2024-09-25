@@ -42,11 +42,8 @@ async function authenticate() {
     userStore.authenticaded(res.data, jwt)
     
 
-    if (role == 'organizador') {
-      router.push('/admin')
-    } else {
       router.push('/')
-    }
+    
   } catch (e) {
     if (isAxiosError(e) && isApplicationError(e.response?.data)) {
       exception.value = e.response?.data

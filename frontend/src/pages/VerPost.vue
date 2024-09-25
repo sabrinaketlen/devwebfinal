@@ -34,12 +34,13 @@ async function getPost() {
       },
     })
     console.log(data.data)
+    
     post.value = data.data
+    if (!post.value) {
+      throw new Error('Post não encontrado'); // Lança erro se o post não for encontrado
+    }
     console.log(post.value)
-    //post_owner.value = post.value.users_permissions_user.id
 
-    //console.log(post_owner.value)
-    //console.log(user_id)
     if(post.value.users_permissions_user.id != user_id){
         console.log("NAO EH MEU POST")
     }
@@ -54,6 +55,7 @@ async function getPost() {
     if (isAxiosError(e) && isApplicationError(e.response?.data)) {
       error.value = e.response?.data
     }
+    router.push('/NotFound')
   } finally {
     loading.value = false
   }

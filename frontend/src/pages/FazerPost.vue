@@ -7,7 +7,7 @@ import { useUserStore } from '@/stores/userStore'
 import { api } from '@/api';
 import { useRouter, useRoute } from 'vue-router';
 
-
+//ESTA DANDO PROBLEMA/LIVROS/IDQUALQUER
 
 const estante = ref({} as Estante)
 const livro_selecionado = ref({} as Livro);
@@ -15,7 +15,7 @@ const tipo = ref('');
 const dado = ref(0);
 const dado_edit = ref(0);
 const edit = ref(false);
-
+const error = ref<ApplicationError>()
 const route = useRoute()
 const router = useRouter()
 const conteudo = ref('');
@@ -119,8 +119,30 @@ async function Postar() {
   }
 }
 
+async function isTherePost() {
+  try{
+    const { data } = await api.get(`/posts/${route.params.id}`, {
+      headers: {
+        Authorization: `Bearer ${userStore.jwt}`,
+      },
+    });
+  }
+  catch(e){
+    if (isAxiosError(e) && isApplicationError(e.response?.data)) {
+      error.value = e.response?.data
+    }
+    router.push('/NotFound')
+  }
+  finally{
+
+  }
+
+}
+isTherePost()
+
 async function Editar() {
   console.log("Método Editar chamado");
+  
   try {
     loading.value = true;
     exception.value = undefined;

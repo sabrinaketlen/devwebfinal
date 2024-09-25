@@ -12,6 +12,7 @@ import FazerPost from '../pages/FazerPost.vue'
 import adminHome from '@/pages/Admin/adminHome.vue'
 import BookProfile4admin from '@/pages/Admin/BookProfile4admin.vue'
 import ManageBook from '@/pages/Admin/ManageBook.vue'
+import Unauthorized from '@/pages/Unauthorized.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -119,6 +120,11 @@ const router = createRouter({
       path: '/NotFound',
       name: "NOT FOUND",
       component: NotFound
+    },
+    {
+      path: '/unauthorized',
+      name: "unauthorized",
+      component: Unauthorized
     },
     { path: '/:pathMatch(.*)*', component: NotFound },
   ]

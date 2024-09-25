@@ -14,6 +14,41 @@ const loading = ref(false)
 const exception = ref<ApplicationError>()
 const router = useRouter()
 
+async function createEstante() {
+  try{
+  const jwt = localStorage.getItem('jwt') 
+
+    const { data } = await api.get('/users/me', {
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      },
+    })
+  
+      const newdata = {
+      data: {
+        users_permissions_user: data.id
+        }
+      }
+
+      console.log('Payload enviado:', newdata)
+    
+
+      const res = await api.post(`/estantes`, newdata, {
+       headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+       });
+      console.log("ESTANTE CRIADA")
+    
+  } catch (e) {
+    if (isAxiosError(e) && isApplicationError(e.response?.data)) {
+      exception.value = e.response?.data
+    }
+  } finally {
+    loading.value = false
+  }
+
+}
 
 
 async function register() {
@@ -26,7 +61,9 @@ async function register() {
         email: email.value,
         password: password.value
     })
+    localStorage.setItem('jwt', data.jwt)
     router.push('/login') 
+    createEstante()
   } catch (e) {
     if (isAxiosError(e) && isApplicationError(e.response?.data)) {
       exception.value = e.response?.data

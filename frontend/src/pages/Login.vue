@@ -16,77 +16,6 @@ const id = ref(0)
 const estante = ref([] as Estante[])
 const userStore = useUserStore()
 
-async function createEstante() {
-  try{
-  const { data } = await api.get('/estantes?populate=livros.Capa, users_permissions_user', {
-      headers: {
-        Authorization: `Bearer ${userStore.jwt}`
-      },
-    })
-    console.log(data.data)
-    let achado = false
-    estante.value = data.data.map((estante: any) => ({
-      user: {
-        id: estante.attributes.users_permissions_user.data.id,
-        username: estante.attributes.users_permissions_user.data.attributes.username,
-        role: estante.attributes.users_permissions_user.data.attributes.role,
-        email: estante.attributes.users_permissions_user.data.attributes.email,
-      },
-      livros: estante.attributes.livros.data.map((livro: any) => ({
-        id: livro.id,
-        Nome: livro.attributes.Nome,
-        Autor: livro.attributes.Autor,
-        Genero: livro.attributes.Genero,
-        Sinopse: livro.attributes.Sinopse,
-        Capa: livro.attributes.Capa?.data
-          ? {
-              id: livro.attributes.Capa.data.id,
-              url: livro.attributes.Capa.data.attributes.url,
-            }
-          : undefined,
-        Nota: livro.attributes.Nota,
-        nCapitulos: livro.attributes.nCapitulos,
-      })),
-    }));
-    console.log(estante.value)
-
-    for(let i = 0; i < estante.value.length ; i++){
-      if(estante.value[i].user.id == userStore.user.id){
-      console.log("ja tem estante")
-      achado = true
-      }
-    }
-    console.log(achado)
-    if(!achado){
-      const newdata = {
-      data: {
-        users_permissions_user: userStore.user.id
-        }
-      };
-
-      console.log('Payload enviado:', newdata)
-    
-
-      const res = await api.post(`/estantes`, newdata, {
-       headers: {
-          Authorization: `Bearer ${userStore.jwt}`,
-        },
-      });
-      console.log("ESTANTE CRIADA")
-    }
-    else{
-      console.log("tem estante")
-    }
-  } catch (e) {
-    if (isAxiosError(e) && isApplicationError(e.response?.data)) {
-      exception.value = e.response?.data
-    }
-  } finally {
-    loading.value = false
-  }
-
-}
-
 async function authenticate() {
   try {
     loading.value = true
@@ -111,7 +40,6 @@ async function authenticate() {
     console.log(id.value)
 
     userStore.authenticaded(res.data, jwt)
-    createEstante()
     
 
     if (role == 'organizador') {

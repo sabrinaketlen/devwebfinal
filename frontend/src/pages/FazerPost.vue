@@ -25,7 +25,7 @@ const errorMessage = ref<string | null>(null);
 const userStore = useUserStore()
 const user_id = userStore.user.id
 
-    if (route.fullPath == `/posts/editar/${route.params.id}`){
+    if (route.fullPath == `/editarpost/${route.params.id}`){
         edit.value = true 
         console.log(edit.value)
     }
@@ -141,15 +141,7 @@ async function Editar() {
       errorMessage.value = `Postagem do tipo 'Progresso' pro livro ${livro_selecionado.value.Nome} deve ter 'Dado' entre 1 e ${livro_selecionado.value.nCapitulos}`;
       throw new Error(errorMessage.value);
     }
-    
-    //console.log(conteudo._rawValue);
-    //console.log(livro_selecionado._rawValue.attributes.nCapitulos);
-   // console.log(dado._rawValue);
-    //console.log(tipo._rawValue);
-    //console.log(livro_selecionado);
-    //console.log(toRaw(user));
-    //console.log(user_id);
-
+  
     const newdata = {
       data: {
         Conteudo: conteudo.value,

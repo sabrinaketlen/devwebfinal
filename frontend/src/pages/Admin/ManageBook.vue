@@ -36,7 +36,7 @@ function handleUpload(event: Event) {
 }
 
 
-if(route.fullPath == `/admin/criarlivro/${route.params.username}`){
+if(route.fullPath == `/admin/criarlivro`){
     criando.value = true
 }
 
@@ -83,7 +83,6 @@ async function editLivro() {
     loading.value = true;
     const formData = new FormData();
 
-    // Defina um tipo específico para 'data' com todas as propriedades possíveis
     const data: Partial<{ Nome: string, Autor: string, Genero: string, Sinopse: string, Nota: string, nCapitulos: string }> = {};
 
     if (cover.value) {

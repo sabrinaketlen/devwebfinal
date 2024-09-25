@@ -19,14 +19,9 @@ console.log(userStore.user.role.name)
 onMounted(async () => {
   try {
     const { data } = await api.get(`/livros?populate=Capa`);
-    livros.value = data.data.map((livro: any) => ({
-    id: livro.id,
-    ...livro.attributes,
-    Capa: {
-          id: livro.attributes.Capa.data.id,
-          url: livro.attributes.Capa.data.attributes.url,
-        }
-    }));
+    console.log(data.data)
+    livros.value = data.data
+    console.log(livros.value)
   } catch (e) {
     if (isAxiosError(e) && isApplicationError(e.response?.data)) {
       exception.value = e.response?.data;
@@ -68,7 +63,7 @@ onMounted(async () => {
       />
     </RouterLink>
     </div>
-    <RouterLink :to="`/admin/criarlivro/${userStore.user.username}`"> 
+    <RouterLink :to="`/admin/criarlivro`"> 
       <button class="floating-button">
         <i class="bi bi-feather"></i>
       </button>

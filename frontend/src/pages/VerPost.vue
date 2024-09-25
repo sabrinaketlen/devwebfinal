@@ -100,7 +100,7 @@ getPost()
       
       <!-- Ícones com v-if para mostrar apenas se o usuário for o dono do post -->
       <div v-if="post_owner" class="icon-container">
-        <RouterLink :to="`/posts/editar/${post.id}`">
+        <RouterLink :to="`/editarpost/${post.id}`">
         <button class="btn btn-info" title="Editar Post">
           <i class="bi bi-pencil-square"></i>
         </button>

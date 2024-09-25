@@ -53,8 +53,17 @@ const router = createRouter({
 
     },
     {
-      path: '/posts/:username',
-      name: 'posts',
+      path: '/fazerpost',
+      name: 'fazer posts',
+      component: FazerPost,
+      meta: {
+        requiresAuth: true
+      }
+
+    },
+    {
+      path: '/editarpost/:id',
+      name: 'editar posts',
       component: FazerPost,
       meta: {
         requiresAuth: true
@@ -65,14 +74,6 @@ const router = createRouter({
       path: '/post/:id',
       name: 'post',
       component: VerPost,
-      meta: {
-        requiresAuth: true
-      }
-    },
-    {
-      path: '/posts/editar/:id',
-      name: 'editar posts',
-      component: FazerPost,
       meta: {
         requiresAuth: true
       }
@@ -106,7 +107,7 @@ const router = createRouter({
       },
     },
     {
-      path: '/admin/criarlivro/:username',
+      path: '/admin/criarlivro',
       name: 'CRIAR LIVRO',
       component: ManageBook,
       meta: {

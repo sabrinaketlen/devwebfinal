@@ -10,7 +10,7 @@
           <!-- Exibir o nome do usuário -->
           <span>Logged as {{ userStore.username }}</span>
         </div>
-        <RouterLink :to="`/posts/${userStore.username}`"
+        <RouterLink :to="`/fazerpost`"
           ><button type="button" class="option-btn">
             Fazer post
           </button></RouterLink

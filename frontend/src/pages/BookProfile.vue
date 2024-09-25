@@ -10,9 +10,7 @@ import { isApplicationError } from '@/composables/useApplicationError'
 import Post from '../components/Post.vue';
 
 
-const estantes = ref([] as Estante[])
 const posts = ref([] as Poste[])
-const posts_selecionados = ref([] as Poste[])
 const route = useRoute()
 const livro = ref({} as Livro)
 const loading = ref(true)
@@ -27,90 +25,25 @@ const user_id = userStore.user.id
 const isBookInEstante = ref(false)
 
 async function getEstante() {
-  const { data } = await api.get(`/estantes?populate=livros.Capa, users_permissions_user`, {
+  const { data } = await api.get(`/estantes?populate=livros.Capa, users_permissions_user&filters[users_permissions_user][id]=${user_id}`, {
       headers: {
         Authorization: `Bearer ${userStore.jwt}`,
       },
     });
     console.log(data.data)
-    estantes.value = data.data.map((estante: any) => ({
-      id: estante.id,
-      user: {
-        id: estante.attributes.users_permissions_user.data.id,
-        username: estante.attributes.users_permissions_user.data.attributes.username,
-        role: estante.attributes.users_permissions_user.data.attributes.role,
-        email: estante.attributes.users_permissions_user.data.attributes.email,
-      },
-      livros: estante.attributes.livros.data.map((livro: any) => ({
-        id: livro.id,
-        Nome: livro.attributes.Nome,
-        Autor: livro.attributes.Autor,
-        Genero: livro.attributes.Genero,
-        Sinopse: livro.attributes.Sinopse,
-        Capa:
-           {
-              id: livro.attributes.Capa.data.id,
-              url: livro.attributes.Capa.data.attributes.url,
-            },
-        Nota: livro.attributes.Nota,
-        nCapitulos: livro.attributes.nCapitulos,
-        
-      })),
-    }));
-    console.log(estantes.value);
-    for(let i = 0; i < estantes.value.length ; i++){
-      if(estantes.value[i].user.id == userStore.user.id){
-        console.log(estantes.value[i])
-      estante.value = estantes.value[i]
-      }
-    }
-    console.log(estante.value)
+    estante.value = data.data[0]
+    console.log(estante.value.livros)
 }
 
 async function getPosts() {
   try {
-    const { data } = await api.get(`/posts?populate=livro.Capa,users_permissions_user.role`, {
+    const { data } = await api.get(`/livros?populate=posts.livro, posts.users_permissions_user&filters[id][$eq]=${route.params.id}`, {
       headers: {
         Authorization: `Bearer ${userStore.jwt}`,
       },
     })
-    console.log(data.data)
-    posts.value = data.data.map((post: any) => ({
-      id: post.id,
-      Conteudo: post.attributes.Conteudo,
-      Dado: post.attributes.Dado,
-      Tipo: post.attributes.Tipo,
-      livro: {
-        id: post.attributes.livro.data.id,
-        Nome: post.attributes.livro.data.attributes.Nome,
-        Autor: post.attributes.livro.data.attributes.Autor,
-        Genero: post.attributes.livro.data.attributes.Genero,
-        Sinopse: post.attributes.livro.data.attributes.Sinopse,
-        Capa: 
-           {
-              id: post.attributes.livro.data.attributes.Capa.data.id,
-              url: post.attributes.livro.data.attributes.Capa.data.attributes.url,
-            },
-        Nota: post.attributes.livro.data.attributes.Nota,
-        nCapitulos: post.attributes.livro.data.attributes.nCapitulos,
-      },
-      users_permissions_user: {
-        id: post.attributes.users_permissions_user.data.id,
-        username: post.attributes.users_permissions_user.data.attributes.username,
-        role: post.attributes.users_permissions_user.data.attributes.role,
-        email: post.attributes.users_permissions_user.data.attributes.email,
-      }
-    }));
-    console.log(posts)
-
-    for(let i = 0; i < posts.value.length; i++){
-        if(posts.value[i].id == livro.value.id)
-          posts_selecionados.value.push(posts.value[i])
-    }
-
-    //console.log(posts_selecionados)
-
-    //console.log(livro._rawValue);
+    console.log(data.data[0])
+    posts.value = data.data[0].posts
     
   } catch (e) {
     if (isAxiosError(e) && isApplicationError(e.response?.data)) {
@@ -131,9 +64,8 @@ async function checkIfBookInEstante() {
     let achado = false
     const idParam = Number(route.params.id);
     console.log(estante.value.livros)
-    // ERRO ESTA AQUI
+
     for (const livro of estante.value.livros) {
-    
         if (livro.id == idParam ) {
             achado = true
             break
@@ -153,10 +85,8 @@ async function toggleBookInEstante() {
   try {
     loading.value = true
     
-    //console.log(estante._rawValue);
     
     console.log(estante.value)
-    //console.log("currentLivros:");
 
     let currentLivros_id: number[] = [];
 
@@ -165,16 +95,7 @@ async function toggleBookInEstante() {
     }
     console.log(currentLivros_id)
     console.log(livro.value.id)
-    
-    //console.log(currentLivros);
-    //console.log("livro raw value");
-
-    //console.log(livro._rawValue);
-    
-    //console.log("livro_objeto");
-
-    //console.log(livro_objeto);
-    
+  
 
     if (action == 'add') {
       //console.log("tentei add");
@@ -224,16 +145,7 @@ async function toggleBookInEstante() {
 async function getLivro() {
   try {
     const { data } = await api.get(`/livros/${route.params.id}?populate=Capa`)
-    livro.value = {
-      id: data.data.id,
-      Nome: data.data.attributes.Nome, // Certifique-se de que a chave esteja correta
-      Autor: data.data.attributes.Autor,
-      Genero: data.data.attributes.Genero,
-      Sinopse: data.data.attributes.Sinopse,
-      Nota: data.data.attributes.Nota,
-      Capa: data.data.attributes.Capa, // Certifique-se de que a estrutura da Capa esteja correta
-      nCapitulos: data.data.attributes.nCapitulos,
-    };
+    livro.value = data.data
     console.log(livro.value)
     
   } catch (e) {

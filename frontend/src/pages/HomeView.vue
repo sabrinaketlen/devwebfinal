@@ -16,25 +16,12 @@ const loading = ref(true);
 
 console.log(userStore.user.role.name);
 
-const fetchLivro = async () => {
-  
-};
-
-const clearLivro = () => {
-  livros.value = [];
-};
-
 onMounted(async () => {
   try {
     const { data } = await api.get(`/livros?populate=Capa`);
-    livros.value = data.data.map((livro: any) => ({
-    id: livro.id,
-    ...livro.attributes,
-    Capa: {
-          id: livro.attributes.Capa.data.id,
-          url: livro.attributes.Capa.data.attributes.url,
-        }
-    }));
+    console.log(data.data)
+    livros.value = data.data
+    console.log(livros.value)
   } catch (e) {
     if (isAxiosError(e) && isApplicationError(e.response?.data)) {
       exception.value = e.response?.data;

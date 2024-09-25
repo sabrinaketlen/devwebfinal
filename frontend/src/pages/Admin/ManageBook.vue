@@ -76,7 +76,26 @@ async function createLivro() {
     loading.value = false
   }
 }
+async function isThereBook() {
+  try{
+    const { data } = await api.get(`/livros/${route.params.id}`, {
+      headers: {
+        Authorization: `Bearer ${userStore.jwt}`,
+      },
+    });
+  }
+  catch(e){
+    if (isAxiosError(e) && isApplicationError(e.response?.data)) {
+      error.value = e.response?.data
+    }
+    router.push('/NotFound')
+  }
+  finally{
 
+  }
+
+}
+isThereBook()
 
 async function editLivro() {
   try {

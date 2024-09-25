@@ -79,6 +79,8 @@ async function getLivro() {
     if (isAxiosError(e) && isApplicationError(e.response?.data)) {
       error.value = e.response?.data
     }
+    router.push('/NotFound')
+
   } finally {
     loading.value = false
   }

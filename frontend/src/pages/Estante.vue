@@ -5,10 +5,13 @@ import { api } from "@/api";
 import { isAxiosError } from "axios";
 import { isApplicationError } from "@/composables/useApplicationError";
 import { useUserStore } from "@/stores/userStore";
+import { useRouter, useRoute } from 'vue-router';
 import Book from "@/components/Book.vue";
 
 console.log("Componente renderizado");
 
+const router = useRouter()
+const route = useRoute()
 const userStore = useUserStore();
 const estante = ref({} as Estante);
 const exception = ref<ApplicationError>();
@@ -16,11 +19,15 @@ const loading = ref(true);
 const user_id = userStore.user.id;
 console.log("Token JWT:", userStore.jwt);
 
+console.log(route.params.username)
 
 async function getEstantes(){
   console.log("getEstantes chamada");
   try {
-    const { data } = await api.get(`/estantes?populate=livros.Capa, users_permissions_user&filters[users_permissions_user][id]=${user_id}`, {
+    if(route.params.username != userStore.user.username){
+      throw new Error()
+    }
+    const { data } = await api.get(`/estantes?populate=livros.Capa, users_permissions_user&filters[users_permissions_user][username]=${route.params.username}`, {
       headers: {
         Authorization: `Bearer ${userStore.jwt}`,
       },
@@ -33,6 +40,7 @@ async function getEstantes(){
     if (isAxiosError(e) && isApplicationError(e.response?.data)) {
       exception.value = e.response?.data;
     }
+    router.push('/NotFound')
   } finally {
     loading.value = false;
   }

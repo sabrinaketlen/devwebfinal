@@ -108,11 +108,9 @@ async function toggleBookInEstante() {
   
 
     if (action == 'add') {
-      //console.log("tentei add");
       currentLivros_id.push(livro.value.id)
       console.log(currentLivros_id);
     } else if (action == 'remove') {
-      //console.log("tentei remover");
       let indexToRemove = -1; 
       for (let i = 0; i < currentLivros_id.length; i++) {
         if (currentLivros_id[i] === livro.value.id) {
@@ -187,7 +185,6 @@ checkIfBookInEstante()
         <div class="card mb-3">
           <div class="row g-0">
             <div class="col-md-4">
-              <!-- DANDO PROBLEMA -->
               <img
                 v-if="livro.Capa.url" 
                 :src="uploadHelper(livro.Capa.url)"

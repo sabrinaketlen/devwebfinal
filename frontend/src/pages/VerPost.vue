@@ -1,6 +1,6 @@
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, nextTick } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import type { ApplicationError, Poste } from '@/types'
 import { isAxiosError } from 'axios';
@@ -16,6 +16,7 @@ const userStore = useUserStore()
 const loading = ref(true)
 const error = ref<ApplicationError>()
 
+const post_exists = ref(false)
 const user_id = userStore.user.id
 const router = useRouter()
 const route = useRoute()
@@ -36,6 +37,8 @@ async function getPost() {
   } catch (e) {
     if (isAxiosError(e) && isApplicationError(e.response?.data)) {
       error.value = e.response?.data
+      console.error('Erro ao buscar post:', error.value);
+      await nextTick();
       router.push('/NotFound');
     }
 
@@ -70,8 +73,7 @@ getPost()
     <div class="position-relative">
       <span v-if="post.livro" class="badge text-bg-warning">Post sobre {{ post.livro.Nome }}</span>
       
-      <!-- Post component -->
-      <div class="post-content">
+      <div v-if="post.id!=undefined" class="post-content">
         <Post
           :key="post.id"
           :id="post.id"
@@ -83,7 +85,6 @@ getPost()
         />
       </div>
       
-      <!-- Ícones com v-if para mostrar apenas se o usuário for o dono do post -->
       <div v-if="post_owner" class="icon-container">
         <RouterLink :to="`/editarpost/${post.id}`">
         <button class="btn btn-info" title="Editar Post">

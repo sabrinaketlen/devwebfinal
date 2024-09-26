@@ -7,8 +7,6 @@ import { useUserStore } from '@/stores/userStore'
 import { api } from '@/api';
 import { useRouter, useRoute } from 'vue-router';
 
-//ESTA DANDO PROBLEMA/LIVROS/IDQUALQUER
-
 const estante = ref({} as Estante)
 const livro_selecionado = ref({} as Livro);
 const tipo = ref('');
@@ -30,7 +28,7 @@ onMounted(() => {
   if (route.fullPath === `/editarpost/${route.params.id}`) {
     edit.value = true; 
     console.log(edit.value);
-    isTherePost(); // Chama a função para verificar se a postagem existe
+    isTherePost(); 
   }
 });
 
@@ -73,23 +71,6 @@ async function validacao() {
   errorMessage.value = null; 
   return true; 
 }
-//async function getLivro() {
-//    const { data } = await api.get(`/livros?filters`, {
- //       headers: {
-//                Authorization: `Bearer ${userStore.jwt}`,
-//            }
-//    });
-//    console.log(data.data)
-//    livro_selecionado.value = data.data.attributes.livro.data
-//    console.log(livro_selecionado)
-//    tipo.value = data.data.attributes.Tipo
-//    console.log(data.data)
- //   dado_edit.value = data.data.attributes.Dado
-
-//}
-//if(edit){
-//  getLivro()
-//}
 
 async function Postar() {
   try {
@@ -112,10 +93,7 @@ async function Postar() {
         livro: livro_selecionado.value.id,
         users_permissions_user: user_id,
       }
-    };
-
-    //console.log('Payload enviado:', newdata)
-    
+    };    
 
     const { data } = await api.post(`/posts`, newdata, {
       headers: {
@@ -167,8 +145,6 @@ async function Editar() {
     loading.value = true;
     exception.value = undefined;
     errorMessage.value = null; 
-    //console.log(livro_selecionado);
-    //await getLivro()
     console.log(livro_selecionado.value)
 
     const isValid = await validacao();

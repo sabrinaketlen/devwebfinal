@@ -24,7 +24,7 @@ const post_owner = ref(false)
 
 async function getPost() {
   try {
-    const { data } = await api.get(`/posts/${route.params.id}?populate=livro.Capa,users_permissions_user.role`, {
+    const { data } = await api.get(`/posts/${route.params.id}?populate=livro.Capa,users_permissions_user`, {
       headers: {
         Authorization: `Bearer ${userStore.jwt}`,
       },
@@ -32,26 +32,13 @@ async function getPost() {
     console.log(data.data)
     
     post.value = data.data
-    if (!post.value) {
-      throw new Error('Post não encontrado'); 
-    }
-    console.log(post.value)
-
-    if(post.value.users_permissions_user.id != user_id){
-        console.log("NAO EH MEU POST")
-    }
-    else{
-      console.log("eh meu post")
-      post_owner.value = true
-    }
-
-    //console.log(livro._rawValue);
     
   } catch (e) {
     if (isAxiosError(e) && isApplicationError(e.response?.data)) {
       error.value = e.response?.data
+      router.push('/NotFound');
     }
-    router.push('/NotFound')
+
   } finally {
     loading.value = false
   }
